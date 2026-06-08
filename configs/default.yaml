@@ -1,0 +1,39 @@
+model:
+  name_or_path: "Qwen/Qwen2.5-3B-Instruct"
+  device: "cuda"
+  dtype: "bfloat16"
+
+# TokUR-style weight perturbation (defaults near TokUR paper: rank=8, sigma=0.1, M=2+)
+weight:
+  enabled: true
+  num_samples: 8
+  rank: 8
+  sigma: 0.1
+  target_suffixes: ["q_proj", "k_proj"]
+
+# Global sequence-level PGD (not per-token PGD in main experiments)
+embedding_attack:
+  enabled: true
+  epsilon: 0.01
+  steps: 5
+  step_size: 0.002
+  mask: "answer"  # all | answer | query
+
+hidden_attack:
+  enabled: true
+  epsilon: 0.01
+  steps: 5
+  step_size: 0.002
+  layer_fractions: [0.25, 0.5, 0.75]  # L/4, L/2, 3L/4; final score = max over layers
+
+scoring:
+  use_margin_collapse: true
+  zscore_within_response: true
+  equal_weights: true  # if false, fit logistic on dev set
+
+aggregation:
+  response: "mean"  # mean | topk
+  topk: 5
+
+output:
+  dir: "outputs"

@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+venv/
+.venv/
+.tokur_venv/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Large experiment artifacts — not in git (download or regenerate locally)
+outputs/
+models/
+
+# Bundle tooling artifacts (maintainers only)
+bundles/*.tar.zst
+bundles/*.tar.gz
+bundles/*.part_*
+bundles/_restore_*
+bundles/*.log
+push.log

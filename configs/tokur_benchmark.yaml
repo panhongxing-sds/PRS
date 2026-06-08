@@ -1,0 +1,69 @@
+# TokUR-style benchmark: multi-model × math datasets × AUROC/AUPRC/ACC*
+
+output:
+  dir: outputs/tokur_benchmark
+
+data:
+  root: /home/phx/TokUR/datasets
+  seed: 42
+  dev_frac: 0.2
+  datasets: [math500, gsm8k, deepscaler]
+  max_samples:
+    math500: 500      # full MATH500
+    gsm8k: 500        # increase to 7473 for full test
+    deepscaler: 500
+
+generation:
+  max_new_tokens: 512
+  temperature: 0.0
+
+models:
+  - name: qwen3-8b
+    path: /HDDDATA/phx/model/Qwen3-8B
+    device: cuda:0
+    dtype: bfloat16
+  - name: phi35-mini
+    path: /HDDDATA/phx/model/Phi-3.5-mini-instruct
+    device: cuda:0
+    dtype: bfloat16
+  - name: mistral-7b
+    path: /HDDDATA/phx/model/Mistral-7B-Instruct
+    device: cuda:0
+    dtype: bfloat16
+  - name: opt-6.7b
+    path: /HDDDATA/phx/model/OPT-6.7B
+    device: cuda:0
+    dtype: float16
+
+weight:
+  enabled: true
+  num_samples: 8
+  rank: 8
+  sigma: 0.1
+  # auto-detect per model: qkv_proj (Phi) vs q_proj,... (Qwen/Llama/Mistral)
+  target_suffixes: [q_proj, k_proj, v_proj, o_proj]
+
+embedding_attack:
+  enabled: true
+  use_pgd: false   # ablation: random embedding (PGD in sweep script)
+  epsilon: 0.005
+  steps: 3
+  step_size: 0.001
+  mask: answer
+
+hidden_attack:
+  enabled: true
+  use_pgd: true
+  epsilon: 0.01
+  steps: 5
+  step_size: 0.002
+  layer_fractions: [0.25, 0.5, 0.75]
+  aggregate: max
+
+scoring:
+  use_margin_collapse: true
+  zscore_within_response: false
+
+aggregation:
+  response: mean
+  topk: 5

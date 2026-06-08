@@ -1,0 +1,43 @@
+# ASE multi-model experiment registry
+# Qwen2.5-3B (primary): outputs/ase_full
+# Additional models: outputs/ase_{tag}
+
+datasets: [minerva, math500, gsm8k]
+max_samples: 200
+num_gpus: 8
+
+models:
+  qwen25_3b:
+    path: $PRS_MODELS/TFB-Qwen2.5-3B-Instruct
+    out_dir: $PRS_OUTPUTS/ase_full
+    status: primary  # in progress
+
+  llama32_1b:
+    path: /HDDDATA/phx/model/TFB-Llama-3.2-1B-Instruct
+    out_dir: $PRS_OUTPUTS/ase_llama32_1b
+    status: queued
+    note: TokUR paper main model (Llama-3.2-1B)
+
+  llama31_8b:
+    path: /HDDDATA/phx/model/TFB-Llama-3.1-8B-Instruct
+    out_dir: $PRS_OUTPUTS/ase_llama31_8b
+    status: queued
+
+  qwen3_8b:
+    path: /HDDDATA/phx/model/TFB-Qwen3-8B
+    out_dir: $PRS_OUTPUTS/ase_qwen3_8b
+    status: queued
+
+launch:
+  queue_script: scripts/queue_ase_extra_models.sh
+  single_model: scripts/run_ase_model_pipeline.sh
+  fast_mode: true  # ASE_FAST=1: parallel datasets, --fast, sdpa, gsm8k 1024 tokens
+
+fast_profile:
+  parallel_datasets: true       # minerva|math500|gsm8k on GPU 0-1|2-4|5-7 simultaneously
+  weight_seeds: 8
+  topk_save: 10
+  attn: sdpa
+  max_new_tokens_gsm8k: 1024
+  llama32_1b_shards: 16         # 2 processes per GPU
+  expected_speedup: "~3-4x vs sequential full profile"
