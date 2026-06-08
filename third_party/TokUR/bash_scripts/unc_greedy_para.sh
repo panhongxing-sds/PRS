@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
-
 # =====================================================================
 # Uncertainty-based Greedy Response Generation Script
 # =====================================================================
@@ -29,7 +27,7 @@ readonly DATASET_START=0
 readonly DATASET_END=500
 
 # Model Configuration
-readonly MODEL="qwen3b"  # Options: llama1b, llama8b, qwen3b
+readonly MODEL="llama1b"  # Options: llama1b, llama8b, qwen3b
 
 # Set MODEL_BASE_DIR to the directory containing your model checkpoints.
 # You can download TFB models from HuggingFace:

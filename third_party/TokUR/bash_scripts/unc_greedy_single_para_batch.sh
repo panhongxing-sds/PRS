@@ -1,16 +1,6 @@
 # Run single greedy generation using TFB models
-export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
-# TokUR venv + large TMP on /HDDDATA (avoid filling /)
-export PATH="/HDDDATA/phx/tokur_venv/bin:${PATH}"
-export TMPDIR="${TMPDIR:-/HDDDATA/phx/tmp}"
-export PIP_CACHE_DIR="${PIP_CACHE_DIR:-/HDDDATA/phx/pip-cache}"
-export VLLM_USE_V1="${VLLM_USE_V1:-1}"
-export TOKUR_MAX_MODEL_LEN="${TOKUR_MAX_MODEL_LEN:-4096}"
-export TOKUR_MAX_NUM_BATCHED_TOKENS="${TOKUR_MAX_NUM_BATCHED_TOKENS:-4096}"
-
 NUM_GPUS=8
 GPU_IDS=(0 1 2 3 4 5 6 7)
-# 单 seed 快跑：只看 96。若要论文 Table 多 seed 均值：改为 SEEDS=(96 89 64)
 SEEDS=(96)
 
 dataset="math500" # Options: math500, gsm8k_test, deepscaler, leg-counting
@@ -23,7 +13,7 @@ DATASET_END=500
 # LEG_COUNTING: 100 test samples
 ########################################################
 
-MODEL=qwen3b # Options: llama1b, llama8b, qwen3b
+MODEL=llama1b # Options: llama1b, llama8b, qwen3b
 
 # =====================================================================
 # Set MODEL_BASE_DIR to the directory containing your model checkpoints.

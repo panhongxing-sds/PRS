@@ -1,7 +1,5 @@
 #!/bin/bash
 
-export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
-
 # =====================================================================
 # Multi-GPU Scaling Test Script (Table 2)
 # =====================================================================

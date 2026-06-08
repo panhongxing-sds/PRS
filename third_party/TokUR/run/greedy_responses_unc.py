@@ -375,25 +375,14 @@ def main(
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
     
-    max_model_len = int(os.environ.get("TOKUR_MAX_MODEL_LEN", "4096"))
-    gpu_mem = float(os.environ.get("TOKUR_GPU_MEMORY_UTILIZATION", "0.9"))
-    max_num_batched_tokens = int(os.environ.get("TOKUR_MAX_NUM_BATCHED_TOKENS", "4096"))
-    logger.info(
-        "TOKUR_MAX_MODEL_LEN=%s TOKUR_MAX_NUM_BATCHED_TOKENS=%s gpu_memory_utilization=%s",
-        max_model_len,
-        max_num_batched_tokens,
-        gpu_mem,
-    )
-
     llm = LLM(
         model=config.model_path,
-        gpu_memory_utilization=gpu_mem,
+        # max_num_batched_tokens=2048,
+        gpu_memory_utilization=0.9,
         enable_prefix_caching=True,
         seed=seed,
         tensor_parallel_size=num_gpus,
         enforce_eager=True,
-        max_model_len=max_model_len,
-        max_num_batched_tokens=max_num_batched_tokens,
     )
 
 

@@ -8,7 +8,7 @@
 |------|--------|----------------|
 | `src/`, `scripts/`, `configs/`, `tests/` | yes | code |
 | `paper/` | yes | tables & LaTeX |
-| `third_party/TokUR/` | yes | ~150 MB (baseline code + small datasets) |
+| `third_party/TokUR/` | yes | 官方 [Wang-ML-Lab/TokUR](https://github.com/Wang-ML-Lab/TokUR) 源码（未修改） |
 | `data/examples.jsonl` | yes | smoke-test data |
 | `models/` | **no** | ~39 GB TFB checkpoints — download separately |
 | `outputs/` | **no** | ~85 GB experiment runs — regenerate on GPU |

@@ -215,25 +215,14 @@ def main(
         model_config = json.load(f)
         
     print("Sigma:", model_config['bayes_sigma'])
-
-    # Shared GPUs / 24GB cards: full model max_seq_len (e.g. 32k) can OOM during KV profiling.
-    # Override with TOKUR_MAX_MODEL_LEN (default 8192; math generation uses config.max_tokens).
-    max_model_len = int(os.environ.get("TOKUR_MAX_MODEL_LEN", "4096"))
-    gpu_mem = float(os.environ.get("TOKUR_GPU_MEMORY_UTILIZATION", str(config.gpu_memory_utilization)))
-    # Must be >= max_model_len (vLLM SchedulerConfig); lower both if 24GB GPUs OOM during profile_run.
-    max_num_batched_tokens = int(os.environ.get("TOKUR_MAX_NUM_BATCHED_TOKENS", "4096"))
-    print("TOKUR_MAX_MODEL_LEN:", max_model_len, "gpu_memory_utilization:", gpu_mem)
-    print("TOKUR_MAX_NUM_BATCHED_TOKENS:", max_num_batched_tokens)
-
+    
     llm = LLM(
         model=config.model_path,
-        gpu_memory_utilization=gpu_mem,
+        gpu_memory_utilization=config.gpu_memory_utilization,
         enable_prefix_caching=True,
         seed=seed,
         tensor_parallel_size=num_gpus,
         enforce_eager=True,
-        max_model_len=max_model_len,
-        max_num_batched_tokens=max_num_batched_tokens,
     )
 
     # Load dataset

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
-export PATH="/HDDDATA/phx/tokur_venv/bin:${PATH}"
-
 # multi-seed evaluation script with organized result management
 # Usage: ./eval_detect.sh [dataset] [model] [seeds...]
 
