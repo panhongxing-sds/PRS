@@ -17,19 +17,22 @@ from pathlib import Path
 import torch
 from tqdm import tqdm
 
-from prs.ase.generate import generate_with_stats
+from prs.ase.generate import generate_requery_answers, generate_with_stats
 from prs.ase.metrics import metrics_from_record
 from prs.ase.record import (
     _run_from_gen,
     build_full_record,
     delete_partial_record,
     load_partial_record,
+    load_record,
     perturb_config_dict,
     record_exists,
+    runs_from_high_temp_answers,
     save_partial_record,
     save_record,
 )
-from prs.grading.tokur_records import build_prompt_tfb, prompt_template_version
+from prs.datasets.registry import DATASET_IDS, get_dataset_spec, normalize_dataset_id
+from prs.grading.tokur_records import build_prompt_for_dataset, prompt_template_version
 from prs.perturbations.weight import LowRankWeightPerturbation, WeightPerturbConfig
 from prs.token_qaac.data import build_records
 
@@ -38,6 +41,9 @@ from prs.paths import DEFAULT_BENCH, DEFAULT_MODEL, DEFAULT_OUT
 DEFAULT_TFTTCL = Path("/home/phx/TF-TTCL/data/MATH")
 DEFAULT_WEIGHT_SEEDS = [42, 43, 44, 45, 46, 47, 48, 49]
 DECODING = {"temperature": 0.0, "top_p": 1.0, "do_sample": False, "topk_save": 20}
+DEFAULT_SE_SAMPLES = 10
+DEFAULT_SE_TEMPERATURE = 0.7
+DEFAULT_SE_TOP_P = 0.95
 
 
 def load_model(model_path: str, device: str, attn_implementation: str = "sdpa"):
@@ -65,12 +71,15 @@ def generate_full_record(
     weight_sigma: float,
     weight_rank: int,
     topk_save: int,
+    se_samples: int = 0,
+    se_temperature: float = DEFAULT_SE_TEMPERATURE,
+    se_top_p: float = DEFAULT_SE_TOP_P,
     out_dir: Path | None = None,
     checkpoint_every: int = 1,
 ) -> dict:
     question = rec.get("question") or ""
     rephrases = (rec.get("rephrases") or [])[:n_rephrases]
-    prompt_clean = build_prompt_tfb(question, tokenizer, model_path)
+    prompt_clean = build_prompt_for_dataset(question, tokenizer, model_path, dataset=rec.get("dataset", "math500"))
     reference = rec.get("reference", "")
 
     decoding = {**DECODING, "max_new_tokens": max_new_tokens, "topk_save": topk_save}
@@ -88,12 +97,16 @@ def generate_full_record(
         "weight_rank": weight_rank,
         "max_new_tokens": max_new_tokens,
         "topk_save": topk_save,
+        "se_samples": se_samples,
+        "se_temperature": se_temperature,
+        "se_top_p": se_top_p,
     }
 
     partial = load_partial_record(out_dir, rec["dataset"], rec["id"]) if out_dir else None
     clean_gen = (partial or {}).get("clean_gen")
     text_runs = list((partial or {}).get("text_runs") or [])
     weight_runs = list((partial or {}).get("weight_runs") or [])
+    high_temp_runs = list((partial or {}).get("high_temp_runs") or [])
     _step = 0
 
     def _checkpoint() -> None:
@@ -113,6 +126,7 @@ def generate_full_record(
                 "clean_gen": clean_gen,
                 "text_runs": text_runs,
                 "weight_runs": weight_runs,
+                "high_temp_runs": high_temp_runs,
             },
         )
 
@@ -125,7 +139,7 @@ def generate_full_record(
 
     start_text = len(text_runs)
     for i, rq in enumerate(rephrases[start_text:], start=start_text):
-        pr = build_prompt_tfb(rq, tokenizer, model_path)
+        pr = build_prompt_for_dataset(rq, tokenizer, model_path, dataset=rec.get("dataset", "math500"))
         g = generate_with_stats(model, tokenizer, pr, max_new_tokens, device, topk_save=topk_save, decoding=decoding)
         g["input_prompt"] = pr
         text_runs.append(_run_from_gen(f"T_{i}", g, source="text", rephrase_text=rq, reference=reference))
@@ -156,6 +170,25 @@ def generate_full_record(
         weight_runs.append(_run_from_gen(f"W_{seed}", g, source="weight", perturb_config=pcfg, reference=reference))
         _checkpoint()
 
+    if se_samples > 0 and len(high_temp_runs) < se_samples:
+        answers = generate_requery_answers(
+            model,
+            tokenizer,
+            prompt_clean,
+            max_new_tokens,
+            device,
+            num_samples=se_samples,
+            temperature=se_temperature,
+            top_p=se_top_p,
+        )
+        high_temp_runs = runs_from_high_temp_answers(
+            answers,
+            temperature=se_temperature,
+            top_p=se_top_p,
+            reference=reference,
+        )
+        _checkpoint()
+
     if out_dir:
         _step = checkpoint_every - 1
         _checkpoint()
@@ -165,9 +198,51 @@ def generate_full_record(
         clean_gen=clean_gen,
         text_runs=text_runs,
         weight_runs=weight_runs,
+        high_temp_runs=high_temp_runs,
         model_info=model_info,
         experiment_config=experiment_config,
     )
+
+
+def backfill_se_samples(
+    record: dict,
+    model,
+    tokenizer,
+    device: str,
+    *,
+    max_new_tokens: int,
+    se_samples: int,
+    se_temperature: float,
+    se_top_p: float,
+    model_path: str,
+) -> dict | None:
+    """Add high_temp_sample_runs to an existing raw record (SE baseline only)."""
+    if se_samples <= 0 or (record.get("high_temp_sample_runs") or []):
+        return None
+    question = record.get("question") or ""
+    reference = record.get("reference", "")
+    prompt_clean = build_prompt_for_dataset(question, tokenizer, model_path, dataset=record.get("dataset", "math500"))
+    answers = generate_requery_answers(
+        model,
+        tokenizer,
+        prompt_clean,
+        max_new_tokens,
+        device,
+        num_samples=se_samples,
+        temperature=se_temperature,
+        top_p=se_top_p,
+    )
+    record["high_temp_sample_runs"] = runs_from_high_temp_answers(
+        answers,
+        temperature=se_temperature,
+        top_p=se_top_p,
+        reference=reference,
+    )
+    exp = record.setdefault("experiment_config", {})
+    exp["se_samples"] = se_samples
+    exp["se_temperature"] = se_temperature
+    exp["se_top_p"] = se_top_p
+    return record
 
 
 def recompute_dataset_summary(out_dir: Path, dataset: str, top_pct: float) -> int:
@@ -191,7 +266,7 @@ def main() -> None:
     ap.add_argument("--mode", choices=("all", "generate", "metrics"), default="all")
     ap.add_argument(
         "--dataset",
-        choices=("minerva", "math500", "gsm8k", "deepscaler"),
+        choices=DATASET_IDS,
         required=True,
     )
     ap.add_argument("--variants-path", type=Path, default=None)
@@ -209,6 +284,14 @@ def main() -> None:
     ap.add_argument("--topk-save", type=int, default=10)
     ap.add_argument("--attn-implementation", type=str, default="sdpa", choices=("sdpa", "eager", "flash_attention_2"))
     ap.add_argument("--checkpoint-every", type=int, default=1, help="Save partial record every N generate steps")
+    ap.add_argument(
+        "--se-samples",
+        type=int,
+        default=DEFAULT_SE_SAMPLES,
+        help="High-temp samples for official SE baseline (0=skip; stored in high_temp_sample_runs)",
+    )
+    ap.add_argument("--se-temperature", type=float, default=DEFAULT_SE_TEMPERATURE)
+    ap.add_argument("--se-top-p", type=float, default=DEFAULT_SE_TOP_P)
     ap.add_argument("--fast", action="store_true", help="Fast profile: sparse checkpoints, sdpa (topk=10, 8 weight seeds)")
     ap.add_argument("--shard-id", type=int, default=0)
     ap.add_argument("--num-shards", type=int, default=1)
@@ -261,6 +344,25 @@ def main() -> None:
 
     for rec in tqdm(records, desc=f"ASE [{args.dataset}] shard {args.shard_id}"):
         if args.resume and record_exists(out_dir, args.dataset, rec["id"]):
+            if args.se_samples > 0 and args.mode in ("all", "generate"):
+                try:
+                    existing = load_record(out_dir, args.dataset, rec["id"])
+                    patched = backfill_se_samples(
+                        existing,
+                        model,
+                        tokenizer,
+                        device,
+                        max_new_tokens=args.max_new_tokens,
+                        se_samples=args.se_samples,
+                        se_temperature=args.se_temperature,
+                        se_top_p=args.se_top_p,
+                        model_path=args.model_path,
+                    )
+                    if patched is not None:
+                        metrics = metrics_from_record(patched, top_pct=args.atu_top_pct)
+                        save_record(out_dir, patched, metrics)
+                except Exception as exc:
+                    print(f"SE backfill ERROR {rec['id']}: {exc}")
             continue
         try:
             full = generate_full_record(
@@ -276,6 +378,9 @@ def main() -> None:
                 weight_sigma=args.weight_sigma,
                 weight_rank=args.weight_rank,
                 topk_save=args.topk_save,
+                se_samples=args.se_samples,
+                se_temperature=args.se_temperature,
+                se_top_p=args.se_top_p,
                 out_dir=out_dir,
                 checkpoint_every=args.checkpoint_every,
             )

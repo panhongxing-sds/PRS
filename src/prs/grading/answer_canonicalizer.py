@@ -7,6 +7,9 @@ import re
 import sympy as sp
 from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application
 
+from prs.datasets.registry import get_dataset_spec, normalize_dataset_id
+from prs.grading.code_grader import code_equal
+from prs.grading.logic_grader import logic_equal
 from prs.grading.math_grader import extract_math_answer, math_equal
 
 _TRANSFORMATIONS = standard_transformations + (implicit_multiplication_application,)
@@ -208,9 +211,35 @@ MANUAL_RELABEL_IDS = {
 }
 
 
-def grade_answer(pred: str, ref: str, *, record_id: str | None = None) -> dict:
+def _grade_by_mode(pred: str, ref: str, mode: str) -> tuple[bool, bool]:
+    if mode == "string":
+        ok = logic_equal(pred, ref)
+        return ok, ok
+    if mode == "code":
+        ok = code_equal(pred, ref)
+        return ok, ok
     ok_orig = math_equal(pred, ref)
     ok_clean = math_equal_clean(pred, ref)
+    return ok_orig, ok_clean
+
+
+def grade_answer(
+    pred: str,
+    ref: str,
+    *,
+    record_id: str | None = None,
+    dataset: str | None = None,
+) -> dict:
+    if dataset:
+        try:
+            spec = get_dataset_spec(normalize_dataset_id(dataset))
+            ok_orig, ok_clean = _grade_by_mode(pred, ref, spec.grading)
+        except ValueError:
+            ok_orig = math_equal(pred, ref)
+            ok_clean = math_equal_clean(pred, ref)
+    else:
+        ok_orig = math_equal(pred, ref)
+        ok_clean = math_equal_clean(pred, ref)
     if record_id and record_id in MANUAL_RELABEL_IDS:
         ok_clean = True
     return {

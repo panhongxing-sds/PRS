@@ -18,6 +18,8 @@ from sklearn.preprocessing import StandardScaler
 from prs.ase.altmass_decomposition import altmass_variants_weight_branch
 from prs.ase.cluster_token_trace import merge_cluster_token_trace
 from prs.ase.prs import enrich_row_with_prs
+from prs.baselines.from_record import enrich_row_with_baselines
+from prs.baselines.registry import BASELINE_INVERT_KEYS, BASELINE_TABLE_ROWS
 from prs.ase.reasoning_token_features import merge_reasoning_token_metrics
 from prs.grading.answer_canonicalizer import grade_answer
 from prs.metrics_tokur import compute_detection_metrics
@@ -27,6 +29,7 @@ DEFAULT_OUT = DEFAULT_OUT
 
 TABLE1_BASELINE = [
     ("TokUR EU", "tokur_eu_sum", "teacher-forced $a_0$ + weight epistemic uncertainty (baseline)"),
+    *BASELINE_TABLE_ROWS,
 ]
 
 TABLE1 = [
@@ -57,7 +60,12 @@ TABLE2_INVERT = {"final_answer_equiv_last_equation"}
 
 def relabel(rows: list[dict]) -> list[dict]:
     for r in rows:
-        g = grade_answer(r.get("a0", ""), r.get("reference", ""), record_id=r.get("id"))
+        g = grade_answer(
+            r.get("a0", ""),
+            r.get("reference", ""),
+            record_id=r.get("id"),
+            dataset=r.get("dataset"),
+        )
         r["is_correct_clean"] = g["is_correct_clean"]
         r["label_wrong_clean"] = g["label_wrong_clean"]
         r["relabeled"] = g["relabeled"]
@@ -118,6 +126,7 @@ def load_enriched(out_dir: Path, dataset: str) -> list[dict]:
         row.update(merge_cluster_token_trace(base, text, weight))
         row.update(altmass_variants_weight_branch(weight))
         enrich_row_with_prs(row, write_legacy=False)
+        enrich_row_with_baselines(row, rec)
         enriched.append(row)
     return enriched
 
@@ -159,11 +168,11 @@ def build_tables(rows: list[dict], dataset: str) -> str:
     ]
     if any(not math.isnan(float(r.get("tokur_eu_sum", float("nan")))) for r in rows):
         for name, key, desc in TABLE1_BASELINE:
-            a = auroc_clean(rows, key)
+            a = auroc_clean(rows, key, invert=(key in BASELINE_INVERT_KEYS))
             lines.append(f"| {name} | {a:.4f} | {desc} |")
         lines.append("| | | |")
     for name, key, desc in TABLE1:
-        a = auroc_clean(rows, key)
+        a = auroc_clean(rows, key, invert=(key in BASELINE_INVERT_KEYS))
         lines.append(f"| {name} | {a:.4f} | {desc} |")
 
     lines.extend(

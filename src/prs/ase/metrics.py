@@ -10,6 +10,7 @@ from prs.ase.numeric_trajectory import merge_numeric_metrics
 from prs.ase.reasoning_token_features import merge_reasoning_token_metrics
 from prs.ase.cluster_token_trace import merge_cluster_token_trace
 from prs.ase.prs import enrich_row_with_prs
+from prs.baselines.from_record import enrich_row_with_baselines
 
 
 def _gens_from_runs(runs: list[dict]) -> list[dict]:
@@ -44,7 +45,7 @@ def metrics_from_record(record: dict, *, top_pct: float = 0.10) -> dict:
     num = merge_numeric_metrics(text_runs, weight_runs)
     rtok = merge_reasoning_token_metrics(base, text_runs, weight_runs)
     ctr = merge_cluster_token_trace(base, text_runs, weight_runs)
-    altmass = altmass_variants_weight_branch(weight_runs)
+    altmass = altmass_variants_weight_branch(weight_runs, record.get("dataset"), top_pct=top_pct)
 
     sem = record.get("semantic_cache") or {}
     n_tw = sem.get("cluster_assignments", {}).get("num_clusters")
@@ -80,6 +81,7 @@ def metrics_from_record(record: dict, *, top_pct: float = 0.10) -> dict:
         "atu_top_pct": top_pct,
     }
     enrich_row_with_prs(out, write_legacy=False)
+    enrich_row_with_baselines(out, record)
     return out
 
 

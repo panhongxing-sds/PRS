@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 # After git clone: install Python deps + optional TokUR vLLM venv.
 set -euo pipefail
-source "$(dirname "$0")/env.sh"
+source "$(dirname "$0")/activate_env.sh"
 cd "$PRS_ROOT"
 
 echo "PRS_ROOT=$PRS_ROOT"
-pip install -e ".[dev]"
+pip install -e ".[dev]" --no-deps
+pip install pyyaml tqdm scikit-learn pytest safetensors
 
 if [[ ! -x "${TOKUR_VENV:-/HDDDATA/phx/tokur_venv}/bin/python" ]]; then
   echo "Creating TokUR venv at ${TOKUR_VENV:-$PRS_ROOT/.tokur_venv} ..."

@@ -3,39 +3,50 @@
 # Additional models: outputs/ase_{tag}
 
 datasets: [minerva, math500, gsm8k]
-max_samples: 200
+# logic (主表扩展；需 download_logic_code_datasets.sh + API variants)
+logic_code_datasets: [leg_counting, zebra_puzzles, color_cube]
+maintable_seeds: [41, 42, 43]
+max_samples: 500   # 推荐档：math500/gsm8k 拉到 500；minerva 全量 272；逻辑集取全量(≤500)
 num_gpus: 8
 
 models:
   qwen25_3b:
     path: $PRS_MODELS/TFB-Qwen2.5-3B-Instruct
     out_dir: $PRS_OUTPUTS/ase_full
-    status: primary  # in progress
+    status: ready
 
   llama32_1b:
-    path: /HDDDATA/phx/model/TFB-Llama-3.2-1B-Instruct
+    path: $PRS_MODELS/TFB-Llama-3.2-1B-Instruct
     out_dir: $PRS_OUTPUTS/ase_llama32_1b
-    status: queued
+    status: ready
     note: TokUR paper main model (Llama-3.2-1B)
 
   llama31_8b:
-    path: /HDDDATA/phx/model/TFB-Llama-3.1-8B-Instruct
+    path: $PRS_MODELS/TFB-Llama-3.1-8B-Instruct
     out_dir: $PRS_OUTPUTS/ase_llama31_8b
-    status: queued
+    status: ready
 
   qwen3_8b:
-    path: /HDDDATA/phx/model/TFB-Qwen3-8B
+    path: $PRS_MODELS/TFB-Qwen3-8B
     out_dir: $PRS_OUTPUTS/ase_qwen3_8b
-    status: queued
+    status: ready
 
 launch:
   queue_script: scripts/queue_ase_extra_models.sh
   single_model: scripts/run_ase_model_pipeline.sh
   fast_mode: true  # ASE_FAST=1: parallel datasets, --fast, sdpa, gsm8k 1024 tokens
 
+# 公平采样预算：所有采样类方法统一 K=8 次
+#   PRS: R=4 (text) + W=4 (weight) = 8 ；SE: 8 个高温样本 ；U_Ecc/U_Deg 复用 R+W 的 8 个样本
+sampling_budget:
+  K: 8
+  n_rephrases: 4
+  weight_seeds: 4        # 42,43,44,45
+  se_samples: 8
+
 fast_profile:
   parallel_datasets: true       # minerva|math500|gsm8k on GPU 0-1|2-4|5-7 simultaneously
-  weight_seeds: 8
+  weight_seeds: 4
   topk_save: 10
   attn: sdpa
   max_new_tokens_gsm8k: 1024

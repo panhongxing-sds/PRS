@@ -87,12 +87,49 @@ def _run_from_gen(
     return row
 
 
+def runs_from_high_temp_answers(
+    answers: list[str],
+    *,
+    temperature: float,
+    top_p: float,
+    reference: str = "",
+) -> list[dict]:
+    """Minimal run rows for official SE (answers only, no token trace)."""
+    decoding = {"temperature": temperature, "top_p": top_p, "do_sample": True}
+    runs: list[dict] = []
+    for i, ans in enumerate(answers):
+        ref = reference.strip()
+        correct = math_equal(ans, ref) if ref and ans else False
+        runs.append(
+            {
+                "run_id": f"SE_{i}",
+                "source": "high_temp_sample",
+                "input_prompt": None,
+                "rephrase_text": None,
+                "perturb_config": None,
+                "answer_raw": ans,
+                "answer_normalized": ans,
+                "full_response": "",
+                "parse_success": bool(ans),
+                "correctness": correct,
+                "token_trace": [],
+                "answer_span": {},
+                "n_tokens": 0,
+                "decoding": decoding,
+                "token_entropies": [],
+                "token_margins": [],
+            }
+        )
+    return runs
+
+
 def build_full_record(
     rec: dict,
     *,
     clean_gen: dict,
     text_runs: list[dict],
     weight_runs: list[dict],
+    high_temp_runs: list[dict] | None = None,
     model_info: dict,
     experiment_config: dict,
 ) -> dict:
@@ -118,6 +155,7 @@ def build_full_record(
         "base_generation": _run_from_gen("base", clean_gen, source="base", reference=ref),
         "text_rephrase_runs": text_runs,
         "weight_perturb_runs": weight_runs,
+        "high_temp_sample_runs": high_temp_runs or [],
         "semantic_cache": semantic,
     }
 

@@ -1,0 +1,1 @@
+{"task_id": "HumanEval/0", "prompt": "def add(a, b):\n    \"\"\"Add two numbers.\"\"\"\n", "canonical_solution": "    return a + b\n", "entry_point": "add", "test": "def check(candidate):\n    assert candidate(1, 2) == 3\n"}

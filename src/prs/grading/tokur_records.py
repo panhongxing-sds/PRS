@@ -57,15 +57,36 @@ def extract_tokur_unc_from_json_blob(blob: dict) -> dict[str, float] | None:
 
 
 def label_from_answer(pred_text: str, ground_truth: str, dataset: str) -> bool:
+    from prs.grading.answer_canonicalizer import grade_answer
     from prs.grading.math_grader import math_equal
+    from prs.datasets.registry import normalize_dataset_id
 
-    if dataset in ("math500", "deepscaler", "gsm8k", "gsm8k_test"):
+    ds = dataset.replace("-", "_")
+    try:
+        ds = normalize_dataset_id(ds)
+        g = grade_answer(pred_text, ground_truth, dataset=ds)
+        return bool(g["is_correct_clean"])
+    except ValueError:
+        pass
+    if ds in ("math500", "deepscaler", "gsm8k", "gsm8k_test", "minerva"):
         return math_equal(pred_text, ground_truth)
     return pred_text.strip().lower() == ground_truth.strip().lower()
 
 
 def _extract_answer_text(text: str, dataset: str) -> str:
-    if dataset in ("math500", "deepscaler", "gsm8k", "gsm8k_test"):
+    from prs.datasets.registry import get_dataset_spec, normalize_dataset_id
+    from prs.grading.code_grader import extract_code_block
+    from prs.grading.logic_grader import extract_logic_answer
+
+    try:
+        spec = get_dataset_spec(normalize_dataset_id(dataset.replace("-", "_")))
+        if spec.grading == "code":
+            return extract_code_block(text)
+        if spec.grading == "string":
+            return extract_logic_answer(text)
+    except ValueError:
+        pass
+    if dataset in ("math500", "deepscaler", "gsm8k", "gsm8k_test", "minerva"):
         try:
             from run.utils.qwen_math_parser import extract_answer, strip_string
 
@@ -204,6 +225,24 @@ _TOKUR_MATH_SYSTEM = (
 def _is_qwen_model(model_path: str, tokenizer) -> bool:
     hay = f"{model_path} {getattr(tokenizer, 'name_or_path', '')}".lower()
     return "qwen" in hay
+
+
+def build_prompt_for_dataset(problem: str, tokenizer, model_path: str = "", dataset: str = "math500") -> str:
+    """Chat prompt: math uses TokUR template; logic/code use plain user turn."""
+    from prs.datasets.registry import get_dataset_spec, normalize_dataset_id
+
+    try:
+        spec = get_dataset_spec(normalize_dataset_id(dataset))
+        if spec.domain in ("logic", "code"):
+            system = [{"role": "system", "content": "You are a helpful assistant."}]
+            return tokenizer.apply_chat_template(
+                system + [{"role": "user", "content": problem}],
+                tokenize=False,
+                add_generation_prompt=True,
+            )
+    except ValueError:
+        pass
+    return build_prompt_tfb(problem, tokenizer, model_path)
 
 
 def build_prompt_tfb(problem: str, tokenizer, model_path: str = "") -> str:

@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from prs.datasets.loaders import load_dataset_records
+from prs.datasets.registry import get_dataset_spec, list_dataset_ids, normalize_dataset_id
 from prs.grading.math_grader import extract_math_answer, math_equal
 from prs.grading.tokur_records import _extract_answer_text, _normalize_id
 from prs.paths import TOKUR_ROOT
@@ -20,11 +22,18 @@ def _load_jsonl(path: Path) -> list[dict]:
     return rows
 
 
+def _is_math_dataset(dataset: str) -> bool:
+    try:
+        return get_dataset_spec(dataset).grading == "math"
+    except ValueError:
+        return dataset in ("math500", "minerva", "deepscaler", "gsm8k")
+
+
 def _unique_answers(answers: list[str], dataset: str) -> list[str]:
     out: list[str] = []
     seen_norm: set[str] = set()
     for ans in answers:
-        a = extract_math_answer(ans) if dataset in ("math500", "minerva", "deepscaler", "gsm8k") else ans.strip()
+        a = extract_math_answer(ans) if _is_math_dataset(dataset) else ans.strip()
         if not a:
             continue
         key = a.strip().lower()
@@ -193,6 +202,16 @@ def load_tfttcl_originals(
             }
         return by_id
 
+    try:
+        spec = get_dataset_spec(dataset)
+        if spec.domain in ("logic", "code"):
+            return {
+                r["id"]: r
+                for r in load_dataset_records(spec.id, tfttcl_root=data_root, max_samples=None)
+            }
+    except ValueError:
+        pass
+
     raise ValueError(f"Unsupported dataset for TF-TTCL load: {dataset}")
 
 
@@ -241,9 +260,10 @@ def build_records(
             if uid not in records_by_id:
                 records_by_id[uid] = rec
 
-    only_ids = set(variants.keys()) if dataset == "deepscaler" else None
+    ds_norm = normalize_dataset_id(dataset) if dataset in list_dataset_ids() else dataset
+    only_ids = set(variants.keys()) if ds_norm == "deepscaler" else None
     if tfttcl_root and tfttcl_root.exists():
-        for uid, rec in load_tfttcl_originals(dataset, tfttcl_root, only_ids=only_ids).items():
+        for uid, rec in load_tfttcl_originals(ds_norm, tfttcl_root, only_ids=only_ids).items():
             if uid not in records_by_id:
                 records_by_id[uid] = rec
             else:

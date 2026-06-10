@@ -16,6 +16,7 @@ from prs.ase.analyze_main_tables import (
     load_enriched,
     load_features_table,
 )
+from prs.baselines.registry import BASELINE_INVERT_KEYS
 from prs.metrics_tokur import compute_detection_metrics
 from prs.paths import DEFAULT_OUT, PAPER
 
@@ -158,7 +159,7 @@ def main() -> None:
         wrong = sum(r["label_wrong_clean"] for r in rows)
         stats[ds] = {"n": n, "wrong": wrong, "acc": 1 - wrong / n, "relabeled": sum(r.get("relabeled", False) for r in rows)}
         for name, key, _ in PAPER_EXTENDED:
-            invert = key in TABLE2_INVERT
+            invert = key in TABLE2_INVERT or key in BASELINE_INVERT_KEYS
             if key not in rows[0] and key != "tokur_eu_sum":
                 continue
             if key == "tokur_eu_sum" and not any("tokur_eu_sum" in r for r in rows):

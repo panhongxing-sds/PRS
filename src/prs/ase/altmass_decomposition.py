@@ -89,6 +89,87 @@ def _late_indices(trace: list[dict], frac: float = 1 / 3) -> set[int]:
     return set(range(start, n))
 
 
+# Domain-aware content-token selection for the A (per-domain) ablation of S_tr.
+# Logic tasks: keep content words, drop English stopwords/pure punctuation.
+# Code tasks: keep identifiers, keywords, operators, brackets, literals.
+_LOGIC_STOPWORDS = frozenset(
+    "the a an of to in on at and or but if then so is are was were be been being "
+    "we i it he she they you that this these those there here as for with from by "
+    "will would can could may might must shall should do does did has have had".split()
+)
+_CODE_KEEP = re.compile(r"[A-Za-z_]\w*|[(){}\[\];:,.]|[-+*/%=<>!&|^~]+|\d+")
+
+
+def _domain_content_indices(trace: list[dict], domain: str) -> set[int]:
+    """Indices of 'decision-bearing' tokens per domain (A ablation)."""
+    if domain == "math":
+        return {i for i, t in enumerate(trace) if _classify_token(t.get("token", "")) != "other"}
+    if domain == "code":
+        idxs = set()
+        for i, t in enumerate(trace):
+            s = t.get("token", "").strip()
+            if s and _CODE_KEEP.search(s):
+                idxs.add(i)
+        return idxs
+    if domain == "logic":
+        idxs = set()
+        for i, t in enumerate(trace):
+            s = t.get("token", "").strip()
+            if not s or s.isspace():
+                continue
+            if s.lower() in _LOGIC_STOPWORDS:
+                continue
+            if re.search(r"[A-Za-z0-9]", s):
+                idxs.add(i)
+        return idxs
+    # unknown domain → all reasoning tokens
+    return set(range(len(trace)))
+
+
+def _dataset_domain(dataset: str | None) -> str:
+    ds = (dataset or "").lower()
+    if ds in {"humaneval", "mbpp"} or "code" in ds:
+        return "code"
+    if ds in {"leg_counting", "zebra_puzzles", "color_cube"} or "logic" in ds:
+        return "logic"
+    return "math"
+
+
+def _local_spread_topk(
+    runs: list[dict],
+    *,
+    top_pct: float = 0.10,
+    indices_fn=None,
+) -> float:
+    """
+    Domain-agnostic trace drift (B): mean of the top-k% highest local-spread
+    reasoning tokens per run, averaged across runs.
+
+    ``indices_fn(trace) -> set[int]`` optionally restricts positions (A ablation).
+    """
+    if not runs:
+        return float("nan")
+    per_run: list[float] = []
+    for run in runs:
+        trace = _reasoning_trace(run)
+        if not trace:
+            continue
+        pos_ok = indices_fn(trace) if indices_fn is not None else set(range(len(trace)))
+        spreads: list[float] = []
+        for i, t in enumerate(trace):
+            if i not in pos_ok:
+                continue
+            m = _local_topk_spread(t.get("topk") or [], t.get("token", ""))
+            if m is not None:
+                spreads.append(m)
+        if not spreads:
+            continue
+        spreads.sort(reverse=True)
+        k = max(1, int(math.ceil(len(spreads) * top_pct)))
+        per_run.append(float(np.mean(spreads[:k])))
+    return float(np.mean(per_run)) if per_run else float("nan")
+
+
 def _cluster_other_token_sets(
     runs: list[dict],
     labels: list[int],
@@ -178,18 +259,32 @@ def _aggregate_altmass(
     return float(np.mean(per_run)) if per_run else float("nan")
 
 
-def altmass_variants_weight_branch(weight_runs: list[dict]) -> dict[str, float]:
-    """Compute decomposed AltMass features on weight-perturbed runs."""
+def altmass_variants_weight_branch(
+    weight_runs: list[dict],
+    dataset: str | None = None,
+    *,
+    top_pct: float = 0.10,
+) -> dict[str, float]:
+    """Compute decomposed AltMass features on weight-perturbed runs.
+
+    Trace-drift (S_tr) keys:
+      - ``AltMass_local_spread_topk``    — B (primary): domain-agnostic top-k%%.
+      - ``AltMass_local_spread_content`` — A (ablation): per-domain content tokens.
+      - ``AltMass_local_spread_reason``  — legacy math-token mean (backward compat).
+    """
     nan = float("nan")
+    keys = (
+        "AltMass_final", "AltMass_reason_all", "AltMass_numeric",
+        "AltMass_equation", "AltMass_step_end", "AltMass_late_reason",
+        "AltMass_local_spread_reason", "AltMass_local_spread_topk",
+        "AltMass_local_spread_content",
+    )
     if len(weight_runs) < 2:
-        return {k: nan for k in (
-            "AltMass_final", "AltMass_reason_all", "AltMass_numeric",
-            "AltMass_equation", "AltMass_step_end", "AltMass_late_reason",
-            "AltMass_local_spread_reason",
-        )}
+        return {k: nan for k in keys}
     answers = [r.get("answer_normalized", "") for r in weight_runs]
     labels, sizes = cluster_answers(answers)
 
+    domain = _dataset_domain(dataset)
     return {
         "AltMass_final": _aggregate_altmass(weight_runs, labels, region="final"),
         "AltMass_reason_all": _aggregate_altmass(weight_runs, labels, region="reason_all"),
@@ -199,5 +294,13 @@ def altmass_variants_weight_branch(weight_runs: list[dict]) -> dict[str, float]:
         "AltMass_late_reason": _aggregate_altmass(weight_runs, labels, region="late_reason"),
         "AltMass_local_spread_reason": _aggregate_altmass(
             weight_runs, labels, region="reason_all", use_local_spread=True
+        ),
+        # B (primary): domain-agnostic, top-k%% highest local spread
+        "AltMass_local_spread_topk": _local_spread_topk(weight_runs, top_pct=top_pct),
+        # A (ablation): per-domain content tokens, top-k%% within them
+        "AltMass_local_spread_content": _local_spread_topk(
+            weight_runs,
+            top_pct=top_pct,
+            indices_fn=lambda tr: _domain_content_indices(tr, domain),
         ),
     }

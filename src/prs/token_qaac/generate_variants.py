@@ -12,6 +12,8 @@ from pathlib import Path
 
 from tqdm import tqdm
 
+from prs.datasets.loaders import load_dataset_records
+from prs.datasets.registry import DATASET_IDS, get_dataset_spec, normalize_dataset_id
 from prs.token_qaac.api_rephrase import build_api_client, rephrase_one
 from prs.paths import DEFAULT_BENCH, TOKUR_ROOT
 
@@ -90,6 +92,22 @@ def load_questions(
             uid = str(r.get("unique_id", i)).replace("/", "_").replace(".json", "")
             out.append({"idx": i, "unique_id": f"deepscaler_{uid}", "question": q})
         return out
+
+    try:
+        spec = normalize_dataset_id(dataset)
+        get_dataset_spec(spec)
+        rows = load_dataset_records(
+            spec,
+            tfttcl_root=tfttcl_root,
+            max_samples=max_samples,
+            seed=seed,
+        )
+        return [
+            {"idx": i, "unique_id": r["id"], "question": r["question"]}
+            for i, r in enumerate(rows)
+        ]
+    except ValueError:
+        pass
 
     raise ValueError(f"Unsupported dataset: {dataset}")
 

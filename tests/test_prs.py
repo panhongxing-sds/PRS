@@ -115,3 +115,6 @@ def test_metrics_from_record_includes_prs():
     if math.isfinite(m["D_reason"]):
         assert math.isfinite(m["PRS"])
         assert m["PRS"] == compute_prs(m["F_resp"], m["D_ans"], m["D_reason"])
+    assert "baseline_PE_mean" in m
+    assert "baseline_SE_H" in m
+    assert math.isfinite(m["baseline_PE_mean"])

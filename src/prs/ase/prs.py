@@ -42,6 +42,8 @@ _D_ANS_ALIASES = (
 _D_REASON_ALIASES = (
     KEY_D_REASON,
     KEY_REASONING_DRIFT,
+    # B (primary): domain-agnostic top-k%% local spread; falls back to legacy math-token mean.
+    "AltMass_local_spread_topk",
     "AltMass_local_spread_reason",
 )
 
