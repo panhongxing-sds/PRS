@@ -75,8 +75,10 @@ The HF pipeline works without vLLM; vLLM only accelerates the plain-decoding rou
 ## 2. The experiment
 
 **Models** (4): Qwen2.5-3B (primary) / Llama-3.2-1B / Llama-3.1-8B / Qwen3-8B
-**Datasets** (6): `minerva`(272) `math500`(500) `gsm8k`(500) | `zebra_puzzles` `color_cube` `leg_counting`
+**Datasets** (6): `minerva`(272) `math500`(300) `gsm8k`(300) | `zebra_puzzles` `color_cube` `leg_counting` (各 300)
 **Seeds**: 41 / 42 / 43 → mean±std
+**Budget**: ¥3,000 cap on RTX 5090 (¥2.88/h) — see `paper/EXPERIMENT_PLAN.md` §12.7
+**Priority**: **PRS + TokUR EU first** (P0 main model math), then logic, then other models
 **Fair sampling budget K=8** for every sampling/perturbation method:
 
 | Method | 8 samples come from | engine |
@@ -105,21 +107,24 @@ Phase B  prs.ase.run_ase_experiment    HF:   weight branch + metrics → raw_run
          (--resume reads the partial and only adds the weight branch)
 ```
 
-### One command per model (does both phases)
+### Execution order (PRS + TokUR first)
 
 ```bash
 source scripts/env.sh
+export MAX_SAMPLES=300   # default in configs/ase_models.yaml
 
-# Math (4 models, 3 seeds)
-for m in qwen25_3b llama32_1b llama31_8b qwen3_8b; do
+# P0 — main model math: PRS full pipeline + TokUR EU (highest priority)
+DATASETS=minerva,math500,gsm8k bash scripts/run_maintable_vllm.sh qwen25_3b
+
+# P1 — main model logic
+DATASETS=leg_counting,zebra_puzzles,color_cube bash scripts/run_maintable_vllm.sh qwen25_3b
+
+# P2 — other 3 models (math only)
+for m in llama32_1b llama31_8b qwen3_8b; do
   DATASETS=minerva,math500,gsm8k bash scripts/run_maintable_vllm.sh "$m"
 done
 
-# Logic (primary model only, for cross-domain generalization)
-DATASETS=leg_counting,zebra_puzzles,color_cube \
-  bash scripts/run_maintable_vllm.sh qwen25_3b
-
-# Aggregate 3-seed mean±std tables
+# P3 — aggregate 3-seed mean±std tables (CPU)
 for m in qwen25_3b llama32_1b llama31_8b qwen3_8b; do
   bash scripts/aggregate_maintable.sh "$m"
 done
@@ -137,7 +142,7 @@ SKIP_HF=1   bash scripts/run_maintable_vllm.sh qwen25_3b
 SKIP_VLLM=1 bash scripts/run_maintable_vllm.sh qwen25_3b
 ```
 
-Useful env vars: `MAX_SAMPLES` (default 500), `N_REPHRASES=4`, `WEIGHT_SEEDS=42,43,44,45`,
+Useful env vars: `MAX_SAMPLES` (default 300), `N_REPHRASES=4`, `WEIGHT_SEEDS=42,43,44,45`,
 `SE_SAMPLES=8`, `ASE_MAX_TOKENS=2048`, `GPU_MEM_UTIL=0.90`, `CUDA_DEVICE=cuda:0`.
 
 ### Pure-HF fallback (no vLLM)

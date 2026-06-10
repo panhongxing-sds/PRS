@@ -6,7 +6,7 @@ datasets: [minerva, math500, gsm8k]
 # logic (主表扩展；需 download_logic_code_datasets.sh + API variants)
 logic_code_datasets: [leg_counting, zebra_puzzles, color_cube]
 maintable_seeds: [41, 42, 43]
-max_samples: 500   # 推荐档：math500/gsm8k 拉到 500；minerva 全量 272；逻辑集取全量(≤500)
+max_samples: 300   # 定稿档：math500/gsm8k/逻辑集 cap 300；minerva 全量 272
 num_gpus: 8
 
 models:

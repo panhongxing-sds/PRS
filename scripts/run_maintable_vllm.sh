@@ -21,7 +21,7 @@ export PYTHONPATH="${ROOT}/src${PYTHONPATH:+:$PYTHONPATH}"
 MODEL_TAG="${1:?model_tag required (qwen25_3b|llama32_1b|llama31_8b|qwen3_8b)}"
 SEEDS="${SEEDS:-41,42,43}"
 DATASETS="${DATASETS:-minerva,math500,gsm8k,leg_counting,zebra_puzzles,color_cube}"
-MAX_SAMPLES="${MAX_SAMPLES:-500}"
+MAX_SAMPLES="${MAX_SAMPLES:-300}"
 # Fair sampling budget K=8: R=4 text + W=4 weight; SE=8 high-temp samples.
 N_REPHRASES="${N_REPHRASES:-4}"
 WEIGHT_SEEDS="${WEIGHT_SEEDS:-42,43,44,45}"

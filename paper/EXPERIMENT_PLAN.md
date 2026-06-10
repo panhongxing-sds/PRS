@@ -19,6 +19,7 @@
 > - 单次方法（PE/LL/Self-Certainty/DeepConf/INSIDE/P(True)）：仅 1 次 greedy/前向，本就不采样，不参与采样数对齐。
 >
 > 每题**解码**生成 = 1(clean) + 4(R) + 4(W) + 8(SE) = **17 次**；TokUR 另加 8 次前向（teacher-forcing，便宜）。降预算（R=W=8→4）经验上几乎不掉点，且让 SE/TokUR 都在 K=8 下公平。
+
 | $S_\text{out}$ | **$U=1-\max_c\hat p_\text{cls}(c)$**（按代码，非归一化熵） | `F_resp`=`TW_ASE` |
 | $S_\text{ans}$ | weight 分支平均 | `AltMass_final` |
 | $S_\text{tr}$ | **B：domain-agnostic top-10% 局部 spread**（跨数学/逻辑统一） | `AltMass_local_spread_topk` |
@@ -42,9 +43,29 @@
 | E7 扰动强度 | $\sigma$ / rank | 表 7 | 需重跑 | 是 |
 
 **模型**（`configs/ase_models.yaml`）：Qwen2.5-3B(主) / Llama-3.2-1B / Llama-3.1-8B / Qwen3-8B
-**数学数据集**：minerva(272 全量), math500(500), gsm8k(500) ——推荐档
-**逻辑数据集**：leg_counting, zebra_puzzles, color_cube（各取全量，上限 500）
+**数学数据集**：minerva(272 全量), math500(**300**), gsm8k(**300**) ——**定稿档 MAX_SAMPLES=300**
+**逻辑数据集**：leg_counting, zebra_puzzles, color_cube（各 **300**）
 **Seeds**：41, 42, 43（`DEFAULT_EXPERIMENT_SEEDS`）
+**GPU 预算**：**¥3,000**（5090-32GB ¥2.88/h）；引擎 **vLLM 混合**
+
+### 1.1 执行优先级（先 TokUR + PRS，再扩模型）
+
+> 主表核心对比是 **PRS vs TokUR EU**；其余 10 个 baseline 随 PRS 管线 Phase B 自动产出，不单独排队。
+
+| 优先级 | 内容 | 目的 | 估 5090 卡时 |
+|--------|------|------|------------:|
+| **P0** | Qwen2.5-3B × 数学 3 集 × 3 seeds → **PRS 全管线 + TokUR EU** | 主表 1a 可填 | ~280 h |
+| **P1** | Qwen2.5-3B × 逻辑 3 集 × 3 seeds → PRS + TokUR | 主表 2a 可填 | ~130 h |
+| **P2** | 其余 3 模型 × 数学 3 集（Llama-3.2-1B / Llama-3.1-8B / Qwen3-8B） | 跨模型表 3 | ~350 h |
+| **P3** | 聚合 3-seed 主表 + CPU 消融（E4/E5/E6） | 论文表格 | CPU |
+| **延后** | E7 扰动强度、失败分析 | 附录/可选 | 另计 |
+
+**P0 最小闭环**（预算紧时只跑这个也能写主结论）：
+1. vLLM Phase A：clean + R + SE（产出 partial，含 clean 回复）
+2. HF Phase B：weight 分支 → **PRS 三组分 + 11 baselines**
+3. 同 Phase B 内：`score_tokur_baseline` → **TokUR EU**（8 次权重扰动前向，便宜）
+
+已有 **Qwen2.5-3B seed1**（500 档旧 raw）：CPU 子采样对齐 300 题 + GPU 仅补 SE backfill。
 
 ---
 
@@ -203,49 +224,53 @@ CPU 后处理：`compute_prs_from_row(row, lambda_a=, lambda_r=)`。代表数据
 
 ---
 
-## 9. 运行命令速查
+## 9. 运行命令速查（定稿档 MAX_SAMPLES=300）
 
 ```bash
 cd /mnt/afs/L202500372/PRS
-export PYTHONPATH=src
+source scripts/env.sh
+export MAX_SAMPLES=300   # 默认已写入 configs/ase_models.yaml 与编排脚本
 
-# --- E1 主表（数学，3 seeds 聚合）---
-# (A) 纯 HF 管线
-for m in qwen25_3b llama32_1b llama31_8b qwen3_8b; do
-  bash scripts/run_maintable_pipeline.sh "$m"            # GPU 生成 + 聚合
-done
-SKIP_GPU=1 bash scripts/run_maintable_pipeline.sh qwen25_3b   # 仅聚合已有 raw
+# ========== P0：主模型 PRS + TokUR（数学，最优先）==========
+# Phase A+B 一体；Phase B 内自动跑 weight 分支 + TokUR EU + 全部 baseline
+DATASETS=minerva,math500,gsm8k bash scripts/run_maintable_vllm.sh qwen25_3b
 
-# (B) vLLM 混合管线（推荐，clean+R+SE 走 vLLM；weight/TokUR 走 HF）
-for m in qwen25_3b llama32_1b llama31_8b qwen3_8b; do
-  DATASETS=minerva,math500,gsm8k bash scripts/run_maintable_vllm.sh "$m"
-done
-# 分批/续跑：可按 seed、按数据集切分，重复执行自动跳过已完成
+# 分批/续跑（重复执行自动跳过已完成）
 SEEDS=41 DATASETS=math500 bash scripts/run_maintable_vllm.sh qwen25_3b
-SKIP_VLLM=1 bash scripts/run_maintable_vllm.sh qwen25_3b   # 只补 weight(HF)+metrics
-SKIP_HF=1   bash scripts/run_maintable_vllm.sh qwen25_3b   # 只跑 vLLM 生成阶段
+SKIP_VLLM=1 bash scripts/run_maintable_vllm.sh qwen25_3b   # 只补 HF：weight + TokUR + metrics
+SKIP_HF=1   bash scripts/run_maintable_vllm.sh qwen25_3b   # 只跑 vLLM：clean+R+SE
 
-# --- E2 逻辑 ---
+# seed1 已有 500 档 raw：子采样对齐 300 + 补 SE
+SEEDS=41 MAX_SAMPLES=300 SKIP_VLLM=1 bash scripts/run_maintable_vllm.sh qwen25_3b
+
+# ========== P1：主模型逻辑（PRS + TokUR）==========
 bash scripts/download_logic_code_datasets.sh
 bash scripts/generate_api_variants.sh leg_counting,zebra_puzzles,color_cube
 DATASETS=leg_counting,zebra_puzzles,color_cube \
   bash scripts/run_maintable_vllm.sh qwen25_3b
 
-# --- E4 组件消融（CPU）---
-bash scripts/run_ablation_cpu.sh         # → ABLATION_component.md
-# 3-seed：对 seed41/42/43 各自 out-dir 分别跑后再 mean±std
+# ========== P2：其余 3 模型数学 ==========
+for m in llama32_1b llama31_8b qwen3_8b; do
+  DATASETS=minerva,math500,gsm8k bash scripts/run_maintable_vllm.sh "$m"
+done
+
+# ========== P3：聚合主表（CPU）==========
+for m in qwen25_3b llama32_1b llama31_8b qwen3_8b; do
+  bash scripts/aggregate_maintable.sh "$m"
+done
+
+# --- E4 组件消融（CPU，有 raw 后跑）---
+bash scripts/run_ablation_cpu.sh
 
 # --- E5 扰动预算（CPU）---
 python -m prs.ase.ablation_recompute --out-dir $PRS_OUTPUTS/ase_full \
   --datasets math500,gsm8k,minerva --budget-sweep \
   --output $PRS_OUTPUTS/ABLATION_budget_sweep.json
 
-# --- E6 λ 敏感性（CPU）---
-# 对 enriched features.jsonl 逐 (λ_a, λ_r) 调 compute_prs_from_row 再算 AUROC
-
-# --- E7 扰动强度（GPU）---
+# --- E7 扰动强度（GPU，预算充裕再跑）---
 python -m prs.ase.run_ase_experiment --dataset math500 --mode all \
-  --weight-sigma 0.05 --weight-rank 4 --out-dir $PRS_OUTPUTS/ablation_sigma05
+  --max-samples 300 --weight-sigma 0.05 --weight-rank 4 \
+  --out-dir $PRS_OUTPUTS/ablation_sigma05
 ```
 
 输出位置：
@@ -273,25 +298,25 @@ python -m prs.ase.run_ase_experiment --dataset math500 --mode all \
 
 ## 12. 数据集题量与算力估算（A100 / H100 / RTX 5090）
 
-### 12.1 每数据集题量（`run_maintable_3seed.sh` 实际口径）
+### 12.1 每数据集题量（定稿档 `MAX_SAMPLES=300`）
 
 | 数据集 | 域 | 每 seed 题量 | 来源 |
 |--------|----|----:|------|
-| Minerva | math | 272 | 全集（`MAX_SAMPLES_MINERVA=272`） |
-| MATH-500 | math | 500 | 全集 |
-| GSM8K | math | 500 | `max_samples=500`（截断自 1319） |
-| Zebra Puzzles | logic | ≤500 | 取仓库全量(上限 500)，需下载确认 |
-| Color Cube | logic | ≤500 | 同上 |
-| Leg Counting | logic | ≤500 | 同上（原仓库可能 <500） |
-| **数学合计/模型/seed** | | **1272** | 272+500+500，4 模型都跑 |
-| **逻辑合计/seed（仅主模型）** | | **≤1500** | 仅 Qwen2.5-3B 跑 |
+| Minerva | math | 272 | 全集（`MAX_SAMPLES_MINERVA=272`，不受 cap 影响） |
+| MATH-500 | math | **300** | `max_samples=300`（截断自 500） |
+| GSM8K | math | **300** | `max_samples=300`（截断自 1319） |
+| Zebra Puzzles | logic | **300** | `max_samples=300` |
+| Color Cube | logic | **300** | 同上 |
+| Leg Counting | logic | **300** | 同上 |
+| **数学合计/模型/seed** | | **872** | 272+300+300，4 模型都跑 |
+| **逻辑合计/seed（仅主模型）** | | **900** | 300×3，仅 Qwen2.5-3B 跑 |
 
 **定稿方案口径**：
-- 数学 3 集（1272/seed）× **4 模型** × 3 seeds；其中 **Qwen2.5-3B 的 seed1 已有**（500/272 全量）。
-  - seed1 旧 raw 是 R=W=8（16 扰动样本），新口径 K=8 只需在 CPU 上**取前 4+4 子集重算**（免 GPU）；
-  - 但 seed1 缺 SE，需 GPU **backfill SE=8**（`--se-samples 8 --resume` 自动补，约 1272 题×8 次，≈ +55 A100-h）。
-- 逻辑 3 集（≤1500/seed）**仅主模型 Qwen2.5-3B** × 3 seeds。
+- 数学 3 集（**872**/seed）× **4 模型** × 3 seeds；**优先 P0 跑 Qwen2.5-3B PRS + TokUR**。
+- **Qwen2.5-3B seed1 已有**（旧 500 档 raw）：CPU **子采样前 300** 对齐新口径；R=W=8→4 子集重算免 GPU；缺 SE 需 GPU backfill（约 872 题×8 次，≈ +38 A100-h）。
+- 逻辑 3 集（900/seed）**仅主模型 Qwen2.5-3B** × 3 seeds（P1）。
 - 每题 **17 次解码**（`1+R(4)+W(4)+SE(8)`），统一采样预算 K=8。
+- **执行顺序**：P0 主模型数学 PRS+TokUR → P1 逻辑 → P2 其余模型 → P3 CPU 消融。
 
 ### 12.2 成本模型与假设
 
@@ -311,32 +336,32 @@ python -m prs.ase.run_ase_experiment --dataset math500 --mode all \
 
 > 带宽比例：H100≈1.6×A100，5090≈0.9×A100。`ASE_FAST=1`（数据集并行+分片）只缩短**墙钟**，卡时总量不变。
 
-**各模型生成题量**（逻辑按代表值 zebra500+color500+leg200≈1200/seed 估）：
+**各模型生成题量**（300 档）：
 
 | 模型 | 题量 | token 量 |
 |------|----:|----:|
-| Llama-3.2-1B（数学 3 seed） | 1272×3 = 3816 | 51.9M |
-| Qwen2.5-3B（数学补 2 seed + 逻辑 3 seed） | 1272×2 + 1200×3 = 6144 | 83.6M |
-| Llama-3.1-8B（数学 3 seed） | 3816 | 51.9M |
-| Qwen3-8B（数学 3 seed） | 3816 | 51.9M |
+| Llama-3.2-1B（数学 3 seed） | 872×3 = 2616 | 35.6M |
+| Qwen2.5-3B（数学补 2 seed + 逻辑 3 seed） | 872×2 + 900×3 = 4444 | 60.4M |
+| Llama-3.1-8B（数学 3 seed） | 2616 | 35.6M |
+| Qwen3-8B（数学 3 seed） | 2616 | 35.6M |
 
-### 12.3 主实验卡时（推荐档定稿口径）
+### 12.3 主实验卡时（300 档定稿口径）
 
-| 模型 | A100 (h) | H100 (h) | 5090 (h) |
+| 模型 | A100 (h) | H100 (h) | 5090 (h) | 优先级 |
+|------|---------:|---------:|---------:|--------|
+| **Qwen2.5-3B（含逻辑，PRS+TokUR）** | **≈400** | **≈250** | **≈445** | **P0+P1** |
+| Llama-3.2-1B | 180 | 112 | 198 | P2 |
+| Llama-3.1-8B | 353 | 220 | 397 | P2 |
+| Qwen3-8B | 353 | 220 | 397 | P2 |
+| **小计** | **≈1286** | **≈802** | **≈1437** |
+
+加 TokUR EU + INSIDE/P(True) 前向 ≈ **+15%**（TokUR 在 P0 即跑，已含）。
+
+| 全计划合计（300 档，3 seeds，vLLM 前 HF 基准） | A100 | H100 | 5090 |
 |------|---------:|---------:|---------:|
-| Llama-3.2-1B | 262 | 164 | 288 |
-| Qwen2.5-3B（含逻辑） | 581 | 363 | 645 |
-| Llama-3.1-8B | 515 | 320 | 577 |
-| Qwen3-8B | 515 | 320 | 577 |
-| **小计** | **≈1873** | **≈1167** | **≈2087** |
+| **GPU-hours** | **≈1480** | **≈920** | **≈1650** |
 
-加 TokUR EU + INSIDE/P(True) 前向 ≈ **+15%**；加 E7 扰动强度 ≈ +20/13/22 h。
-
-| 全计划合计（推荐档，3 seeds，无 SE） | A100 | H100 | 5090 |
-|------|---------:|---------:|---------:|
-| **GPU-hours** | **≈2150** | **≈1360** | **≈2420** |
-
-> 逻辑若取满 500×3 则 A100 升至 ≈2240。CPU 消融（E4/E5/E6）不占 GPU。误差带 ±40%。
+> 相对 500 推荐档（2150 A100-h）约 **−31%**。CPU 消融（E4/E5/E6）不占 GPU。误差带 ±40%。
 
 ### 12.4 换算参考
 - 8×A100：≈ **11 节点·天**；8×H100：≈ **7 节点·天**；8×5090：≈ **12.6 节点·天**（单卡 ≈100 天，须多卡）。
@@ -350,8 +375,8 @@ python -m prs.ase.run_ase_experiment --dataset math500 --mode all \
 | 3 | 逻辑改用 Llama-3.2-1B 主模型 | 微降（约 −90 h） | — |
 | — | 复用 Qwen2.5-3B seed1 | （已计入定稿口径） | — |
 
-> **已采纳**：降 R/W 到 4（K=8），换来 SE 公平接入；总生成仍 17 次/题（4+4+8+1）。经验上 R=W=8→4 几乎不掉点。
-> 推荐执行：定稿口径 + 方案 1（8B 单 seed）+ **vLLM 混合管线（§12.6）**。
+> **已采纳**：降 R/W 到 4（K=8）；**MAX_SAMPLES=300**；**vLLM 混合管线（§12.6）**；**先 P0 PRS+TokUR 再扩模型**。
+> 300 档下 4 模型 3 seed 全跑可纳入 ¥3000 预算，无需再砍 8B seed。
 
 ### 12.6 vLLM 混合管线（已实现）
 
@@ -369,32 +394,36 @@ python -m prs.ase.run_ase_experiment --dataset math500 --mode all \
 
 **预期加速**：13/17≈76% 解码可批量化，全管线含 HF 前向约 **1.7–2.6×**（视 batch 与 vLLM 吞吐）。
 
-| 方案 | 数学 A100-h | 逻辑 A100-h | 合计 |
+| 方案（300 档） | 数学 A100-h | 逻辑 A100-h | 合计 |
 |------|----:|----:|----:|
-| 纯 HF（定稿） | ≈1826 | ≈391 | ≈2217 |
-| vLLM 混合（保守 1.7×） | ≈1070 | ≈230 | ≈1300 |
-| vLLM 混合（中等 2.2×） | ≈830 | ≈178 | ≈1010 |
-| vLLM 混合 + 8B 单 seed | ≈550–700 | ≈178 | **≈750–900** |
+| 纯 HF | ≈1260 | ≈235 | ≈1495 |
+| vLLM 混合（保守 1.7×） | ≈740 | ≈138 | **≈880** |
+| vLLM 混合（中等 2.2×） | ≈575 | ≈107 | **≈680** |
+| **P0 only**（Qwen 数学 PRS+TokUR） | ≈245 | — | **≈245** |
 
 > 安装：`pip install vllm`（按本机 CUDA/torch 版本匹配）。未安装时 HF 管线照常工作。
 
-### 12.7 预算报价（报销用）
+### 12.7 预算报价（报销用，封顶 ¥3,000）
 
 卡时单价：**RTX 5090-32GB ¥2.88/h**、**A100-40GB ¥3.28/h**。
+老师批复预算：**¥3,000**（按 5090 计 ≈ **1040 卡时**可用）。
 
 **保守口径**（往高报，可辩护）：
-- 不计 vLLM 不确定加速时按纯 HF；计 vLLM 时取**最保守 1.7× 加速**；
-- A100-40GB 带宽比 80GB 低约 20% → 卡时 ×1.2；
-- 失败重跑 / 调参 / reasoning 长尾余量 ×1.3。
+- vLLM 取**最保守 1.7× 加速**；
+- 失败重跑 / SE backfill / reasoning 长尾余量 ×1.2。
 
-| 方案 | 基准卡时(A100/5090) | A100-40GB 预算 | 5090-32GB 预算 |
-|------|------|---:|---:|
-| 纯 HF（全部跑完） | 2150 / 2420 | 3354 h → **¥11,000** | 3146 h → **¥9,100** |
-| **vLLM 混合（保守 1.7×）** | 1300 / 1460 | 2028 h → **¥6,700** | 1900 h → **¥5,500** |
-| vLLM 混合 + 8B 单 seed | ≈850 / 960 | ≈1326 h → **¥4,350** | ≈1250 h → **¥3,600** |
+| 方案（300 档） | 基准 5090-h | 含余量 5090-h | **5090 费用** | 是否在 ¥3000 内 |
+|------|----:|----:|----:|:---:|
+| **P0 only**（Qwen 数学 PRS+TokUR，3 seed） | ≈280 | ≈336 | **≈¥970** | ✅ |
+| P0+P1（+逻辑 PRS+TokUR） | ≈410 | ≈492 | **≈¥1,420** | ✅ |
+| **全计划**（4 模型 3 seed + 逻辑，vLLM） | ≈880 | ≈1056 | **≈¥2,940** | ✅ 刚好 |
+| 纯 HF 全计划（无 vLLM） | ≈1650 | ≈1980 | ≈¥5,700 | ❌ |
 
-**建议报销额**：
-- 走 vLLM 混合（推荐）：**A100 报 ¥7,000 / 5090 报 ¥5,500**；想要不超封顶 → 统一 **¥7,500**。
-- 若不确定能否用 vLLM、要最稳：按纯 HF 报 **¥12,000** 封顶。
+**建议报销额**：按老师封顶 **报 ¥3,000**（说明：300 题/集 × vLLM 混合 × 优先 PRS+TokUR，含 20% 重跑余量）。
 
-> 实际执行用 vLLM 混合，省下即结余。CPU 消融（E4/E5/E6）不占 GPU、不计费。
+**分阶段花钱**（预算紧时）：
+1. 先花 **~¥1,000** 跑 P0 → 主表 PRS vs TokUR 可填
+2. 再花 **~¥400** 跑 P1 → 逻辑跨域可填
+3. 余 **~¥1,600** 跑 P2 三模型 + 重跑缓冲
+
+> CPU 消融（E4/E5/E6）不占 GPU、不计费。E7 扰动强度从余量出，不够则延后。
