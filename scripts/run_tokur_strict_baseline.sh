@@ -35,15 +35,17 @@ BATCH_SIZE="${BATCH_SIZE:-16}"
 PARALLEL_SHARDS="${PARALLEL_SHARDS:-0}"
 
 export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
-export PATH="/HDDDATA/phx/tokur_venv/bin:${PATH}"
-export TMPDIR="${TMPDIR:-/HDDDATA/phx/tmp}"
-export PIP_CACHE_DIR="${PIP_CACHE_DIR:-/HDDDATA/phx/pip-cache}"
+export TOKUR_VENV="${TOKUR_VENV:-${PRS_ROOT}/.tokur_venv}"
+export TOKUR_PY="${TOKUR_PY:-${TOKUR_VENV}/bin/python}"
+export PATH="${TOKUR_VENV}/bin:${PATH}"
+export TMPDIR="${TMPDIR:-/tmp}"
+export PIP_CACHE_DIR="${PIP_CACHE_DIR:-${TMPDIR}/pip-cache}"
 export VLLM_USE_V1="${VLLM_USE_V1:-1}"
 export TOKUR_MAX_MODEL_LEN="${TOKUR_MAX_MODEL_LEN:-4096}"
 export TOKUR_MAX_NUM_BATCHED_TOKENS="${TOKUR_MAX_NUM_BATCHED_TOKENS:-4096}"
 
-if [[ ! -x /HDDDATA/phx/tokur_venv/bin/python ]]; then
-  echo "Missing tokur venv: /HDDDATA/phx/tokur_venv" >&2
+if [[ ! -x "$TOKUR_PY" ]]; then
+  echo "Missing TokUR venv: $TOKUR_PY (run bash scripts/setup_after_clone.sh)" >&2
   exit 1
 fi
 
@@ -98,11 +100,10 @@ if [[ ! -f "$MODEL_PATH/config.json" ]]; then
   echo "Missing config.json under $MODEL_PATH" >&2
   exit 1
 fi
-/HDDDATA/phx/tokur_venv/bin/python -c "import json; c=json.load(open('$MODEL_PATH/config.json')); print('bayes_sigma', c.get('bayes_sigma'), 'num_samples', c.get('num_samples'), 'basis_idx len', len(c.get('basis_idx',[])))"
+"$TOKUR_PY" -c "import json; c=json.load(open('$MODEL_PATH/config.json')); print('bayes_sigma', c.get('bayes_sigma'), 'num_samples', c.get('num_samples'), 'basis_idx len', len(c.get('basis_idx',[])))"
 
 cd "$ROOT"
 PRS_PY="${ROOT}/src"
-TOKUR_PY="/HDDDATA/phx/tokur_venv/bin/python"
 
 for dataset in $DATASETS; do
   echo "======== strict TokUR: $dataset ========"

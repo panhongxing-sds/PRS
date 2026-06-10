@@ -15,10 +15,10 @@
 > **公平采样预算（关键）**：所有采样/扰动类方法统一 **K=8** 个样本，确保对比公平：
 > - PRS / U_Ecc / U_Deg：共享同一组 R+W=8 扰动样本（4 text 改写 + 4 weight 扰动，均为完整解码）；
 > - SE：8 个独立高温样本（`--se-samples 8`，温度 0.7 / top-p 0.95，完整解码）；
-> - **TokUR EU：8 次权重扰动 teacher-forcing 前向**（`num_samples=8`，对固定回复做前向估 EU，**非解码**，故卡时远低于上面三类；用其论文自带的 rank8/σ0.1/q,k,v,o 扰动配置，仅对齐样本数）；
+> - **TokUR EU：官方实现**（`third_party/TokUR` + `run_tokur_official_maintable.sh`）——vLLM greedy 解码时由 TFB `bayesian_transformer` 原生累计 EU；`num_samples` / `bayes_sigma` / `basis_idx` **取自 TFB checkpoint**（如 Qwen2.5-3B 默认 num_samples=5），**不与 PRS 的 K=8 强行对齐**；
 > - 单次方法（PE/LL/Self-Certainty/DeepConf/INSIDE/P(True)）：仅 1 次 greedy/前向，本就不采样，不参与采样数对齐。
 >
-> 每题**解码**生成 = 1(clean) + 4(R) + 4(W) + 8(SE) = **17 次**；TokUR 另加 8 次前向（teacher-forcing，便宜）。降预算（R=W=8→4）经验上几乎不掉点，且让 SE/TokUR 都在 K=8 下公平。
+> 每题 **PRS 管线解码** = 1(clean) + 4(R) + 4(W) + 8(SE) = **17 次**。TokUR 为**独立官方管线**（greedy 生成 + 生成时 EU），不走 PRS 的 post-hoc `score_tokur_baseline` 近似路径。
 
 | $S_\text{out}$ | **$U=1-\max_c\hat p_\text{cls}(c)$**（按代码，非归一化熵） | `F_resp`=`TW_ASE` |
 | $S_\text{ans}$ | weight 分支平均 | `AltMass_final` |
@@ -61,9 +61,11 @@
 | **延后** | E7 扰动强度、失败分析 | 附录/可选 | 另计 |
 
 **P0 最小闭环**（预算紧时只跑这个也能写主结论）：
-1. vLLM Phase A：clean + R + SE（产出 partial，含 clean 回复）
-2. HF Phase B：weight 分支 → **PRS 三组分 + 11 baselines**
-3. 同 Phase B 内：`score_tokur_baseline` → **TokUR EU**（8 次权重扰动前向，便宜）
+1. **Phase A（vLLM）**：clean + R + SE → `*.partial.json`
+2. **Phase B（HF）**：weight 分支 → **PRS 三组分 + 11 baselines** → 完整 `raw_runs/*.json`
+3. **Phase C（官方 TokUR venv）**：`run_tokur_official_maintable.sh` → export jsonl → `greedy_unc_single_batch_refine.py` → `tokur_baseline.jsonl`（`scoring_mode=official_vllm`）
+
+> **禁止**主表使用 `score_tokur_baseline.py`（post-hoc HF 近似，与官方 TFB 扰动/生成路径不一致）。
 
 已有 **Qwen2.5-3B seed1**（500 档旧 raw）：CPU 子采样对齐 300 题 + GPU 仅补 SE backfill。
 
@@ -231,14 +233,19 @@ cd /mnt/afs/L202500372/PRS
 source scripts/env.sh
 export MAX_SAMPLES=300   # 默认已写入 configs/ase_models.yaml 与编排脚本
 
-# ========== P0：主模型 PRS + TokUR（数学，最优先）==========
-# Phase A+B 一体；Phase B 内自动跑 weight 分支 + TokUR EU + 全部 baseline
+# ========== P0：主模型 PRS + 官方 TokUR（数学，最优先）==========
+# Phase A(vLLM) + B(HF weight+metrics) + C(official TokUR) 一体
 DATASETS=minerva,math500,gsm8k bash scripts/run_maintable_vllm.sh qwen25_3b
 
 # 分批/续跑（重复执行自动跳过已完成）
 SEEDS=41 DATASETS=math500 bash scripts/run_maintable_vllm.sh qwen25_3b
-SKIP_VLLM=1 bash scripts/run_maintable_vllm.sh qwen25_3b   # 只补 HF：weight + TokUR + metrics
+SKIP_VLLM=1 bash scripts/run_maintable_vllm.sh qwen25_3b   # 只补 HF：weight + metrics
 SKIP_HF=1   bash scripts/run_maintable_vllm.sh qwen25_3b   # 只跑 vLLM：clean+R+SE
+ASE_SKIP_TOKUR=1 bash scripts/run_maintable_vllm.sh qwen25_3b  # 跳过 Phase C
+
+# 单独补官方 TokUR（需 Phase B 已完成 raw_runs）
+OUT_DIR=$PRS_OUTPUTS/maintable_qwen25_3b/seed41 PRS_MODEL_TAG=qwen25_3b \
+  DATASET=math500 TOKUR_SEED=41 bash scripts/run_tokur_official_maintable.sh
 
 # seed1 已有 500 档 raw：子采样对齐 300 + 补 SE
 SEEDS=41 MAX_SAMPLES=300 SKIP_VLLM=1 bash scripts/run_maintable_vllm.sh qwen25_3b
@@ -378,14 +385,17 @@ python -m prs.ase.run_ase_experiment --dataset math500 --mode all \
 > **已采纳**：降 R/W 到 4（K=8）；**MAX_SAMPLES=300**；**vLLM 混合管线（§12.6）**；**先 P0 PRS+TokUR 再扩模型**。
 > 300 档下 4 模型 3 seed 全跑可纳入 ¥3000 预算，无需再砍 8B seed。
 
-### 12.6 vLLM 混合管线（已实现）
+### 12.6 三阶段管线（PRS vLLM 混合 + 官方 TokUR）
 
-为压缩卡时，**纯解码三路（clean + R 文本改写 + SE 高温采样，共 13/17 次）改用 vLLM 批量生成**；权重扰动分支（W=4）、TokUR EU、INSIDE 仍走 HF（vLLM 无法逐样本注入权重噪声 / 暴露隐藏态）。
+**PRS 路径**：纯解码三路（clean + R + SE，13/17 次）走 vLLM；权重扰动（W=4）+ INSIDE 走 HF。
 
-**两阶段架构（均可续跑、可分批）**：
-- **Phase A（vLLM）**：`prs.ase.run_vllm_phase` 批量生成 clean+R+SE，按 chunk 写 `raw_runs/{id}.partial.json`。
-- **Phase B（HF）**：现有 `prs.ase.run_ase_experiment --mode all --resume` 读取 partial，**只补 weight 分支**，再算 metrics → 完整 `raw_runs/{id}.json`。
-- 编排脚本：`scripts/run_maintable_vllm.sh`（`SKIP_VLLM=1` 只跑 B，`SKIP_HF=1` 只跑 A）。
+**TokUR 路径（官方，独立）**：`third_party/TokUR/run/greedy_unc_single_batch_refine.py`（vLLM + TFB bayesian_transformer），**不用** PRS 的 `score_tokur_baseline` 近似。
+
+**三阶段架构（均可续跑、可分批）**：
+- **Phase A（vLLM，PRS）**：`prs.ase.run_vllm_phase` → `raw_runs/{id}.partial.json`
+- **Phase B（HF，PRS）**：`run_ase_experiment --resume` → 补 weight 分支 + metrics → `raw_runs/{id}.json`
+- **Phase C（官方 TokUR venv）**：`run_tokur_official_maintable.sh` → export → greedy_unc → `tokur_baseline.jsonl`
+- 编排：`scripts/run_maintable_vllm.sh`（`SKIP_VLLM`/`SKIP_HF`/`ASE_SKIP_TOKUR` 控制各阶段）
 
 **保真度说明（写进 limitation/附录）**：vLLM 仅返回 top-k logprobs，非全词表分布。因此：
 - **精确**：选中 token logprob、top-k pairs、top-2 margin、rank → **LL / DeepConf / Self-Certainty 与 HF 一致**；答案类指标（F_resp / U_Ecc / U_Deg / SE）完全不受影响。

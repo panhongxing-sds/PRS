@@ -63,12 +63,15 @@ bash scripts/download_logic_code_datasets.sh     # logic: leg_counting / zebra_p
 bash scripts/generate_api_variants.sh minerva,math500,gsm8k,leg_counting,zebra_puzzles,color_cube
 ```
 
-### 1.3 Optional: vLLM (recommended, ~2× faster)
+### 1.3 vLLM + official TokUR venv (required for maintable)
 
 ```bash
-pip install vllm      # match your CUDA / torch build
+pip install vllm      # PRS Phase A (match your CUDA / torch build)
+bash scripts/setup_after_clone.sh   # creates .tokur_venv for official TokUR Phase C
 ```
-The HF pipeline works without vLLM; vLLM only accelerates the plain-decoding routes.
+
+TokUR baseline uses `third_party/TokUR` native `greedy_unc_single_batch_refine.py`
+(`scoring_mode=official_vllm`). Do **not** use `score_tokur_baseline.py` for paper tables.
 
 ---
 
@@ -85,7 +88,7 @@ The HF pipeline works without vLLM; vLLM only accelerates the plain-decoding rou
 |--------|---------------------|--------|
 | PRS / U_Ecc / U_Deg | R=4 text rephrase + W=4 weight perturb (shared) | text→vLLM, weight→HF |
 | SE | 8 high-temp samples | vLLM |
-| TokUR EU | 8 weight-perturb teacher-forcing forwards | HF |
+| TokUR EU | official greedy + TFB EU during decode | **TokUR venv (vLLM)** |
 | PE / LL / Self-Certainty / DeepConf / INSIDE / P(True) | single greedy/forward (no sampling) | HF |
 
 Per question = 1 clean + 4 text + 4 weight + 8 SE = **17 decodes**.
@@ -94,17 +97,15 @@ Per question = 1 clean + 4 text + 4 weight + 8 SE = **17 decodes**.
 
 ## 3. Hybrid vLLM pipeline (how to run)
 
-Only the **pure-decoding routes (clean + R text rephrase + SE, 13/17 decodes)** run on
-vLLM. The **weight-perturbation branch, TokUR EU, and INSIDE stay on Hugging Face**
-(vLLM cannot inject per-sample weight noise nor expose hidden states).
+**PRS** uses a vLLM+HF hybrid; **TokUR EU uses the official third_party/TokUR pipeline**
+(separate vLLM + TFB bayesian_transformer — not the post-hoc `score_tokur_baseline` approx).
 
-Two phases, both **resumable** and **safe to run in batches** (re-running skips
-finished work — you do *not* need to finish in one shot):
+Three phases, all **resumable**:
 
 ```
-Phase A  prs.ase.run_vllm_phase        vLLM: clean + R + SE  → raw_runs/{id}.partial.json
-Phase B  prs.ase.run_ase_experiment    HF:   weight branch + metrics → raw_runs/{id}.json
-         (--resume reads the partial and only adds the weight branch)
+Phase A  prs.ase.run_vllm_phase              vLLM: clean + R + SE  → *.partial.json
+Phase B  prs.ase.run_ase_experiment          HF:   weight branch + metrics → raw_runs/*.json
+Phase C  run_tokur_official_maintable.sh     TokUR venv: greedy_unc → tokur_baseline.jsonl
 ```
 
 ### Execution order (PRS + TokUR first)

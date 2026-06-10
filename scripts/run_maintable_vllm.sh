@@ -2,7 +2,8 @@
 # Hybrid vLLM + HF main-table pipeline (per model).
 #
 #   Phase A (vLLM, batched): clean greedy + R text rephrases + SE high-temp samples
-#   Phase B (HF, per-question): weight-perturbation branch + TokUR EU + metrics
+#   Phase B (HF, per-question): weight-perturbation branch + metrics
+#   Phase C (official TokUR venv): greedy_unc → tokur_baseline.jsonl
 #
 # Both phases are resumable; the whole thing can be run in batches (by dataset,
 # by seed, or by shard) and re-invoked safely — completed work is skipped.
@@ -97,12 +98,13 @@ for seed in "${SEED_ARR[@]}"; do
         ${ASE_FAST:+--fast} \
         > "$LOG/hf_${ds}_seed${seed}.log" 2>&1 || echo "WARN: HF phase B $ds seed$seed failed"
 
-      if [[ "${ASE_SKIP_TOKUR:-0}" != "1" ]]; then
-        python3 -m prs.ase.score_tokur_baseline \
-          --out-dir "$OUT" --dataset "$ds" \
-          --model-path "$MODEL_PATH" --device "${CUDA_DEVICE:-cuda:0}" --resume \
-          >> "$LOG/tokur_${ds}_seed${seed}.log" 2>&1 || true
-      fi
+    fi
+
+    # --- Phase C: official TokUR (third_party/TokUR vLLM + TFB greedy EU) ---
+    if [[ "${ASE_SKIP_TOKUR:-0}" != "1" && "$SKIP_HF" != "1" ]]; then
+      OUT_DIR="$OUT" PRS_MODEL_TAG="$MODEL_TAG" DATASET="$ds" TOKUR_SEED="$seed" \
+        bash scripts/run_tokur_official_maintable.sh \
+        >> "$LOG/tokur_${ds}_seed${seed}.log" 2>&1 || echo "WARN: official TokUR $ds seed$seed failed"
     fi
   done
 done

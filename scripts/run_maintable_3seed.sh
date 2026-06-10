@@ -80,15 +80,11 @@ for seed in "${SEED_ARR[@]}"; do
       ${ASE_FAST:+--fast} \
       > "$LOG/${ds}_seed${seed}.log" 2>&1 || echo "WARN: $ds seed$seed failed"
 
-    # TokUR EU baseline (approx unless ASE_TOKUR_STRICT=1)
+    # Official TokUR (third_party/TokUR greedy_unc + TFB; NOT score_tokur_baseline approx)
     if [[ "${ASE_SKIP_TOKUR:-0}" != "1" ]]; then
-      python3 -m prs.ase.score_tokur_baseline \
-        --out-dir "$OUT" \
-        --dataset "$ds" \
-        --model-path "$MODEL_PATH" \
-        --device "${CUDA_DEVICE:-cuda:0}" \
-        --resume \
-        >> "$LOG/tokur_${ds}_seed${seed}.log" 2>&1 || true
+      OUT_DIR="$OUT" PRS_MODEL_TAG="$MODEL_TAG" DATASET="$ds" TOKUR_SEED="$seed" \
+        bash scripts/run_tokur_official_maintable.sh \
+        >> "$LOG/tokur_${ds}_seed${seed}.log" 2>&1 || echo "WARN: official TokUR $ds seed$seed failed"
     fi
   done
 done
