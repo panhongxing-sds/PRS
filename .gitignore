@@ -10,6 +10,10 @@ build/
 venv/
 .venv/
 .tokur_venv/
+.tokur_venv_5090/
+githubkey
+*.pem
+*.key
 .idea/
 .vscode/
 *.swp

@@ -16,6 +16,17 @@ def _answer_from_run(run: dict) -> str:
     return (run.get("answer_normalized") or run.get("final_answer") or "").strip()
 
 
+def _sequence_from_run_for_se(run: dict) -> str:
+    """Official SE clusters full generations; fall back to extracted answer."""
+    return (
+        run.get("full_response")
+        or run.get("response_text")
+        or run.get("answer_raw")
+        or _answer_from_run(run)
+        or ""
+    ).strip()
+
+
 def _collect_tw_sample_answers(record: dict) -> list[str]:
     """Text + weight perturbation answers (for U_Ecc / U_Deg graph baselines)."""
     text = record.get("text_rephrase_runs") or []
@@ -28,13 +39,26 @@ def _collect_tw_sample_answers(record: dict) -> list[str]:
     return answers
 
 
-def _collect_se_sample_answers(record: dict) -> list[str]:
+def _collect_se_sample_sequences(record: dict) -> list[str]:
     """
-    High-temperature sampling answers for official semantic entropy.
+    High-temperature sampled generations for official semantic entropy (NLI clustering).
 
     Does **not** fall back to T/W perturbation runs — those are a different
     experimental protocol (ASE), not SE (Kuhn et al.).
     """
+    for key in SE_SAMPLE_RUN_KEYS:
+        runs = record.get(key) or []
+        if not runs:
+            continue
+        seqs = [_sequence_from_run_for_se(r) for r in runs]
+        seqs = [s for s in seqs if s]
+        if seqs:
+            return seqs
+    return []
+
+
+def _collect_se_sample_answers(record: dict) -> list[str]:
+    """Extracted final answers from SE runs (diagnostics; SE metric uses full sequences)."""
     for key in SE_SAMPLE_RUN_KEYS:
         runs = record.get(key) or []
         if not runs:
@@ -44,6 +68,16 @@ def _collect_se_sample_answers(record: dict) -> list[str]:
         if answers:
             return answers
     return []
+
+
+def official_nli_se_from_record(record: dict) -> dict[str, float | str | int]:
+    """Official SE with NLI on full_response (post-hoc only; use recompute_metrics --recompute-se)."""
+    se_sequences = _collect_se_sample_sequences(record)
+    if se_sequences:
+        out = semantic_entropy_h(se_sequences, cluster_mode="nli")
+        out["baseline_SE_status"] = "ok"
+        return out
+    return _missing_se_fields()
 
 
 def _missing_se_fields() -> dict[str, float | str | int]:
@@ -64,9 +98,9 @@ def sample_baselines_from_record(record: dict) -> dict[str, float | str | int]:
     """
     out: dict[str, float | str | int] = {}
 
-    se_answers = _collect_se_sample_answers(record)
-    if se_answers:
-        out.update(semantic_entropy_h(se_answers))
+    se_sequences = _collect_se_sample_sequences(record)
+    if se_sequences:
+        out.update(semantic_entropy_h(se_sequences))
         out["baseline_SE_status"] = "ok"
     else:
         out.update(_missing_se_fields())

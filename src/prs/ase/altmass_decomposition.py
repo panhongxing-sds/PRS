@@ -153,6 +153,11 @@ def _local_spread_topk(
     for run in runs:
         trace = _reasoning_trace(run)
         if not trace:
+            # Short-answer tasks (e.g. color_cube) have no separate reasoning span;
+            # fall back to the full token trace so the local-spread signal (answer-token
+            # alternative mass under perturbation) is still defined instead of nan.
+            trace = run.get("token_trace") or []
+        if not trace:
             continue
         pos_ok = indices_fn(trace) if indices_fn is not None else set(range(len(trace)))
         spreads: list[float] = []
@@ -257,6 +262,95 @@ def _aggregate_altmass(
         if masses:
             per_run.append(float(np.mean(masses)))
     return float(np.mean(per_run)) if per_run else float("nan")
+
+
+def drift_form_variants(
+    runs: list[dict],
+    *,
+    top_pct: float = 0.10,
+    prefix: str = "",
+) -> dict[str, float]:
+    """Alternative mathematical forms of D_reason / D_ans for later form-selection
+    analysis. Same raw quantities as the primary metrics, different aggregations.
+
+    D_reason family (per-run local-spread sequence over the reasoning trace):
+      Dr_q90        — mean over runs of the 90th-percentile spread
+      Dr_max        — mean of per-run max spread
+      Dr_lse        — mean of per-run soft-max (log-sum-exp, tau=0.1)
+      Dr_late_w     — position-weighted mean (w ∝ (i/n)^2; late drift counts more)
+      Dr_fork_density — fraction of tokens with spread > 0.3 (decision-fork rate)
+      Dr_run_std    — std across runs of per-run top-k%% mean (drift instability)
+
+    D_ans family (final answer span / answer clusters):
+      Da_final_max  — mean of per-run max token alt-mass inside the final span
+      Da_margin     — 1 - (top1 - top2 cluster mass): close-competition form
+      Da_minority   — mean spread over minority-cluster runs only
+    """
+    nan = float("nan")
+    keys = ("Dr_q90", "Dr_max", "Dr_lse", "Dr_late_w", "Dr_fork_density", "Dr_run_std",
+            "Da_final_max", "Da_margin", "Da_minority")
+    if len(runs) < 2:
+        return {prefix + k: nan for k in keys}
+
+    answers = [r.get("answer_normalized", "") for r in runs]
+    labels, sizes = cluster_answers(answers)
+    n_runs = len(runs)
+
+    per_run_spreads: list[list[float]] = []
+    per_run_topk_mean: list[float] = []
+    q90s, maxs, lses, late_ws, forks = [], [], [], [], []
+    for run in runs:
+        trace = _reasoning_trace(run)
+        spreads, pos = [], []
+        for i, t in enumerate(trace):
+            m = _local_topk_spread(t.get("topk") or [], t.get("token", ""))
+            if m is not None:
+                spreads.append(m)
+                pos.append(i)
+        if not spreads:
+            continue
+        arr = np.asarray(spreads)
+        per_run_spreads.append(spreads)
+        srt = np.sort(arr)[::-1]
+        k = max(1, int(math.ceil(len(arr) * top_pct)))
+        per_run_topk_mean.append(float(srt[:k].mean()))
+        q90s.append(float(np.quantile(arr, 0.9)))
+        maxs.append(float(arr.max()))
+        tau = 0.1
+        lses.append(float(tau * np.log(np.mean(np.exp(arr / tau)))))
+        w = (np.asarray(pos, float) / max(1, len(trace))) ** 2
+        late_ws.append(float((arr * w).sum() / (w.sum() + 1e-12)))
+        forks.append(float((arr > 0.3).mean()))
+
+    # D_ans family
+    final_maxs = []
+    minority_spreads = []
+    majority_label = max(sizes, key=sizes.get)
+    for run, lab in zip(runs, labels):
+        span_toks = _span_slice(run.get("token_trace") or [], run.get("answer_span"))
+        ms = [m for t in span_toks
+              if (m := _local_topk_spread(t.get("topk") or [], t.get("token", ""))) is not None]
+        if ms:
+            final_maxs.append(float(max(ms)))
+            if lab != majority_label:
+                minority_spreads.append(float(np.mean(ms)))
+    masses = sorted((c / n_runs for c in sizes.values()), reverse=True)
+    margin = 1.0 - (masses[0] - (masses[1] if len(masses) > 1 else 0.0))
+
+    def _m(x):
+        return float(np.mean(x)) if x else nan
+
+    return {
+        prefix + "Dr_q90": _m(q90s),
+        prefix + "Dr_max": _m(maxs),
+        prefix + "Dr_lse": _m(lses),
+        prefix + "Dr_late_w": _m(late_ws),
+        prefix + "Dr_fork_density": _m(forks),
+        prefix + "Dr_run_std": float(np.std(per_run_topk_mean)) if len(per_run_topk_mean) > 1 else nan,
+        prefix + "Da_final_max": _m(final_maxs),
+        prefix + "Da_margin": float(margin),
+        prefix + "Da_minority": _m(minority_spreads) if minority_spreads else 0.0,
+    }
 
 
 def altmass_variants_weight_branch(

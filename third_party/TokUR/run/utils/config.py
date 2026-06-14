@@ -13,16 +13,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Literal
+import os
 
 
 @dataclass
 class Config:
     approach: Literal["best_of_n", "beam_search", "dvts"] = "dvts"
     model_path: str = "meta-llama/Llama-3.2-1B-Instruct"
-    gpu_memory_utilization: float = (
-        0.9  # vllm is allocated 0.5 of GPU memory, the PRM uses the rest
+    gpu_memory_utilization: float = field(
+        default_factory=lambda: float(os.environ.get("TOKUR_GPU_MEM_UTIL", "0.88"))
     )
     prm_path: str = "RLHFlow/Llama3.1-8B-PRM-Deepseek-Data"
     # Output Related Options

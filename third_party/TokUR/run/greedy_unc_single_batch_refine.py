@@ -241,7 +241,7 @@ def main(
         max_tokens=config.max_tokens,
         stop_token_ids=(
             [151645, 151643]
-            if "qwen2" in config.model_path.lower()
+            if "qwen" in config.model_path.lower()
             else None
         ),
     )

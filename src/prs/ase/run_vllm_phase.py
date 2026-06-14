@@ -36,7 +36,7 @@ from prs.token_qaac.data import build_records
 
 DEFAULT_TFTTCL = Path("/home/phx/TF-TTCL/data/MATH")
 DEFAULT_WEIGHT_SEEDS = [42, 43, 44, 45]
-DEFAULT_SE_TEMPERATURE = 0.7
+DEFAULT_SE_TEMPERATURE = 0.3
 DEFAULT_SE_TOP_P = 0.95
 
 

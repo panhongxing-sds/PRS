@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from prs.ase.semantic_cache import build_semantic_cache
+from prs.grading.answer_canonicalizer import grade_answer
 from prs.grading.math_grader import math_equal
 
 
@@ -135,7 +136,13 @@ def build_full_record(
 ) -> dict:
     ref = str(rec.get("reference", "")).strip()
     a0 = clean_gen.get("answer_normalized", "")
-    ok = math_equal(a0, ref) if ref and a0 else False
+    # Mode-aware strict grading (math/string/code) so the raw stored label is not a
+    # bogus math_equal verdict for non-numeric datasets (e.g. logic color words).
+    g = grade_answer(
+        a0, ref, record_id=rec.get("id"), dataset=rec.get("dataset"),
+        model=(model_info or {}).get("model_name"),
+    )
+    ok = bool(g["is_correct_clean"])
 
     text_answers = [r["answer_normalized"] for r in text_runs]
     weight_answers = [r["answer_normalized"] for r in weight_runs]
@@ -150,6 +157,10 @@ def build_full_record(
         "reference_normalized": ref,
         "is_correct": ok,
         "label_wrong": 0 if ok else 1,
+        "is_correct_clean": bool(g["is_correct_clean"]),
+        "label_wrong_clean": g["label_wrong_clean"],
+        "label_drop": g["label_drop"],
+        "relabeled": g["relabeled"],
         "model_info": model_info,
         "experiment_config": experiment_config,
         "base_generation": _run_from_gen("base", clean_gen, source="base", reference=ref),

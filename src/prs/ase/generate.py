@@ -5,7 +5,7 @@ from __future__ import annotations
 import torch
 
 from prs.ase.trace import build_token_trace, find_answer_span
-from prs.grading.math_grader import extract_math_answer
+from prs.grading.extract import extract_answer_for_dataset
 
 
 @torch.no_grad()
@@ -19,6 +19,7 @@ def generate_requery_answers(
     num_samples: int = 3,
     temperature: float = 0.7,
     top_p: float = 0.95,
+    dataset: str | None = None,
 ) -> list[str]:
     """Fast prefix re-query: batched sampling, no token trace (answers only)."""
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
@@ -50,7 +51,7 @@ def generate_requery_answers(
     for i in range(num_samples):
         gen_ids = sequences[i, prompt_len:]
         text = tokenizer.decode(gen_ids, skip_special_tokens=True)
-        ans = extract_math_answer(text) or text.strip()
+        ans = extract_answer_for_dataset(text, dataset) or text.strip()
         answers.append(ans)
     return answers
 
@@ -65,6 +66,7 @@ def generate_with_stats(
     *,
     topk_save: int = 20,
     decoding: dict | None = None,
+    dataset: str | None = None,
 ) -> dict:
     """
     Greedy decode with KV cache; save full token_trace (top-k logprobs, entropy, margin).
@@ -98,11 +100,12 @@ def generate_with_stats(
     token_entropies = [t["entropy"] for t in trace]
     token_margins = [-t["margin_top2"] for t in trace]
 
+    extracted = extract_answer_for_dataset(response_text, dataset)
     row = {
         "response_text": response_text,
-        "final_answer": extract_math_answer(response_text),
-        "answer_raw": extract_math_answer(response_text),
-        "answer_normalized": extract_math_answer(response_text),
+        "final_answer": extracted,
+        "answer_raw": extracted,
+        "answer_normalized": extracted,
         "parse_success": bool(response_text.strip()),
         "token_entropies": token_entropies,
         "token_margins": token_margins,

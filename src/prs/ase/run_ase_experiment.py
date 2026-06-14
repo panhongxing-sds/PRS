@@ -12,10 +12,42 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+import time
 from pathlib import Path
 
 import torch
 from tqdm import tqdm
+
+
+def _try_claim(claim_dir: Path, rec_id: str, stale_sec: float = 1800.0) -> bool:
+    """Atomically claim a record for dynamic work distribution across processes.
+
+    Returns True if this process won the claim (and should process the record).
+    A claim file older than ``stale_sec`` is assumed orphaned (crashed worker)
+    and may be re-claimed. Double-processing on rare stale races is harmless
+    (idempotent: last save_record wins).
+    """
+    claim_dir.mkdir(parents=True, exist_ok=True)
+    cp = claim_dir / f"{rec_id}.claim"
+    try:
+        fd = os.open(str(cp), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
+        return True
+    except FileExistsError:
+        try:
+            age = time.time() - cp.stat().st_mtime
+        except FileNotFoundError:
+            return False
+        if age > stale_sec:
+            try:
+                os.utime(cp, None)
+                cp.write_text(str(os.getpid()))
+                return True
+            except OSError:
+                return False
+        return False
 
 from prs.ase.generate import generate_requery_answers, generate_with_stats
 from prs.ase.metrics import metrics_from_record
@@ -42,7 +74,7 @@ DEFAULT_TFTTCL = Path("/home/phx/TF-TTCL/data/MATH")
 DEFAULT_WEIGHT_SEEDS = [42, 43, 44, 45, 46, 47, 48, 49]
 DECODING = {"temperature": 0.0, "top_p": 1.0, "do_sample": False, "topk_save": 20}
 DEFAULT_SE_SAMPLES = 10
-DEFAULT_SE_TEMPERATURE = 0.7
+DEFAULT_SE_TEMPERATURE = 0.3
 DEFAULT_SE_TOP_P = 0.95
 
 
@@ -79,7 +111,8 @@ def generate_full_record(
 ) -> dict:
     question = rec.get("question") or ""
     rephrases = (rec.get("rephrases") or [])[:n_rephrases]
-    prompt_clean = build_prompt_for_dataset(question, tokenizer, model_path, dataset=rec.get("dataset", "math500"))
+    ds_name = rec.get("dataset", "math500")
+    prompt_clean = build_prompt_for_dataset(question, tokenizer, model_path, dataset=ds_name)
     reference = rec.get("reference", "")
 
     decoding = {**DECODING, "max_new_tokens": max_new_tokens, "topk_save": topk_save}
@@ -132,15 +165,15 @@ def generate_full_record(
 
     if clean_gen is None:
         clean_gen = generate_with_stats(
-            model, tokenizer, prompt_clean, max_new_tokens, device, topk_save=topk_save, decoding=decoding
+            model, tokenizer, prompt_clean, max_new_tokens, device, topk_save=topk_save, decoding=decoding, dataset=ds_name
         )
         clean_gen["input_prompt"] = prompt_clean
         _checkpoint()
 
     start_text = len(text_runs)
     for i, rq in enumerate(rephrases[start_text:], start=start_text):
-        pr = build_prompt_for_dataset(rq, tokenizer, model_path, dataset=rec.get("dataset", "math500"))
-        g = generate_with_stats(model, tokenizer, pr, max_new_tokens, device, topk_save=topk_save, decoding=decoding)
+        pr = build_prompt_for_dataset(rq, tokenizer, model_path, dataset=ds_name)
+        g = generate_with_stats(model, tokenizer, pr, max_new_tokens, device, topk_save=topk_save, decoding=decoding, dataset=ds_name)
         g["input_prompt"] = pr
         text_runs.append(_run_from_gen(f"T_{i}", g, source="text", rephrase_text=rq, reference=reference))
         _checkpoint()
@@ -156,7 +189,7 @@ def generate_full_record(
             continue
         with wp.sample(seed=seed):
             g = generate_with_stats(
-                model, tokenizer, prompt_clean, max_new_tokens, device, topk_save=topk_save, decoding=decoding
+                model, tokenizer, prompt_clean, max_new_tokens, device, topk_save=topk_save, decoding=decoding, dataset=ds_name
             )
         g["input_prompt"] = prompt_clean
         pcfg = perturb_config_dict(
@@ -180,6 +213,7 @@ def generate_full_record(
             num_samples=se_samples,
             temperature=se_temperature,
             top_p=se_top_p,
+            dataset=ds_name,
         )
         high_temp_runs = runs_from_high_temp_answers(
             answers,
@@ -231,6 +265,7 @@ def backfill_se_samples(
         num_samples=se_samples,
         temperature=se_temperature,
         top_p=se_top_p,
+        dataset=record.get("dataset", "math500"),
     )
     record["high_temp_sample_runs"] = runs_from_high_temp_answers(
         answers,
@@ -295,6 +330,13 @@ def main() -> None:
     ap.add_argument("--fast", action="store_true", help="Fast profile: sparse checkpoints, sdpa (topk=10, 8 weight seeds)")
     ap.add_argument("--shard-id", type=int, default=0)
     ap.add_argument("--num-shards", type=int, default=1)
+    ap.add_argument(
+        "--dynamic-claim",
+        action="store_true",
+        help="Dynamic work queue: every shard scans the full record list and atomically "
+        "claims the next undone record (eliminates static-shard straggler tail). "
+        "Ignores shard-id/num-shards slicing.",
+    )
     ap.add_argument("--resume", action="store_true")
     args = ap.parse_args()
 
@@ -319,15 +361,18 @@ def main() -> None:
         max_samples=args.max_samples,
     )
     records = sorted(records, key=lambda r: r["id"])
-    records = records[args.shard_id :: args.num_shards]
+    if not args.dynamic_claim:
+        records = records[args.shard_id :: args.num_shards]
+    claim_dir = out_dir / args.dataset / "claims"
 
     device = args.device
     if device.startswith("cuda") and not torch.cuda.is_available():
         device = "cpu"
     weight_seeds = [int(s.strip()) for s in args.weight_seeds.split(",") if s.strip()]
 
+    mode_desc = "dynamic-claim" if args.dynamic_claim else f"shard {args.shard_id}/{args.num_shards}"
     print(
-        f"[{args.mode}] shard {args.shard_id}/{args.num_shards} {args.dataset}: "
+        f"[{args.mode}] {mode_desc} {args.dataset}: "
         f"{len(records)} records, device={device}"
     )
 
@@ -342,9 +387,10 @@ def main() -> None:
         )
         wp = LowRankWeightPerturbation(model, wp_cfg)
 
-    for rec in tqdm(records, desc=f"ASE [{args.dataset}] shard {args.shard_id}"):
+    def _process_one(rec) -> bool:
+        """Process a single record. Returns True if generation was attempted."""
         if args.resume and record_exists(out_dir, args.dataset, rec["id"]):
-            if args.se_samples > 0 and args.mode in ("all", "generate"):
+            if not args.dynamic_claim and args.se_samples > 0 and args.mode in ("all", "generate"):
                 try:
                     existing = load_record(out_dir, args.dataset, rec["id"])
                     patched = backfill_se_samples(
@@ -363,7 +409,9 @@ def main() -> None:
                         save_record(out_dir, patched, metrics)
                 except Exception as exc:
                     print(f"SE backfill ERROR {rec['id']}: {exc}")
-            continue
+            return False
+        if args.dynamic_claim and not _try_claim(claim_dir, rec["id"]):
+            return False
         try:
             full = generate_full_record(
                 rec,
@@ -391,6 +439,21 @@ def main() -> None:
             err.parent.mkdir(parents=True, exist_ok=True)
             err.write_text(json.dumps({"id": rec["id"], "error": str(exc)}), encoding="utf-8")
             print(f"ERROR {rec['id']}: {exc}")
+        return True
+
+    if args.dynamic_claim:
+        # Repeat full passes until a pass does no work: catches records orphaned
+        # by crashed workers (stale claims become re-claimable after stale_sec).
+        while True:
+            did_work = False
+            for rec in tqdm(records, desc=f"ASE [{args.dataset}] dyn"):
+                if _process_one(rec):
+                    did_work = True
+            if not did_work:
+                break
+    else:
+        for rec in tqdm(records, desc=f"ASE [{args.dataset}] shard {args.shard_id}"):
+            _process_one(rec)
 
     print(f"raw_runs → {out_dir / args.dataset / 'raw_runs/'}")
 

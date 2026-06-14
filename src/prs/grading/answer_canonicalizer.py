@@ -9,8 +9,9 @@ from sympy.parsing.sympy_parser import parse_expr, standard_transformations, imp
 
 from prs.datasets.registry import get_dataset_spec, normalize_dataset_id
 from prs.grading.code_grader import code_equal
-from prs.grading.logic_grader import logic_equal
+from prs.grading.logic_grader import grade_grid_answer, logic_equal
 from prs.grading.math_grader import extract_math_answer, math_equal
+from prs.grading.strict_grader import strict_grade
 
 _TRANSFORMATIONS = standard_transformations + (implicit_multiplication_application,)
 
@@ -211,16 +212,36 @@ MANUAL_RELABEL_IDS = {
 }
 
 
-def _grade_by_mode(pred: str, ref: str, mode: str) -> tuple[bool, bool]:
+def _grade_by_mode(pred: str, ref: str, mode: str, dataset_id: str | None = None) -> tuple[bool, bool, bool]:
+    """Return (ok_orig, ok_clean, drop).
+
+    For math datasets we use the strict three-way grader: confidently gradable
+    samples get a correct/wrong verdict; un-confidently gradable ones are flagged
+    ``drop=True`` so downstream aggregation can exclude them instead of risking a
+    misjudgment. Logic ('string') and code modes are exact and never dropped,
+    except zebra grids which use a structured three-way grader.
+    """
     if mode == "string":
+        if dataset_id == "zebra_puzzles":
+            verdict = grade_grid_answer(pred, ref)
+            if verdict == "correct":
+                return True, True, False
+            if verdict == "wrong":
+                return False, False, False
+            return False, False, True
         ok = logic_equal(pred, ref)
-        return ok, ok
+        return ok, ok, False
     if mode == "code":
         ok = code_equal(pred, ref)
-        return ok, ok
+        return ok, ok, False
     ok_orig = math_equal(pred, ref)
-    ok_clean = math_equal_clean(pred, ref)
-    return ok_orig, ok_clean
+    verdict = strict_grade(pred, ref)
+    if verdict == "correct":
+        return ok_orig, True, False
+    if verdict == "wrong":
+        return ok_orig, False, False
+    # drop: clean label falls back to raw, but the sample is flagged for exclusion
+    return ok_orig, ok_orig, True
 
 
 def grade_answer(
@@ -229,23 +250,31 @@ def grade_answer(
     *,
     record_id: str | None = None,
     dataset: str | None = None,
+    model: str | None = None,
 ) -> dict:
+    drop = False
     if dataset:
         try:
-            spec = get_dataset_spec(normalize_dataset_id(dataset))
-            ok_orig, ok_clean = _grade_by_mode(pred, ref, spec.grading)
+            norm_id = normalize_dataset_id(dataset)
+            spec = get_dataset_spec(norm_id)
+            ok_orig, ok_clean, drop = _grade_by_mode(pred, ref, spec.grading, norm_id)
         except ValueError:
-            ok_orig = math_equal(pred, ref)
-            ok_clean = math_equal_clean(pred, ref)
+            ok_orig, ok_clean, drop = _grade_by_mode(pred, ref, "math")
     else:
-        ok_orig = math_equal(pred, ref)
-        ok_clean = math_equal_clean(pred, ref)
-    if record_id and record_id in MANUAL_RELABEL_IDS:
+        ok_orig, ok_clean, drop = _grade_by_mode(pred, ref, "math")
+    # MANUAL_RELABEL_IDS were hand-verified on the Qwen2.5-3B minerva outputs ONLY.
+    # Applying them to other models (Llama, Qwen3-8B) would force-keep samples those
+    # models answered differently, inflating their scores. Gate on the model id; when
+    # model is unknown (None) we keep legacy behaviour (Qwen-3B pipeline default).
+    relabel_ok = model is None or "qwen2.5-3b" in model.lower() or "qwen25_3b" in model.lower()
+    if relabel_ok and record_id and record_id in MANUAL_RELABEL_IDS:
         ok_clean = True
+        drop = False
     return {
         "is_correct": ok_orig,
         "is_correct_clean": ok_clean,
         "label_wrong": 0 if ok_orig else 1,
         "label_wrong_clean": 0 if ok_clean else 1,
-        "relabeled": (not ok_orig) and ok_clean,
+        "label_drop": 1 if drop else 0,
+        "relabeled": (not ok_orig) and ok_clean and not drop,
     }

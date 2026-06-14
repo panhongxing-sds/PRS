@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import os
 
 import numpy as np
 
@@ -14,21 +15,49 @@ def _normalize_answer(text: str) -> str:
     return extract_math_answer(text).strip()
 
 
-def semantic_entropy_h(answers: list[str]) -> dict[str, float]:
-    """
-    Official semantic entropy H over clusters (Kuhn et al.).
+def _se_cluster_mode() -> str:
+    """math_equal (generation) or nli (official post-hoc via --recompute-se)."""
+    return os.environ.get("PRS_SE_CLUSTER", "math_equal").strip().lower()
 
-    Uses math_equal clustering (domain-specific; official SE uses NLI entailment).
+
+def _cluster_for_se(
+    sequences: list[str], *, cluster_mode: str | None = None
+) -> tuple[dict[int, int], str]:
+    mode = (cluster_mode or _se_cluster_mode()).strip().lower()
+    if mode == "math_equal":
+        _, sizes = cluster_answers(sequences)
+        return sizes, "math_equal"
+    try:
+        from prs.baselines.nli_entailment import cluster_sequences_nli
+
+        _, sizes = cluster_sequences_nli(sequences)
+        return sizes, "nli"
+    except Exception:
+        # NLI model missing/offline → fall back so metrics pipeline does not crash.
+        _, sizes = cluster_answers(sequences)
+        return sizes, "math_equal_nli_fallback"
+
+
+def semantic_entropy_h(
+    sequences: list[str], *, cluster_mode: str | None = None
+) -> dict[str, float | str | int]:
     """
-    n = len(answers)
+    Semantic entropy H over clusters (Kuhn et al.).
+
+    Generation default: math_equal on extracted answers (fast).
+    Official table SE: pass cluster_mode=\"nli\" or PRS_SE_CLUSTER=nli (post-hoc).
+    """
+    mode_label = (cluster_mode or _se_cluster_mode()).strip().lower()
+    n = len(sequences)
     if n == 0:
         nan = float("nan")
         return {
             "baseline_SE_H": nan,
             "baseline_SE_H_norm": nan,
             "baseline_SE_num_clusters": 0,
+            "baseline_SE_cluster_mode": mode_label,
         }
-    _, sizes = cluster_answers(answers)
+    sizes, mode = _cluster_for_se(sequences, cluster_mode=cluster_mode)
     masses = [c / n for c in sizes.values()]
     h = 0.0
     for p in masses:
@@ -40,6 +69,7 @@ def semantic_entropy_h(answers: list[str]) -> dict[str, float]:
         "baseline_SE_H": h,
         "baseline_SE_H_norm": h_norm,
         "baseline_SE_num_clusters": k,
+        "baseline_SE_cluster_mode": mode,
     }
 
 

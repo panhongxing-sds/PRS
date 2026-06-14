@@ -49,7 +49,8 @@ def test_deepconf_from_topk():
     assert dc["baseline_DC_mean"] > 0
 
 
-def test_semantic_entropy_uniform_clusters():
+def test_semantic_entropy_uniform_clusters(monkeypatch):
+    monkeypatch.setenv("PRS_SE_CLUSTER", "math_equal")
     h = semantic_entropy_h(["1", "2", "3", "4"])
     assert h["baseline_SE_num_clusters"] == 4
     assert h["baseline_SE_H"] == pytest.approx(math.log(4), rel=1e-5)

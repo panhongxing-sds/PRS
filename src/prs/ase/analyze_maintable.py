@@ -37,6 +37,8 @@ def seed_out_dir(base: Path, seed: int) -> Path:
 
 
 def eval_clean(rows: list[dict], key: str, invert: bool = False) -> dict[str, float]:
+    # Exclude samples the strict grader could not confidently judge (label_drop=1).
+    rows = [r for r in rows if not r.get("label_drop", 0)]
     labels = [r["label_wrong_clean"] == 0 for r in rows]
     scores = [float(r.get(key, float("nan"))) for r in rows]
     if invert:
@@ -49,6 +51,7 @@ def eval_clean(rows: list[dict], key: str, invert: bool = False) -> dict[str, fl
 
 def cot_acc_star(rows: list[dict]) -> float:
     """CoT lower-bound: greedy accuracy only (no uncertainty ranking)."""
+    rows = [r for r in rows if not r.get("label_drop", 0)]
     if not rows:
         return float("nan")
     correct = sum(1 for r in rows if r.get("label_wrong_clean", 1) == 0)

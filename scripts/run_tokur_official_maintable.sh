@@ -50,7 +50,7 @@ export TOKUR_VENV TOKUR_PY
 export PATH="${TOKUR_VENV}/bin:${PATH}"
 export TMPDIR="${TMPDIR:-/tmp}"
 export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
-export VLLM_USE_V1="${VLLM_USE_V1:-1}"
+export VLLM_USE_V1="${VLLM_USE_V1:-0}"
 
 # maintable out dirs never use legacy ase_{dataset} slug
 export TOKUR_DS_LEGACY=0
