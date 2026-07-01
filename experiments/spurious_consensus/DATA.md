@@ -25,7 +25,7 @@ data/
 
 ## 模型 × 样本文件（canonical）
 
-6 模型 × 3 benchmark，共同题 N=2228：
+**主实验集**（6 模型 × 3 benchmark，共同题 N≈2228）：
 
 | Tag | 文件模式 | 说明 |
 |-----|----------|------|
@@ -37,6 +37,13 @@ data/
 | `phi4_mini` | `samples_phi4_mini_seed41_{bench}.s3_{0,1,2}.jsonl` | 3 分片 |
 
 `{bench}` ∈ `deepscaler`, `gpqa_diamond`, `aime_2024`
+
+**扩展采样**（额外 benchmark / 中间分片，共 54 个 jsonl 文件全量入库）：
+
+- `qwen25_3b`：+ `minerva`, `competition_math_l5_500`, `math_level4plus_300`
+- `llama32_1b`：+ `competition_math_l5_500`
+- `gemma3_4b`：部分 deepscaler / aime（未完成全量）
+- `phi4_mini`：+ 部分 `shard*` / `s3_0_h*` 中间运行文件
 
 ## jsonl 字段
 
