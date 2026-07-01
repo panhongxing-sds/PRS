@@ -1,0 +1,41 @@
+# Spurious Consensus — answer-level UQ 实验配置
+
+model:
+  tag: qwen25_3b
+  path: $PRS_MODELS/TFB-Qwen2.5-3B-Instruct
+
+benchmarks:
+  - deepscaler
+  - gpqa_diamond
+  - aime_2024
+
+seeds: [41]
+
+sampling:
+  temperature: 0.5
+  top_p: 0.95
+  k: 64
+  k_chunk: 8
+  prompt_batch: 2
+
+max_new_tokens:
+  deepscaler: 2048
+  gpqa_diamond: 2048
+  aime_2024: 4096
+
+# vLLM 采样（sample_vllm.py）
+vllm:
+  batch_size: 16
+  max_model_len: 5120        # 必须 >= gpqa 最长 prompt(2848)+输出；否则长题 prompt 被拒整批崩溃
+  prompt_headroom: 1024
+  max_num_seqs: 64           # 与已验证可跑的 phi shard 一致，避免 OOM
+  gpu_memory_utilization: 0.92
+  dtype: bfloat16
+  enforce_eager: false
+  tensor_parallel_size: 1
+
+analysis:
+  n_grid: [2, 4, 8, 16, 32, 64]
+  bootstrap_draws: 200
+  blindspot_taus: [0.8, 0.9, 0.95]
+  drop_label_drop: true

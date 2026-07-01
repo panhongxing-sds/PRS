@@ -1,0 +1,56 @@
+{
+  "aime_2024": {
+    "n": 30,
+    "wrong_rate": 0.9666666666666667,
+    "auroc_uptop": 0.5862068965517242,
+    "selective_acc_p09": NaN,
+    "cov_p09": 0.0,
+    "wrong_n": 29,
+    "blind_p09": 0,
+    "moderate_wrong": 1,
+    "split_wrong": 28,
+    "mean_p_top_on_wrong": 0.10183189655172414,
+    "blind_ids": []
+  },
+  "competition_math_l5_500": {
+    "n": 500,
+    "wrong_rate": 0.648,
+    "auroc_uptop": 0.7883873456790123,
+    "selective_acc_p09": 1.0,
+    "cov_p09": 0.01,
+    "wrong_n": 324,
+    "blind_p09": 0,
+    "moderate_wrong": 42,
+    "split_wrong": 282,
+    "mean_p_top_on_wrong": 0.1646412037037037,
+    "blind_ids": []
+  },
+  "deepscaler": {
+    "n": 2000,
+    "wrong_rate": 0.702,
+    "auroc_uptop": 0.7579620308227691,
+    "selective_acc_p09": 0.975,
+    "cov_p09": 0.02,
+    "wrong_n": 1404,
+    "blind_p09": 1,
+    "moderate_wrong": 163,
+    "split_wrong": 1240,
+    "mean_p_top_on_wrong": 0.1582309472934473,
+    "blind_ids": [
+      "38763"
+    ]
+  },
+  "gpqa_diamond": {
+    "n": 198,
+    "wrong_rate": 0.6818181818181818,
+    "auroc_uptop": 0.493533215755438,
+    "selective_acc_p09": 1.0,
+    "cov_p09": 0.005050505050505051,
+    "wrong_n": 135,
+    "blind_p09": 0,
+    "moderate_wrong": 132,
+    "split_wrong": 3,
+    "mean_p_top_on_wrong": 0.5290208765741867,
+    "blind_ids": []
+  }
+}

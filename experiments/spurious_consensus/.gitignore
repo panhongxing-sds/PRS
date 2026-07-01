@@ -1,0 +1,12 @@
+# 运行产物（data/ 与 results/ 主数据已纳入 git）
+logs/
+*.log
+download.log
+*.pid
+__pycache__/
+*.pyc
+*.bak
+*.dryrun
+*.preshard
+sc_*.yaml
+spurious_consensus_*.yaml

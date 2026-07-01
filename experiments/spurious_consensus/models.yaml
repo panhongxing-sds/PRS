@@ -1,0 +1,34 @@
+# 跨模型采样（普通 HF Instruct，不必 TFB）
+# Qwen 已有基线；新增其他厂商、较新、长上下文小模型
+# 用法: MODEL_TAG=phi4_mini MODEL_PATH=$PRS_MODELS/Phi-4-mini-instruct ./run_sampling.sh
+
+models:
+  qwen25_3b:
+    path: $PRS_MODELS/TFB-Qwen2.5-3B-Instruct
+    params: 3B
+    context: 32k
+    vendor: Alibaba
+    note: 主实验基线（已有采样，无需重跑）
+
+  llama32_1b:
+    path: $PRS_MODELS/TFB-Llama-3.2-1B-Instruct
+    params: 1B
+    context: 128k
+    vendor: Meta
+    note: 弱模型对照
+
+  gemma3_4b:
+    path: $PRS_MODELS/gemma-3-4b-it
+    params: 4B
+    context: 128k
+    vendor: Google
+    released: 2025-03
+    note: Gemma 3，待下载+采样
+
+  phi4_mini:
+    path: $PRS_MODELS/Phi-4-mini-instruct
+    params: 3.8B
+    context: 128k
+    vendor: Microsoft
+    released: 2025-02
+    note: Phi-4，待下载+采样

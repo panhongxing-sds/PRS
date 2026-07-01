@@ -1,0 +1,3042 @@
+{
+  "summary": {
+    "n_questions": 42,
+    "resample_matches_stored_maj": 0.5238095238095238,
+    "all_64_same_answer": 0.5714285714285714,
+    "all_64_same_reasoning": 0.0,
+    "all_64_same_token_ids": 0.0,
+    "prefix200_all_same": 0.0,
+    "exact_reason_rate_eq1": 0.0,
+    "sim_to_first_mean_avg": 0.39270314477283014,
+    "sim_to_first_mean_median": 0.37506135622006087,
+    "high_sim_ge_0.9": 0.0,
+    "low_sim_lt_0.5": 0.6666666666666666,
+    "common_prefix_len_mean": 6.761904761904762,
+    "common_prefix_len_median": 1.0,
+    "position_consensus_first50_mean": 0.6080580357142857,
+    "pairwise_first_divergence_mean": 26.48670634920635,
+    "cross_logprob_std_mean": 0.16718488830532463,
+    "avg_token_logprob_mean": -0.06633058325856454,
+    "low_logprob_frac_mean": 0.014925393909190876
+  },
+  "questions": [
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "6924764",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.96875,
+      "maj_answer": "6924764",
+      "maj_answer_frac": 0.96875,
+      "n_unique_answers": 3,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.5024322856764156,
+      "sim_to_first_min": 0.19838056680161945,
+      "avg_pairwise_sim": 0.47922335565396795,
+      "min_pairwise_sim": 0.13815042035900932,
+      "completion_len_mean": 740.4375,
+      "completion_len_std": 103.95940839457485,
+      "avg_token_logprob_mean": -0.055770854810642645,
+      "avg_token_logprob_std": 0.013429439380219744,
+      "low_logprob_frac_mean": 0.010945585181837213,
+      "cumulative_logprob_mean": -40.721451309921164,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.2097172920892495,
+      "position_consensus_first50": 0.8278125,
+      "pairwise_first_divergence_mean": 28.283333333333335,
+      "cross_logprob_std_mean": 0.17786139676806242,
+      "reasoning_head": "To determine the number of ways to choose 6 different numbers from the set \\(\\{1, 2, \\ldots, 49\\}\\) such that at least two of the chosen numbers are consecutive, we can use the principle of complementary counting. This involves first calculating the total number of ways to choose 6 numbers from 49 and then subtracting the number of ways to choose 6 numbers such that no two numbers are consecutive.",
+      "answer_counts": {
+        "6924764": 62,
+        "13950167": 1,
+        "10721193": 1
+      },
+      "id": "11874",
+      "benchmark": "deepscaler",
+      "gold": "\\binom{49}{6} - \\binom{44}{6}",
+      "exogenous_difficulty": 0.03125
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "220",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "220",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.4659224992075547,
+      "sim_to_first_min": 0.09601873536299765,
+      "avg_pairwise_sim": 0.33814611406085265,
+      "min_pairwise_sim": 0.08909853249475891,
+      "completion_len_mean": 236.0625,
+      "completion_len_std": 30.402443877918763,
+      "avg_token_logprob_mean": -0.08784047952397012,
+      "avg_token_logprob_std": 0.012398845001439193,
+      "low_logprob_frac_mean": 0.015631331369172018,
+      "cumulative_logprob_mean": -20.604543327324276,
+      "common_prefix_len": 15,
+      "mean_position_consensus": 0.23958333333333334,
+      "position_consensus_first50": 0.54625,
+      "pairwise_first_divergence_mean": 20.175,
+      "cross_logprob_std_mean": 0.207660395398975,
+      "reasoning_head": "To determine the number of coins Fox had at the beginning, we need to follow these steps:\n\n1. Calculate the total toll Fox has to pay for crossing the bridge four times.\n2. Add the number of coins Fox wants to have left after paying the tolls to the total toll.\n\nFirst, let's calculate the total toll for crossing the bridge four times. Since the toll is 50 coins each time, the total toll is:\n\\[ 50 ",
+      "answer_counts": {
+        "220": 64
+      },
+      "id": "12473",
+      "benchmark": "deepscaler",
+      "gold": "25",
+      "exogenous_difficulty": 0.0
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "26",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "26",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.3161726283940482,
+      "sim_to_first_min": 0.03880983182406209,
+      "avg_pairwise_sim": 0.29079181751712985,
+      "min_pairwise_sim": 0.01982651796778191,
+      "completion_len_mean": 1885.375,
+      "completion_len_std": 251.4832561523729,
+      "avg_token_logprob_mean": -0.024069863152995474,
+      "avg_token_logprob_std": 0.003371257689608563,
+      "low_logprob_frac_mean": 0.003986088699321857,
+      "cumulative_logprob_mean": -45.281957225861596,
+      "common_prefix_len": 0,
+      "mean_position_consensus": 0.11795227786144578,
+      "position_consensus_first50": 0.26875,
+      "pairwise_first_divergence_mean": 6.225,
+      "cross_logprob_std_mean": 0.09020607313026717,
+      "reasoning_head": "Let's solve each part step by step.\n\n### Part (a)\nWe need to evaluate the double integral:\n\\[\n\\int_{0}^{2} dx \\int_{0}^{3} \\left(x^2 + 2xy\\right) dy\n\\]\n\nFirst, we integrate with respect to \\(y\\):\n\\[\n\\int_{0}^{3} \\left(x^2 + 2xy\\right) dy = \\int_{0}^{3} x^2 dy + \\int_{0}^{3} 2xy dy\n\\]\n\\[\n= x^2 \\int_{0}^{3} dy + 2x \\int_{0}^{3} y dy\n\\]\n\\[\n= x^2 [y]_{0}^{3} + 2x \\left[\\frac{y^2}{2}\\right]_{0}^{3}\n\\]\n",
+      "answer_counts": {
+        "26": 64
+      },
+      "id": "12827",
+      "benchmark": "deepscaler",
+      "gold": "\\frac{506}{3}",
+      "exogenous_difficulty": 0.009583333333333333
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "2",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "2",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 60,
+      "n_unique_reasoning": 60,
+      "n_unique_token_ids": 60,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.6498262833897118,
+      "sim_to_first_min": 0.17842876165113183,
+      "avg_pairwise_sim": 0.6904426612692801,
+      "min_pairwise_sim": 0.11946176567115195,
+      "completion_len_mean": 564.375,
+      "completion_len_std": 40.48668762692251,
+      "avg_token_logprob_mean": -0.023236048385417582,
+      "avg_token_logprob_std": 0.0031044542804116977,
+      "low_logprob_frac_mean": 0.004227947157714669,
+      "cumulative_logprob_mean": -13.155959905148398,
+      "common_prefix_len": 9,
+      "mean_position_consensus": 0.31526419925512106,
+      "position_consensus_first50": 0.95,
+      "pairwise_first_divergence_mean": 97.51666666666667,
+      "cross_logprob_std_mean": 0.054757757143669546,
+      "reasoning_head": "To solve the equation \\(\\sqrt{2x^2 + 8x + 1} - x = 3\\), we will follow these steps:\n\n1. Isolate the square root term.\n2. Square both sides to eliminate the square root.\n3. Solve the resulting quadratic equation.\n4. Verify the solutions by substituting them back into the original equation.\n\nStep 1: Isolate the square root term.\n\\[\n\\sqrt{2x^2 + 8x + 1} = x + 3\n\\]\n\nStep 2: Square both sides to elimin",
+      "answer_counts": {
+        "2": 64
+      },
+      "id": "12867",
+      "benchmark": "deepscaler",
+      "gold": "-8",
+      "exogenous_difficulty": 0.2625
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "32",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.984375,
+      "maj_answer": "32",
+      "maj_answer_frac": 0.984375,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.30147495361842225,
+      "sim_to_first_min": 0.09082892416225749,
+      "avg_pairwise_sim": 0.3211805384004103,
+      "min_pairwise_sim": 0.0764063811922754,
+      "completion_len_mean": 289.59375,
+      "completion_len_std": 66.43881554436005,
+      "avg_token_logprob_mean": -0.17387418065679353,
+      "avg_token_logprob_std": 0.023977344459135297,
+      "low_logprob_frac_mean": 0.044168821936867234,
+      "cumulative_logprob_mean": -49.940980807008934,
+      "common_prefix_len": 13,
+      "mean_position_consensus": 0.2814039408866995,
+      "position_consensus_first50": 0.83625,
+      "pairwise_first_divergence_mean": 22.366666666666667,
+      "cross_logprob_std_mean": 0.3061709215981198,
+      "reasoning_head": "To determine the maximum number of kings that can be placed on an \\(8 \\times 8\\) chessboard without putting each other in check, we need to understand the movement and attack pattern of a king. A king can move to any of the 8 adjacent squares (including diagonally). Therefore, no two kings can be placed in adjacent squares (including diagonally adjacent).\n\nOne effective strategy to maximize the nu",
+      "answer_counts": {
+        "32": 63,
+        "16": 1
+      },
+      "id": "13184",
+      "benchmark": "deepscaler",
+      "gold": "16",
+      "exogenous_difficulty": 0.054354508196721316
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "25",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "25",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.21715332917543997,
+      "sim_to_first_min": 0.02628232301822806,
+      "avg_pairwise_sim": 0.24119303921336607,
+      "min_pairwise_sim": 0.03192338387869114,
+      "completion_len_mean": 427.234375,
+      "completion_len_std": 77.05633941058565,
+      "avg_token_logprob_mean": -0.06852780422830641,
+      "avg_token_logprob_std": 0.011495639737263178,
+      "low_logprob_frac_mean": 0.012081310007393958,
+      "cumulative_logprob_mean": -29.07583445641143,
+      "common_prefix_len": 0,
+      "mean_position_consensus": 0.1626953125,
+      "position_consensus_first50": 0.32625,
+      "pairwise_first_divergence_mean": 11.058333333333334,
+      "cross_logprob_std_mean": 0.1968287985156936,
+      "reasoning_head": "To solve this problem, let's break it down step by step:\n\n1. **Determine the frosting rates:**\n   - Cagney can frost a cupcake every 20 seconds, so her rate is \\( \\frac{1 \\text{ cupcake}}{20 \\text{ seconds}} \\).\n   - Lacey can frost a cupcake every 30 seconds, so her rate is \\( \\frac{1 \\text{ cupcake}}{30 \\text{ seconds}} \\).\n\n2. **Find the combined frosting rate:**\n   - To find the combined rate,",
+      "answer_counts": {
+        "25": 64
+      },
+      "id": "1401",
+      "benchmark": "deepscaler",
+      "gold": "20",
+      "exogenous_difficulty": 0.00625
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "39",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "39",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.6773816060539881,
+      "sim_to_first_min": 0.18127490039840638,
+      "avg_pairwise_sim": 0.5912430905271275,
+      "min_pairwise_sim": 0.19901960784313724,
+      "completion_len_mean": 296.328125,
+      "completion_len_std": 24.787884318440227,
+      "avg_token_logprob_mean": -0.08367372731267458,
+      "avg_token_logprob_std": 0.014511211662774127,
+      "low_logprob_frac_mean": 0.014546957787561023,
+      "cumulative_logprob_mean": -24.7342764639687,
+      "common_prefix_len": 6,
+      "mean_position_consensus": 0.20091841603053434,
+      "position_consensus_first50": 0.455,
+      "pairwise_first_divergence_mean": 11.633333333333333,
+      "cross_logprob_std_mean": 0.1755163347427322,
+      "reasoning_head": "To determine the minimum number of platforms required to transport all the slabs, we need to calculate the total weight of the slabs and then determine how many platforms are needed to transport that weight, given each platform can hold up to 40 tons.\n\nFirst, calculate the total weight of the 120 granite slabs weighing 7 tons each:\n\\[ 120 \\times 7 = 840 \\text{ tons} \\]\n\nNext, calculate the total w",
+      "answer_counts": {
+        "39": 64
+      },
+      "id": "14993",
+      "benchmark": "deepscaler",
+      "gold": "40",
+      "exogenous_difficulty": 0.134375
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "-\\infty,-2]\\cup[3,\\infty",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "(-\\infty, -2] \\cup [3, \\infty)",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.29198013889841495,
+      "sim_to_first_min": 0.017827029631414117,
+      "avg_pairwise_sim": 0.2507885068907977,
+      "min_pairwise_sim": 0.01653261840929401,
+      "completion_len_mean": 733.640625,
+      "completion_len_std": 102.35360997350985,
+      "avg_token_logprob_mean": -0.03452949966343839,
+      "avg_token_logprob_std": 0.006886619659250606,
+      "low_logprob_frac_mean": 0.0061513802033698025,
+      "cumulative_logprob_mean": -25.0141955518099,
+      "common_prefix_len": 3,
+      "mean_position_consensus": 0.16278125,
+      "position_consensus_first50": 0.4253125,
+      "pairwise_first_divergence_mean": 17.133333333333333,
+      "cross_logprob_std_mean": 0.12096348257438203,
+      "reasoning_head": "To determine the complete set of values of \\(x\\) for which \\(y\\) is real in the equation \\(4y^2 + 4xy + x + 6 = 0\\), we need to ensure that the quadratic equation in \\(y\\) has real solutions. This requires the discriminant of the quadratic equation to be non-negative.\n\nThe given equation is:\n\\[4y^2 + 4xy + (x + 6) = 0.\\]\n\nThis is a quadratic equation in \\(y\\) of the form \\(ay^2 + by + c = 0\\), whe",
+      "answer_counts": {
+        "(-\\infty, -2] \\cup [3, \\infty)": 64
+      },
+      "id": "1670",
+      "benchmark": "deepscaler",
+      "gold": "$x \\le -2$ or $x \\ge 3$",
+      "exogenous_difficulty": 0.0031746031746031746
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "135^\\circ",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.90625,
+      "maj_answer": "135^\\circ",
+      "maj_answer_frac": 0.90625,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.36271529477807063,
+      "sim_to_first_min": 0.18889809444904723,
+      "avg_pairwise_sim": 0.3802054314745685,
+      "min_pairwise_sim": 0.12950222581950627,
+      "completion_len_mean": 397.59375,
+      "completion_len_std": 56.29934467591519,
+      "avg_token_logprob_mean": -0.06797772836329397,
+      "avg_token_logprob_std": 0.009655368955713726,
+      "low_logprob_frac_mean": 0.012390888031791357,
+      "cumulative_logprob_mean": -26.76562590571027,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.2193452380952381,
+      "position_consensus_first50": 0.7046875,
+      "pairwise_first_divergence_mean": 19.866666666666667,
+      "cross_logprob_std_mean": 0.1620121334375721,
+      "reasoning_head": "To find the inclination angle of the line given by the parametric equations \\( \\begin{cases} x=1+t \\\\ y=1-t \\end{cases} \\), we need to determine the slope of the line first. The inclination angle \\(\\theta\\) of a line is related to its slope \\(m\\) by the equation \\(m = \\tan \\theta\\).\n\n1. **Identify the slope of the line:**\n   - From the parametric equations, we can express \\(y\\) in terms of \\(x\\).\n",
+      "answer_counts": {
+        "135^\\circ": 58,
+        "\\frac{3\\pi": 6
+      },
+      "id": "17214",
+      "benchmark": "deepscaler",
+      "gold": "\\frac {3\\pi }{4}",
+      "exogenous_difficulty": 0.171875
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "sqrt6+2sqrt2",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.984375,
+      "maj_answer": "\\sqrt{6 + 2\\sqrt{2",
+      "maj_answer_frac": 0.984375,
+      "n_unique_answers": 2,
+      "n_unique_texts": 63,
+      "n_unique_reasoning": 63,
+      "n_unique_token_ids": 63,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.6285308753786942,
+      "sim_to_first_min": 0.11909949164851126,
+      "avg_pairwise_sim": 0.5336345624330405,
+      "min_pairwise_sim": 0.05632930981120396,
+      "completion_len_mean": 591.671875,
+      "completion_len_std": 125.49216293850534,
+      "avg_token_logprob_mean": -0.048643376503113026,
+      "avg_token_logprob_std": 0.0201371351309292,
+      "low_logprob_frac_mean": 0.009918702054951508,
+      "cumulative_logprob_mean": -29.506295797368356,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.36640433985330073,
+      "position_consensus_first50": 0.894375,
+      "pairwise_first_divergence_mean": 76.03333333333333,
+      "cross_logprob_std_mean": 0.09929880776950815,
+      "reasoning_head": "To find the value of \\(a\\) given that \\(f(g(a)) = 18\\), where \\(f(x) = x^2 + 10\\) and \\(g(x) = x^2 - 6\\), we will follow these steps:\n\n1. **Substitute \\(g(a)\\) into \\(f(x)\\):**\n   \\[\n   f(g(a)) = f(a^2 - 6)\n   \\]\n\n2. **Use the definition of \\(f(x)\\):**\n   \\[\n   f(a^2 - 6) = (a^2 - 6)^2 + 10\n   \\]\n\n3. **Set the expression equal to 18:**\n   \\[\n   (a^2 - 6)^2 + 10 = 18\n   \\]\n\n4. **Isolate the squared",
+      "answer_counts": {
+        "\\sqrt{6 + 2\\sqrt{2": 63,
+        "\\sqrt{6 - 2\\sqrt{2": 1
+      },
+      "id": "17252",
+      "benchmark": "deepscaler",
+      "gold": "\\sqrt{2\\sqrt{2} + 6}",
+      "exogenous_difficulty": 0.18125
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "2^49/6",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.953125,
+      "maj_answer": "2^{49/6",
+      "maj_answer_frac": 0.953125,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.3657621962534557,
+      "sim_to_first_min": 0.1309255079006772,
+      "avg_pairwise_sim": 0.3109496952164697,
+      "min_pairwise_sim": 0.09017439387494683,
+      "completion_len_mean": 521.53125,
+      "completion_len_std": 72.35869176151196,
+      "avg_token_logprob_mean": -0.04431868619888744,
+      "avg_token_logprob_std": 0.010116770045365604,
+      "low_logprob_frac_mean": 0.007579628451275273,
+      "cumulative_logprob_mean": -22.923113864027837,
+      "common_prefix_len": 35,
+      "mean_position_consensus": 0.29217960858585856,
+      "position_consensus_first50": 0.9159375,
+      "pairwise_first_divergence_mean": 59.525,
+      "cross_logprob_std_mean": 0.13027350324659193,
+      "reasoning_head": "To solve for \\( R \\) in the equation \\(\\sqrt[4]{R^3} = 64\\sqrt[16]{4}\\), we will follow these steps:\n\n1. **Rewrite the equation using exponents:**\n   \\[\n   \\sqrt[4]{R^3} = 64 \\sqrt[16]{4}\n   \\]\n   This can be rewritten as:\n   \\[\n   (R^3)^{1/4} = 64 \\cdot 4^{1/16}\n   \\]\n\n2. **Simplify the left side:**\n   \\[\n   (R^3)^{1/4} = R^{3/4}\n   \\]\n   So the equation becomes:\n   \\[\n   R^{3/4} = 64 \\cdot 4^{1/",
+      "answer_counts": {
+        "2^{49/6": 61,
+        "\\frac{49": 3
+      },
+      "id": "21529",
+      "benchmark": "deepscaler",
+      "gold": "256 \\cdot 2^{1/6}",
+      "exogenous_difficulty": 0.08854166666666667
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "368\\textcubicfeet",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "368 \\text{ cubic feet",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 63,
+      "n_unique_reasoning": 63,
+      "n_unique_token_ids": 63,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.7157966991594622,
+      "sim_to_first_min": 0.4860960635608523,
+      "avg_pairwise_sim": 0.7238835809384007,
+      "min_pairwise_sim": 0.2233468286099865,
+      "completion_len_mean": 551.21875,
+      "completion_len_std": 26.376758679517465,
+      "avg_token_logprob_mean": -0.03808478242132543,
+      "avg_token_logprob_std": 0.00492821188815857,
+      "low_logprob_frac_mean": 0.008045731679278275,
+      "cumulative_logprob_mean": -20.972941641195927,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.15367683531746032,
+      "position_consensus_first50": 0.3934375,
+      "pairwise_first_divergence_mean": 10.1,
+      "cross_logprob_std_mean": 0.07882696831351751,
+      "reasoning_head": "To find the total volume and total surface area of the three cubic boxes, we will calculate each for the individual boxes and then sum them up.\n\n### Step 1: Calculate the Volume of Each Box\n\nThe volume \\( V \\) of a cube with edge length \\( a \\) is given by:\n\\[ V = a^3 \\]\n\nFor the three boxes:\n1. For the box with edge length 3 feet:\n\\[ V_1 = 3^3 = 27 \\text{ cubic feet} \\]\n\n2. For the box with edge ",
+      "answer_counts": {
+        "368 \\text{ cubic feet": 64
+      },
+      "id": "22551",
+      "benchmark": "deepscaler",
+      "gold": "420",
+      "exogenous_difficulty": 0.10625
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "-2sqrt2",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.609375,
+      "maj_answer": "-2\\sqrt{2",
+      "maj_answer_frac": 0.609375,
+      "n_unique_answers": 3,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.25289399763593956,
+      "sim_to_first_min": 0.0054525627044711015,
+      "avg_pairwise_sim": 0.2371772605805359,
+      "min_pairwise_sim": 0.02269503546099291,
+      "completion_len_mean": 785.171875,
+      "completion_len_std": 75.96001305940104,
+      "avg_token_logprob_mean": -0.03551273341971103,
+      "avg_token_logprob_std": 0.005179797801901077,
+      "low_logprob_frac_mean": 0.0065143381394440055,
+      "cumulative_logprob_mean": -27.784838520527526,
+      "common_prefix_len": 0,
+      "mean_position_consensus": 0.154875,
+      "position_consensus_first50": 0.4440625,
+      "pairwise_first_divergence_mean": 16.516666666666666,
+      "cross_logprob_std_mean": 0.12977494315666172,
+      "reasoning_head": "To solve the given problem, we need to use the information provided about the angle \\(\\alpha\\) and its coordinates on the unit circle.\n\n### Step 1: Find the value of \\(\\tan \\alpha\\)\n\nGiven that \\(\\alpha\\) is in the fourth quadrant and the x-coordinate of the point where its terminal side intersects the unit circle is \\(\\frac{1}{3}\\), we can denote this point as \\(\\left(\\frac{1}{3}, y\\right)\\). Sin",
+      "answer_counts": {
+        "-2\\sqrt{2": 39,
+        "\\frac{6": 24,
+        "\\frac{8": 1
+      },
+      "id": "23641",
+      "benchmark": "deepscaler",
+      "gold": "\\frac{6}{5}",
+      "exogenous_difficulty": 0.4791666666666667
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "sqrt2",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "\\sqrt{2",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.4553907240805446,
+      "sim_to_first_min": 0.1791044776119403,
+      "avg_pairwise_sim": 0.5662295077704429,
+      "min_pairwise_sim": 0.15726495726495726,
+      "completion_len_mean": 559.109375,
+      "completion_len_std": 34.27969387420744,
+      "avg_token_logprob_mean": -0.04237837870214924,
+      "avg_token_logprob_std": 0.005232795933714545,
+      "low_logprob_frac_mean": 0.007509562967801328,
+      "cumulative_logprob_mean": -23.6633677676946,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.17751996007984033,
+      "position_consensus_first50": 0.491875,
+      "pairwise_first_divergence_mean": 14.35,
+      "cross_logprob_std_mean": 0.1228793666017956,
+      "reasoning_head": "To solve the problem, we need to determine the radius of the sphere and then use that to find the volume of the sphere. Let's go through the steps in detail.\n\n1. **Identify the given information:**\n   - The area of the cross-section of the sphere is \\(\\pi\\).\n   - The distance from the center of the sphere to this cross-section is 1.\n\n2. **Determine the radius of the cross-sectional circle:**\n   Th",
+      "answer_counts": {
+        "\\sqrt{2": 64
+      },
+      "id": "24723",
+      "benchmark": "deepscaler",
+      "gold": "\\frac{8\\sqrt{2}}{3}\\pi",
+      "exogenous_difficulty": 0.3918478260869565
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "50",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "50",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.19658372295008886,
+      "sim_to_first_min": 0.07388137356919876,
+      "avg_pairwise_sim": 0.17898583447246766,
+      "min_pairwise_sim": 0.0435244161358811,
+      "completion_len_mean": 483.75,
+      "completion_len_std": 71.28003752804848,
+      "avg_token_logprob_mean": -0.18046728566918113,
+      "avg_token_logprob_std": 0.0308646089942862,
+      "low_logprob_frac_mean": 0.04723887450787355,
+      "cumulative_logprob_mean": -86.51572417228688,
+      "common_prefix_len": 2,
+      "mean_position_consensus": 0.17046734234234234,
+      "position_consensus_first50": 0.468125,
+      "pairwise_first_divergence_mean": 7.791666666666667,
+      "cross_logprob_std_mean": 0.3321321769703737,
+      "reasoning_head": "To solve the problem, we need to determine the minimum number of pairs that can be selected from 100 real numbers such that the sum of the numbers in each pair is non-negative, given that the sum of all 100 numbers is zero.\n\nLet's denote the 100 real numbers as \\(a_1, a_2, \\ldots, a_{100}\\). We know that:\n\\[a_1 + a_2 + \\cdots + a_{100} = 0.\\]\n\nWe need to form pairs \\((a_i, a_j)\\) such that \\(a_i +",
+      "answer_counts": {
+        "50": 64
+      },
+      "id": "24798",
+      "benchmark": "deepscaler",
+      "gold": "99",
+      "exogenous_difficulty": 0.034375
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "15\\textand",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "15 \\text{ and",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.6446080925263591,
+      "sim_to_first_min": 0.09887640449438202,
+      "avg_pairwise_sim": 0.559161347936275,
+      "min_pairwise_sim": 0.045182724252491695,
+      "completion_len_mean": 466.359375,
+      "completion_len_std": 68.85500326489989,
+      "avg_token_logprob_mean": -0.04656653807191298,
+      "avg_token_logprob_std": 0.007236341794318716,
+      "low_logprob_frac_mean": 0.009695652429975247,
+      "cumulative_logprob_mean": -21.864698300840782,
+      "common_prefix_len": 0,
+      "mean_position_consensus": 0.1480219414893617,
+      "position_consensus_first50": 0.3259375,
+      "pairwise_first_divergence_mean": 12.1,
+      "cross_logprob_std_mean": 0.14529730860983875,
+      "reasoning_head": "Let's denote the number of parts A makes per hour as \\(a\\) and the number of parts B makes per hour as \\(b\\). According to the problem, we have two key pieces of information:\n\n1. The time it takes for person A to make 90 parts is the same as the time it takes for person B to make 120 parts.\n2. Together, A and B make 35 parts per hour.\n\nFrom the first piece of information, we can write the equation",
+      "answer_counts": {
+        "15 \\text{ and": 64
+      },
+      "id": "24959",
+      "benchmark": "deepscaler",
+      "gold": "20",
+      "exogenous_difficulty": 0.28829449152542375
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "180",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "180",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 63,
+      "n_unique_reasoning": 63,
+      "n_unique_token_ids": 63,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.53950816904368,
+      "sim_to_first_min": 0.23758734828981243,
+      "avg_pairwise_sim": 0.5903125225735064,
+      "min_pairwise_sim": 0.2673905666779776,
+      "completion_len_mean": 579.5625,
+      "completion_len_std": 33.820701408309084,
+      "avg_token_logprob_mean": -0.04032074106287263,
+      "avg_token_logprob_std": 0.010039023617431454,
+      "low_logprob_frac_mean": 0.007177679457937816,
+      "cumulative_logprob_mean": -23.268822573596616,
+      "common_prefix_len": 18,
+      "mean_position_consensus": 0.21953125,
+      "position_consensus_first50": 0.645625,
+      "pairwise_first_divergence_mean": 29.583333333333332,
+      "cross_logprob_std_mean": 0.10684780492039334,
+      "reasoning_head": "To find the smallest positive integer with exactly 18 positive divisors, we need to understand how the number of divisors of a number is determined. If a number \\( n \\) has the prime factorization \\( n = p_1^{e_1} p_2^{e_2} \\cdots p_k^{e_k} \\), then the number of positive divisors of \\( n \\) is given by \\((e_1 + 1)(e_2 + 1) \\cdots (e_k + 1)\\).\n\nWe need this product to equal 18. The possible factor",
+      "answer_counts": {
+        "180": 64
+      },
+      "id": "25178",
+      "benchmark": "deepscaler",
+      "gold": "288",
+      "exogenous_difficulty": 0.04434523809523809
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "15",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.796875,
+      "maj_answer": "15",
+      "maj_answer_frac": 0.796875,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.39186344794322614,
+      "sim_to_first_min": 0.1495124593716143,
+      "avg_pairwise_sim": 0.31969397812267636,
+      "min_pairwise_sim": 0.09334298118668596,
+      "completion_len_mean": 584.796875,
+      "completion_len_std": 68.43340277404285,
+      "avg_token_logprob_mean": -0.05225582075479505,
+      "avg_token_logprob_std": 0.010407814576163587,
+      "low_logprob_frac_mean": 0.010026802605797186,
+      "cumulative_logprob_mean": -30.384272039553977,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.23224914965986396,
+      "position_consensus_first50": 0.7228125,
+      "pairwise_first_divergence_mean": 27.708333333333332,
+      "cross_logprob_std_mean": 0.1299872725387649,
+      "reasoning_head": "To compute the sum \\(\\sin^2 6^\\circ + \\sin^2 12^\\circ + \\sin^2 18^\\circ + \\dots + \\sin^2 174^\\circ\\), we start by using the identity \\(\\sin^2 x = \\frac{1 - \\cos 2x}{2}\\). Applying this identity, we can rewrite the sum as follows:\n\n\\[\n\\sin^2 6^\\circ + \\sin^2 12^\\circ + \\sin^2 18^\\circ + \\dots + \\sin^2 174^\\circ = \\sum_{k=1}^{30} \\sin^2 (6k^\\circ) = \\sum_{k=1}^{30} \\frac{1 - \\cos (12k^\\circ)}{2}\n\\]\n",
+      "answer_counts": {
+        "15": 51,
+        "\\frac{29": 13
+      },
+      "id": "25540",
+      "benchmark": "deepscaler",
+      "gold": "15.5",
+      "exogenous_difficulty": 0.0
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "10040_5",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "10040_5",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 62,
+      "n_unique_reasoning": 62,
+      "n_unique_token_ids": 62,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.8113560177830947,
+      "sim_to_first_min": 0.24907063197026022,
+      "avg_pairwise_sim": 0.6633633482049616,
+      "min_pairwise_sim": 0.11494252873563218,
+      "completion_len_mean": 390.96875,
+      "completion_len_std": 26.695604009602405,
+      "avg_token_logprob_mean": -0.03240849129921551,
+      "avg_token_logprob_std": 0.007681863700599978,
+      "low_logprob_frac_mean": 0.006673049173438186,
+      "cumulative_logprob_mean": -12.646999479975305,
+      "common_prefix_len": 30,
+      "mean_position_consensus": 0.3654364224137931,
+      "position_consensus_first50": 0.80375,
+      "pairwise_first_divergence_mean": 44.13333333333333,
+      "cross_logprob_std_mean": 0.0649311375546577,
+      "reasoning_head": "To convert the decimal number \\(645_{10}\\) to base 5, we need to repeatedly divide the number by 5 and keep track of the remainders. Here are the steps:\n\n1. **Divide 645 by 5:**\n   \\[\n   645 \\div 5 = 129 \\quad \\text{with a remainder of} \\quad 0\n   \\]\n   So, the least significant digit (rightmost) in base 5 is 0.\n\n2. **Divide 129 by 5:**\n   \\[\n   129 \\div 5 = 25 \\quad \\text{with a remainder of} \\qu",
+      "answer_counts": {
+        "10040_5": 64
+      },
+      "id": "26836",
+      "benchmark": "deepscaler",
+      "gold": "10400_5",
+      "exogenous_difficulty": 0.071875
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "60",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "60",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.5778043856826384,
+      "sim_to_first_min": 0.3783582089552239,
+      "avg_pairwise_sim": 0.5777478516670687,
+      "min_pairwise_sim": 0.31837360951285004,
+      "completion_len_mean": 547.609375,
+      "completion_len_std": 29.454741334959554,
+      "avg_token_logprob_mean": -0.04211460305014295,
+      "avg_token_logprob_std": 0.006687048726758899,
+      "low_logprob_frac_mean": 0.008614742311555504,
+      "cumulative_logprob_mean": -23.058897621596607,
+      "common_prefix_len": 19,
+      "mean_position_consensus": 0.2152662803532009,
+      "position_consensus_first50": 0.6675,
+      "pairwise_first_divergence_mean": 31.066666666666666,
+      "cross_logprob_std_mean": 0.11278173240119392,
+      "reasoning_head": "To find the smallest positive integer with exactly 12 positive integer divisors, we need to understand the relationship between the prime factorization of a number and the number of its divisors. If a number \\( n \\) has a prime factorization of the form \\( n = p_1^{e_1} p_2^{e_2} \\cdots p_k^{e_k} \\), then the number of positive divisors of \\( n \\) is given by \\( (e_1 + 1)(e_2 + 1) \\cdots (e_k + 1)",
+      "answer_counts": {
+        "60": 64
+      },
+      "id": "27761",
+      "benchmark": "deepscaler",
+      "gold": "150",
+      "exogenous_difficulty": 0.00625
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "-sqrt2",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "-\\sqrt{2",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 63,
+      "n_unique_reasoning": 63,
+      "n_unique_token_ids": 63,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.39806919612036834,
+      "sim_to_first_min": 0.11483622350674373,
+      "avg_pairwise_sim": 0.361592658147002,
+      "min_pairwise_sim": 0.054071876030333005,
+      "completion_len_mean": 556.640625,
+      "completion_len_std": 81.70839292636575,
+      "avg_token_logprob_mean": -0.03880394566523313,
+      "avg_token_logprob_std": 0.0057440293331429354,
+      "low_logprob_frac_mean": 0.005017479198393907,
+      "cumulative_logprob_mean": -21.6403270558893,
+      "common_prefix_len": 19,
+      "mean_position_consensus": 0.20858253588516745,
+      "position_consensus_first50": 0.7253125,
+      "pairwise_first_divergence_mean": 43.2,
+      "cross_logprob_std_mean": 0.12317299377967249,
+      "reasoning_head": "To find the values of \\(\\tan \\alpha\\) and \\(\\cos 2\\alpha\\) given that the terminal side of the angle \\(\\alpha\\) passes through the point \\((-1, \\sqrt{2})\\), we will follow these steps:\n\n1. Determine the value of \\(\\tan \\alpha\\).\n2. Use the double-angle formula for cosine to find \\(\\cos 2\\alpha\\).\n\n**Step 1: Determine \\(\\tan \\alpha\\)**\n\nThe tangent of an angle \\(\\alpha\\) is given by the ratio of th",
+      "answer_counts": {
+        "-\\sqrt{2": 64
+      },
+      "id": "28082",
+      "benchmark": "deepscaler",
+      "gold": "-\\frac{1}{3}",
+      "exogenous_difficulty": 0.09375
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "900",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "900",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 63,
+      "n_unique_reasoning": 63,
+      "n_unique_token_ids": 63,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.4217046418548713,
+      "sim_to_first_min": 0.09691629955947137,
+      "avg_pairwise_sim": 0.453900920822453,
+      "min_pairwise_sim": 0.09691629955947137,
+      "completion_len_mean": 334.0625,
+      "completion_len_std": 37.07166834322405,
+      "avg_token_logprob_mean": -0.08136309996844025,
+      "avg_token_logprob_std": 0.020127853363302663,
+      "low_logprob_frac_mean": 0.01757827175971438,
+      "cumulative_logprob_mean": -27.327734729525304,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.23265796703296704,
+      "position_consensus_first50": 0.7665625,
+      "pairwise_first_divergence_mean": 12.45,
+      "cross_logprob_std_mean": 0.19678643655939992,
+      "reasoning_head": "To determine the number of six-digit palindromes, let's first understand what a six-digit palindrome looks like. A six-digit palindrome has the form \\(ABC CBA\\), where \\(A\\), \\(B\\), and \\(C\\) are digits, and \\(A \\neq 0\\) because it is a six-digit number.\n\nHere's the step-by-step reasoning:\n\n1. **Identify the structure of the palindrome:**\n   - A six-digit palindrome is of the form \\(ABC CBA\\).\n   ",
+      "answer_counts": {
+        "900": 64
+      },
+      "id": "28566",
+      "benchmark": "deepscaler",
+      "gold": "9000",
+      "exogenous_difficulty": 0.103125
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "15",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.796875,
+      "maj_answer": "15",
+      "maj_answer_frac": 0.796875,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.39186344794322614,
+      "sim_to_first_min": 0.1495124593716143,
+      "avg_pairwise_sim": 0.31969397812267636,
+      "min_pairwise_sim": 0.09334298118668596,
+      "completion_len_mean": 584.796875,
+      "completion_len_std": 68.43340277404285,
+      "avg_token_logprob_mean": -0.05225582075479505,
+      "avg_token_logprob_std": 0.010407814576163587,
+      "low_logprob_frac_mean": 0.010026802605797186,
+      "cumulative_logprob_mean": -30.384272039553977,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.23224914965986396,
+      "position_consensus_first50": 0.7228125,
+      "pairwise_first_divergence_mean": 27.708333333333332,
+      "cross_logprob_std_mean": 0.1299872725387649,
+      "reasoning_head": "To compute the sum \\(\\sin^2 6^\\circ + \\sin^2 12^\\circ + \\sin^2 18^\\circ + \\dots + \\sin^2 174^\\circ\\), we start by using the identity \\(\\sin^2 x = \\frac{1 - \\cos 2x}{2}\\). Applying this identity, we can rewrite the sum as follows:\n\n\\[\n\\sin^2 6^\\circ + \\sin^2 12^\\circ + \\sin^2 18^\\circ + \\dots + \\sin^2 174^\\circ = \\sum_{k=1}^{30} \\sin^2 (6k^\\circ) = \\sum_{k=1}^{30} \\frac{1 - \\cos (12k^\\circ)}{2}\n\\]\n",
+      "answer_counts": {
+        "15": 51,
+        "\\frac{29": 13
+      },
+      "id": "28830",
+      "benchmark": "deepscaler",
+      "gold": "15.5",
+      "exogenous_difficulty": 0.0
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "pi",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.640625,
+      "maj_answer": "\\pi",
+      "maj_answer_frac": 0.640625,
+      "n_unique_answers": 4,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.3399490978245351,
+      "sim_to_first_min": 0.060644346178142766,
+      "avg_pairwise_sim": 0.23269123368875283,
+      "min_pairwise_sim": 0.028215767634854772,
+      "completion_len_mean": 1183.953125,
+      "completion_len_std": 177.49836528186498,
+      "avg_token_logprob_mean": -0.042926013105956104,
+      "avg_token_logprob_std": 0.006898668465063443,
+      "low_logprob_frac_mean": 0.007637378344351068,
+      "cumulative_logprob_mean": -50.72639847982424,
+      "common_prefix_len": 3,
+      "mean_position_consensus": 0.1632467707212056,
+      "position_consensus_first50": 0.4909375,
+      "pairwise_first_divergence_mean": 15.708333333333334,
+      "cross_logprob_std_mean": 0.14358297238120796,
+      "reasoning_head": "To solve the given problem, we will proceed step by step.\n\n### Step 1: Simplify the function \\( f(x) \\)\nThe given function is:\n\\[ f(x) = 2\\sin x \\cos x - 2\\sin^2 x \\]\n\nWe can use the double-angle identities to simplify this expression. Recall that:\n\\[ 2\\sin x \\cos x = \\sin 2x \\]\nand\n\\[ \\sin^2 x = \\frac{1 - \\cos 2x}{2} \\]\n\nThus, we can rewrite \\( f(x) \\) as:\n\\[ f(x) = \\sin 2x - 2 \\left( \\frac{1 - \\",
+      "answer_counts": {
+        "\\pi": 41,
+        "\\frac{1": 19,
+        "\\frac{\\sqrt{2": 3,
+        "\\[ \\text{Area} = \\frac{\\sqrt{2}}{2} \\cdot \\frac{\\sqrt{2 + \\sqrt{2}}}{2} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2(2 + \\sqrt{2})}}{4} = \\frac{\\sqrt{2} \\sqrt{2 + \\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2(2 + \\sqrt{2})}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2}}}{4} = \\frac{\\sqrt{2 + \\sqrt{2}}}{2\\sqrt{2}} = \\frac{\\sqrt{2 + \\sqrt{2}} \\sqrt{2}}{4} = \\frac{\\sqrt{4 + 2\\sqrt{2": 1
+      },
+      "id": "30267",
+      "benchmark": "deepscaler",
+      "gold": "\\frac{1}{2}",
+      "exogenous_difficulty": 0.22916666666666666
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "0.3",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.96875,
+      "maj_answer": "0.3",
+      "maj_answer_frac": 0.96875,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 46,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.109375,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.6749695385753292,
+      "sim_to_first_min": 0.20907297830374755,
+      "avg_pairwise_sim": 0.6139630793259176,
+      "min_pairwise_sim": 0.14722536806342015,
+      "completion_len_mean": 1458.90625,
+      "completion_len_std": 165.03945728503078,
+      "avg_token_logprob_mean": -0.02619291099872597,
+      "avg_token_logprob_std": 0.0034903067746613944,
+      "low_logprob_frac_mean": 0.00431280718222762,
+      "cumulative_logprob_mean": -38.247308627392904,
+      "common_prefix_len": 11,
+      "mean_position_consensus": 0.20104445933869527,
+      "position_consensus_first50": 0.8803125,
+      "pairwise_first_divergence_mean": 60.96666666666667,
+      "cross_logprob_std_mean": 0.09100430730647702,
+      "reasoning_head": "Let's solve each part step by step.\n\n### Part (1)\n\\[\n(1)(\\sqrt{\\frac{1}{3}})^{2}+\\sqrt{0.3^{2}}-\\sqrt{\\frac{1}{9}}\n\\]\n\n1. Calculate \\((\\sqrt{\\frac{1}{3}})^2\\):\n\\[\n(\\sqrt{\\frac{1}{3}})^2 = \\frac{1}{3}\n\\]\n\n2. Calculate \\(\\sqrt{0.3^2}\\):\n\\[\n\\sqrt{0.3^2} = 0.3\n\\]\n\n3. Calculate \\(\\sqrt{\\frac{1}{9}}\\):\n\\[\n\\sqrt{\\frac{1}{9}} = \\frac{1}{3}\n\\]\n\nNow, substitute these values back into the expression:\n\\[\n\\fra",
+      "answer_counts": {
+        "0.3": 62,
+        "\\frac{3": 2
+      },
+      "id": "30435",
+      "benchmark": "deepscaler",
+      "gold": "2\\sqrt{2}",
+      "exogenous_difficulty": 0.1015625
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "1657",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "1657",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.5600748235404917,
+      "sim_to_first_min": 0.18800557880055788,
+      "avg_pairwise_sim": 0.5178304208339907,
+      "min_pairwise_sim": 0.19363997728563317,
+      "completion_len_mean": 667.59375,
+      "completion_len_std": 67.71602440292475,
+      "avg_token_logprob_mean": -0.053836712327959925,
+      "avg_token_logprob_std": 0.006354650284513332,
+      "low_logprob_frac_mean": 0.00978253661368684,
+      "cumulative_logprob_mean": -35.730438705673826,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.14562851123595505,
+      "position_consensus_first50": 0.3959375,
+      "pairwise_first_divergence_mean": 5.775,
+      "cross_logprob_std_mean": 0.15384058643209741,
+      "reasoning_head": "To solve this problem, we need to calculate the future value of Angela's and Bob's investments separately and then find the positive difference between their balances after 20 years.\n\n### Step 1: Calculate Angela's Balance\nAngela's account pays 6% interest compounded annually. The formula for the future value of a compounded interest account is:\n\\[ A = P \\left(1 + \\frac{r}{n}\\right)^{nt} \\]\nwhere:",
+      "answer_counts": {
+        "1657": 64
+      },
+      "id": "33958",
+      "benchmark": "deepscaler",
+      "gold": "\\$1,\\!657",
+      "exogenous_difficulty": 0.059375
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "\\cfrac29",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.890625,
+      "maj_answer": "\\cfrac{29",
+      "maj_answer_frac": 0.890625,
+      "n_unique_answers": 3,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.3331925555731486,
+      "sim_to_first_min": 0.08695652173913043,
+      "avg_pairwise_sim": 0.300555211679527,
+      "min_pairwise_sim": 0.02152550304164717,
+      "completion_len_mean": 410.171875,
+      "completion_len_std": 68.08371562998288,
+      "avg_token_logprob_mean": -0.06203891549941714,
+      "avg_token_logprob_std": 0.012754011796555727,
+      "low_logprob_frac_mean": 0.012044109709832404,
+      "cumulative_logprob_mean": -25.06084789632664,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.1833970323741007,
+      "position_consensus_first50": 0.4546875,
+      "pairwise_first_divergence_mean": 14.441666666666666,
+      "cross_logprob_std_mean": 0.1811071888485353,
+      "reasoning_head": "To solve the expression \\(1 + \\cfrac{2}{3 + \\cfrac{4}{5}}\\), we need to simplify it step by step.\n\nFirst, simplify the inner fraction \\(\\cfrac{4}{5}\\):\n\n\\[\n3 + \\cfrac{4}{5} = \\cfrac{3 \\cdot 5 + 4}{5} = \\cfrac{15 + 4}{5} = \\cfrac{19}{5}\n\\]\n\nNow, substitute this back into the original expression:\n\n\\[\n1 + \\cfrac{2}{\\cfrac{19}{5}}\n\\]\n\nNext, simplify the complex fraction \\(\\cfrac{2}{\\cfrac{19}{5}}\\):\n\n",
+      "answer_counts": {
+        "\\cfrac{29": 57,
+        "\\frac{29": 6,
+        "\\cfrac{43": 1
+      },
+      "id": "34320",
+      "benchmark": "deepscaler",
+      "gold": "\\frac{29}{19}",
+      "exogenous_difficulty": 0.43359375
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "d",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.953125,
+      "maj_answer": "D",
+      "maj_answer_frac": 0.953125,
+      "n_unique_answers": 4,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.14829735418616655,
+      "sim_to_first_min": 0.0648884329315209,
+      "avg_pairwise_sim": 0.22445051884430176,
+      "min_pairwise_sim": 0.05959097320169252,
+      "completion_len_mean": 955.25,
+      "completion_len_std": 315.7367871344738,
+      "avg_token_logprob_mean": -0.057889548989580666,
+      "avg_token_logprob_std": 0.011227608120719573,
+      "low_logprob_frac_mean": 0.011083285414022063,
+      "cumulative_logprob_mean": -53.5771628226159,
+      "common_prefix_len": 10,
+      "mean_position_consensus": 0.18225331369661266,
+      "position_consensus_first50": 0.7296875,
+      "pairwise_first_divergence_mean": 37.38333333333333,
+      "cross_logprob_std_mean": 0.18020086429600166,
+      "reasoning_head": "To solve the problem, we need to determine the number of positive integer divisors of \\(81n^4\\) given that \\(110n^3\\) has 110 positive integer divisors.\n\nFirst, we factorize 110:\n\\[ 110 = 2 \\times 5 \\times 11. \\]\nSo, we can write \\(110n^3\\) in the form \\(2^a \\times 5^b \\times 11^c \\times p_1^{d_1} \\times p_2^{d_2} \\times \\cdots \\times p_k^{d_k}\\), where \\(p_1, p_2, \\ldots, p_k\\) are primes differe",
+      "answer_counts": {
+        "D": 61,
+        "\\[ 1+": 1,
+        "This is also not 110. Let's try \\(a = 0\\), \\(b = 2\\), and \\(c": 1,
+        "\\[ 8 \\times (e_1+1)(e_2+1) \\cdots (e_k+1) = 110 \\": 1
+      },
+      "id": "38203",
+      "benchmark": "deepscaler",
+      "gold": "325",
+      "exogenous_difficulty": 0.19261287061994609
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "95040",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "95040",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.5038157368456609,
+      "sim_to_first_min": 0.13200142704245452,
+      "avg_pairwise_sim": 0.6017121810832259,
+      "min_pairwise_sim": 0.1661641541038526,
+      "completion_len_mean": 393.171875,
+      "completion_len_std": 18.344408793536385,
+      "avg_token_logprob_mean": -0.053888447055672584,
+      "avg_token_logprob_std": 0.011299720644977166,
+      "low_logprob_frac_mean": 0.008941596727919492,
+      "cumulative_logprob_mean": -21.24206717904342,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.2918994413407821,
+      "position_consensus_first50": 0.8634375,
+      "pairwise_first_divergence_mean": 45.19166666666667,
+      "cross_logprob_std_mean": 0.12759672554886867,
+      "reasoning_head": "To determine the number of ways to choose a starting lineup consisting of a center, a power forward, a shooting forward, a point guard, and a shooting guard from a basketball team of 12 members, we can follow these steps:\n\n1. **Choose the Center**: There are 12 members available for the center position. So, there are 12 ways to choose the center.\n2. **Choose the Power Forward**: After selecting th",
+      "answer_counts": {
+        "95040": 64
+      },
+      "id": "39486",
+      "benchmark": "deepscaler",
+      "gold": "95,\\!040",
+      "exogenous_difficulty": 0.071875
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "\\beginpmatrix",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "\\begin{pmatrix",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.0872776917282492,
+      "sim_to_first_min": 0.03508771929824561,
+      "avg_pairwise_sim": 0.18711522353696536,
+      "min_pairwise_sim": 0.0323270739244117,
+      "completion_len_mean": 722.546875,
+      "completion_len_std": 112.58842770344728,
+      "avg_token_logprob_mean": -0.054893160382267214,
+      "avg_token_logprob_std": 0.013895003120368043,
+      "low_logprob_frac_mean": 0.012321372210593056,
+      "cumulative_logprob_mean": -39.22644888016235,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.2163432151589242,
+      "position_consensus_first50": 0.45,
+      "pairwise_first_divergence_mean": 13.308333333333334,
+      "cross_logprob_std_mean": 0.18702819614955893,
+      "reasoning_head": "To solve the given matrix multiplication problem, we need to understand the pattern and properties of the matrices involved. Each matrix in the product is of the form \\(\\begin{pmatrix} 1 & a_i \\\\ 0 & 1 \\end{pmatrix}\\), where \\(a_i\\) is an odd number starting from 1 and increasing by 2 each time (i.e., 1, 3, 5, ..., 99).\n\nLet's denote the product of these matrices as \\(P\\):\n\\[ P = \\begin{pmatrix} 1",
+      "answer_counts": {
+        "\\begin{pmatrix": 64
+      },
+      "id": "39604",
+      "benchmark": "deepscaler",
+      "gold": "\\begin{pmatrix} 1 & 2500 \\\\ 0 & 1 \\end{pmatrix}",
+      "exogenous_difficulty": 0.53125
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "\\beginpmatrix",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "\\begin{pmatrix",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.3843605161866661,
+      "sim_to_first_min": 0.10145808019441069,
+      "avg_pairwise_sim": 0.36468219917703537,
+      "min_pairwise_sim": 0.11850177591217308,
+      "completion_len_mean": 1576.78125,
+      "completion_len_std": 144.84112726859559,
+      "avg_token_logprob_mean": -0.02175563793457938,
+      "avg_token_logprob_std": 0.004070827164870064,
+      "low_logprob_frac_mean": 0.004353229934229013,
+      "cumulative_logprob_mean": -34.10190320286263,
+      "common_prefix_len": 11,
+      "mean_position_consensus": 0.1785899833748961,
+      "position_consensus_first50": 0.6803125,
+      "pairwise_first_divergence_mean": 22.058333333333334,
+      "cross_logprob_std_mean": 0.08299641446844737,
+      "reasoning_head": "To find the vector \\(\\mathbf{v}\\) that satisfies the given projection conditions, we start by using the formula for the projection of a vector \\(\\mathbf{v}\\) onto another vector \\(\\mathbf{a}\\):\n\n\\[\n\\operatorname{proj}_{\\mathbf{a}} \\mathbf{v} = \\frac{\\mathbf{v} \\cdot \\mathbf{a}}{\\mathbf{a} \\cdot \\mathbf{a}} \\mathbf{a}\n\\]\n\n### Step 1: Projection onto \\(\\begin{pmatrix} 2 \\\\ 1 \\end{pmatrix}\\)\n\nGiven:\n",
+      "answer_counts": {
+        "\\begin{pmatrix": 64
+      },
+      "id": "39627",
+      "benchmark": "deepscaler",
+      "gold": "\\begin{pmatrix} 7 \\\\ 5 \\end{pmatrix}",
+      "exogenous_difficulty": 0.48125
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "\\beginpmatrix",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.984375,
+      "maj_answer": "\\begin{pmatrix",
+      "maj_answer_frac": 0.984375,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.13736935103242093,
+      "sim_to_first_min": 0.03285638579756227,
+      "avg_pairwise_sim": 0.18438197637614545,
+      "min_pairwise_sim": 0.01945379723157501,
+      "completion_len_mean": 710.8125,
+      "completion_len_std": 276.42855513450485,
+      "avg_token_logprob_mean": -0.09080558080449798,
+      "avg_token_logprob_std": 0.030205770375712156,
+      "low_logprob_frac_mean": 0.024818211641111747,
+      "cumulative_logprob_mean": -61.48809182276354,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.1822084664536741,
+      "position_consensus_first50": 0.531875,
+      "pairwise_first_divergence_mean": 16.85,
+      "cross_logprob_std_mean": 0.2722930545114631,
+      "reasoning_head": "To solve the problem of finding the resulting vector after rotating the vector \\(\\begin{pmatrix} 1 \\\\ 2 \\\\ 2 \\end{pmatrix}\\) by \\(90^\\circ\\) about the origin, passing through the \\(x\\)-axis, we need to carefully consider the axis of rotation and the nature of the rotation.\n\n### Step 1: Identify the Axis of Rotation\nSince the vector passes through the \\(x\\)-axis during the rotation, the axis of rot",
+      "answer_counts": {
+        "\\begin{pmatrix": 63,
+        "This vector does not lie on the \\(x\\)-axis. The correct sequence is a \\(90^\\circ\\) rotation about": 1
+      },
+      "id": "39645",
+      "benchmark": "deepscaler",
+      "gold": "\\begin{pmatrix} 2 \\sqrt{2} \\\\ -\\frac{1}{\\sqrt{2}} \\\\ -\\frac{1}{\\sqrt{2}} \\end{pmatrix}",
+      "exogenous_difficulty": 0.75625
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "\\beginpmatrix",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.953125,
+      "maj_answer": "\\begin{pmatrix",
+      "maj_answer_frac": 0.953125,
+      "n_unique_answers": 4,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.1021776055223057,
+      "sim_to_first_min": 0.017816742081447963,
+      "avg_pairwise_sim": 0.17283073440285546,
+      "min_pairwise_sim": 0.008677486742728587,
+      "completion_len_mean": 1570.125,
+      "completion_len_std": 205.11166928041905,
+      "avg_token_logprob_mean": -0.03517476975235405,
+      "avg_token_logprob_std": 0.011701879699186473,
+      "low_logprob_frac_mean": 0.0070962947226754424,
+      "cumulative_logprob_mean": -54.695151228894105,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.14451436905790838,
+      "position_consensus_first50": 0.4840625,
+      "pairwise_first_divergence_mean": 9.825,
+      "cross_logprob_std_mean": 0.14503965080248504,
+      "reasoning_head": "To solve this problem, we need to find the projection of the vector \\(\\begin{pmatrix} 3 \\\\ 3 \\\\ -2 \\end{pmatrix}\\) onto the vector \\(\\mathbf{w}\\), given that the projection of \\(\\begin{pmatrix} 0 \\\\ 1 \\\\ 4 \\end{pmatrix}\\) onto \\(\\mathbf{w}\\) is \\(\\begin{pmatrix} 1 \\\\ -1/2 \\\\ 1/2 \\end{pmatrix}\\).\n\nFirst, let's recall the formula for the projection of a vector \\(\\mathbf{v}\\) onto a vector \\(\\mathbf{",
+      "answer_counts": {
+        "\\begin{pmatrix": 61,
+        "\\text{proj}_{\\mathbf{w}} \\begin{pmatrix} 3 \\\\ 3 \\\\ -2 \\end{pmatrix} = \\frac{\\begin{pmatrix} 3 \\\\ 3 \\\\ -2 \\end{pmatrix} \\cdot \\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix}}{\\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix} \\cdot \\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix}} \\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix} = \\frac{3 \\cdot 5 + 3 \\cdot (-1) + (-2) \\cdot 2}{5^2 + (-1)^2 + 2^2} \\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix} = \\frac{15 - 3 - 4}{25 + 1 + 4} \\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix} = \\frac{8}{30} \\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix} = \\frac{4}{15} \\begin{pmatrix} 5 \\\\ -1 \\\\ 2 \\end{pmatrix} = \\begin{pmatrix} \\frac{4}{3} \\\\ -\\": 1,
+        "Thus, the projection of $\\begin{pmatrix} 3 \\\\": 1,
+        "Therefore, the projection of \\(\\begin{pm": 1
+      },
+      "id": "39871",
+      "benchmark": "deepscaler",
+      "gold": "\\begin{pmatrix} 1/3 \\\\ -1/6 \\\\ 1/6 \\end{pmatrix}",
+      "exogenous_difficulty": 0.7
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "sqrt2",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 0.984375,
+      "maj_answer": "\\sqrt{2",
+      "maj_answer_frac": 0.984375,
+      "n_unique_answers": 2,
+      "n_unique_texts": 63,
+      "n_unique_reasoning": 63,
+      "n_unique_token_ids": 63,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.09924819738106688,
+      "sim_to_first_min": 0.012738853503184714,
+      "avg_pairwise_sim": 0.22074781123651852,
+      "min_pairwise_sim": 0.010767922924341174,
+      "completion_len_mean": 604.53125,
+      "completion_len_std": 131.7349337626034,
+      "avg_token_logprob_mean": -0.048517955565633514,
+      "avg_token_logprob_std": 0.009543593523051319,
+      "low_logprob_frac_mean": 0.009579150494872445,
+      "cumulative_logprob_mean": -28.6443289424666,
+      "common_prefix_len": 0,
+      "mean_position_consensus": 0.20067019950124687,
+      "position_consensus_first50": 0.424375,
+      "pairwise_first_divergence_mean": 15.85,
+      "cross_logprob_std_mean": 0.15674930499708162,
+      "reasoning_head": "To solve the problem, we need to determine the value of \\( k \\) such that \\(\\mathbf{a} = k (\\mathbf{b} \\times \\mathbf{c})\\).\n\nGiven:\n1. \\(\\mathbf{a}\\), \\(\\mathbf{b}\\), and \\(\\mathbf{c}\\) are unit vectors.\n2. \\(\\mathbf{a} \\cdot \\mathbf{b} = 0\\) and \\(\\mathbf{a} \\cdot \\mathbf{c} = 0\\), which means \\(\\mathbf{a}\\) is orthogonal to both \\(\\mathbf{b}\\) and \\(\\mathbf{c}\\).\n3. The angle between \\(\\mathbf{",
+      "answer_counts": {
+        "\\sqrt{2": 63,
+        "1, -1": 1
+      },
+      "id": "39958",
+      "benchmark": "deepscaler",
+      "gold": "\\sqrt{2}, -\\sqrt{2}",
+      "exogenous_difficulty": 0.27119565217391306
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "-sqrt2",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "(-\\sqrt{2",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.6131706887729094,
+      "sim_to_first_min": 0.3430493273542601,
+      "avg_pairwise_sim": 0.5010534574716042,
+      "min_pairwise_sim": 0.05374823196605375,
+      "completion_len_mean": 578.875,
+      "completion_len_std": 53.076154014773905,
+      "avg_token_logprob_mean": -0.038063697143570156,
+      "avg_token_logprob_std": 0.004274309262537942,
+      "low_logprob_frac_mean": 0.0060855954565465845,
+      "cumulative_logprob_mean": -21.964884019425114,
+      "common_prefix_len": 3,
+      "mean_position_consensus": 0.20104401805869074,
+      "position_consensus_first50": 0.398125,
+      "pairwise_first_divergence_mean": 16.533333333333335,
+      "cross_logprob_std_mean": 0.10965656974059829,
+      "reasoning_head": "To convert the point \\((\\rho, \\theta, \\phi) = \\left(2, \\pi, \\frac{\\pi}{4}\\right)\\) from spherical coordinates to rectangular coordinates, we use the following formulas:\n\n\\[\nx = \\rho \\sin \\phi \\cos \\theta\n\\]\n\\[\ny = \\rho \\sin \\phi \\sin \\theta\n\\]\n\\[\nz = \\rho \\cos \\phi\n\\]\n\nGiven \\(\\rho = 2\\), \\(\\theta = \\pi\\), and \\(\\phi = \\frac{\\pi}{4}\\), we substitute these values into the formulas.\n\n1. Calculate \\(",
+      "answer_counts": {
+        "(-\\sqrt{2": 64
+      },
+      "id": "39973",
+      "benchmark": "deepscaler",
+      "gold": "(-\\sqrt{2}, 0, \\sqrt{2})",
+      "exogenous_difficulty": 0.61875
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "\\beginpmatrix",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "\\begin{pmatrix",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.22069455578837538,
+      "sim_to_first_min": 0.00854353132628153,
+      "avg_pairwise_sim": 0.23578023998216296,
+      "min_pairwise_sim": 0.008883248730964468,
+      "completion_len_mean": 1192.859375,
+      "completion_len_std": 183.82463341350467,
+      "avg_token_logprob_mean": -0.028051707081230694,
+      "avg_token_logprob_std": 0.0044405231265343,
+      "low_logprob_frac_mean": 0.00423387502525973,
+      "cumulative_logprob_mean": -33.201614672694674,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.20502533783783783,
+      "position_consensus_first50": 0.6465625,
+      "pairwise_first_divergence_mean": 24.5,
+      "cross_logprob_std_mean": 0.11220373063124685,
+      "reasoning_head": "To solve for \\( T \\begin{pmatrix} 3 \\\\ 9 \\\\ 12 \\end{pmatrix} \\), we need to use the properties of the transformation \\( T \\). Let's denote the vectors as follows:\n\\[\n\\mathbf{v} = \\begin{pmatrix} 6 \\\\ 6 \\\\ 3 \\end{pmatrix}, \\quad \\mathbf{w} = \\begin{pmatrix} -6 \\\\ 3 \\\\ 6 \\end{pmatrix}, \\quad \\mathbf{u} = \\begin{pmatrix} 3 \\\\ 9 \\\\ 12 \\end{pmatrix}\n\\]\nWe know from the problem statement:\n\\[\nT(\\mathbf{v",
+      "answer_counts": {
+        "\\begin{pmatrix": 64
+      },
+      "id": "40108",
+      "benchmark": "deepscaler",
+      "gold": "\\begin{pmatrix} 7 \\\\ 8 \\\\ 11 \\end{pmatrix}",
+      "exogenous_difficulty": 0.525323275862069
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "\\beginpmatrix",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "\\begin{pmatrix",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 63,
+      "n_unique_reasoning": 63,
+      "n_unique_token_ids": 63,
+      "exact_reasoning_match_rate": 0.03125,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.5860109740678772,
+      "sim_to_first_min": 0.14149139579349904,
+      "avg_pairwise_sim": 0.5540575981016254,
+      "min_pairwise_sim": 0.12385321100917432,
+      "completion_len_mean": 298.859375,
+      "completion_len_std": 32.37855539719731,
+      "avg_token_logprob_mean": -0.06102013475723448,
+      "avg_token_logprob_std": 0.008819972911035636,
+      "low_logprob_frac_mean": 0.011265872631264114,
+      "cumulative_logprob_mean": -18.20298072860469,
+      "common_prefix_len": 7,
+      "mean_position_consensus": 0.34161047717842324,
+      "position_consensus_first50": 0.8496875,
+      "pairwise_first_divergence_mean": 48.708333333333336,
+      "cross_logprob_std_mean": 0.14536652499427313,
+      "reasoning_head": "To find the inverse of the matrix \\(\\begin{pmatrix} 6 & -4 \\\\ -3 & 2 \\end{pmatrix}\\), we need to follow these steps:\n\n1. **Calculate the determinant of the matrix**:\n   The determinant of a \\(2 \\times 2\\) matrix \\(\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}\\) is given by \\(ad - bc\\).\n   For our matrix \\(\\begin{pmatrix} 6 & -4 \\\\ -3 & 2 \\end{pmatrix}\\), the determinant is:\n   \\[\n   \\det = (6)(2) -",
+      "answer_counts": {
+        "\\begin{pmatrix": 64
+      },
+      "id": "40209",
+      "benchmark": "deepscaler",
+      "gold": "\\begin{pmatrix} 0 & 0 \\\\ 0 & 0 \\end{pmatrix}",
+      "exogenous_difficulty": 0.7875
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "1998",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.96875,
+      "maj_answer": "1998",
+      "maj_answer_frac": 0.96875,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.25659426650076955,
+      "sim_to_first_min": 0.12102111566341002,
+      "avg_pairwise_sim": 0.21827969119470608,
+      "min_pairwise_sim": 0.0933289516924088,
+      "completion_len_mean": 613.796875,
+      "completion_len_std": 111.22783201714567,
+      "avg_token_logprob_mean": -0.08619787850640233,
+      "avg_token_logprob_std": 0.014032381333320463,
+      "low_logprob_frac_mean": 0.0171246559062877,
+      "cumulative_logprob_mean": -52.960841037032694,
+      "common_prefix_len": 22,
+      "mean_position_consensus": 0.26210443037974684,
+      "position_consensus_first50": 0.9690625,
+      "pairwise_first_divergence_mean": 46.36666666666667,
+      "cross_logprob_std_mean": 0.20750915112421864,
+      "reasoning_head": "To determine the least possible value of \\( f(1998) \\), we start by analyzing the given functional equation:\n\\[ f(n^2 f(m)) = m (f(n))^2. \\]\n\nFirst, let's consider the case when \\( m = 1 \\):\n\\[ f(n^2 f(1)) = (f(n))^2. \\]\nLet \\( f(1) = c \\). Then the equation becomes:\n\\[ f(n^2 c) = (f(n))^2. \\]\n\nNext, let's consider the case when \\( n = 1 \\):\n\\[ f(f(m)) = m (f(1))^2 = m c^2. \\]\nThis tells us that \\",
+      "answer_counts": {
+        "1998": 62,
+        "1": 2
+      },
+      "id": "6247",
+      "benchmark": "deepscaler",
+      "gold": "120",
+      "exogenous_difficulty": 0.0
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "4sqrt3",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": false,
+      "resample_p_top": 1.0,
+      "maj_answer": "4\\sqrt{3",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.24563774239984437,
+      "sim_to_first_min": 0.10287183883411916,
+      "avg_pairwise_sim": 0.3613741765309322,
+      "min_pairwise_sim": 0.07260447446179823,
+      "completion_len_mean": 507.921875,
+      "completion_len_std": 38.50134116474873,
+      "avg_token_logprob_mean": -0.051650302979191036,
+      "avg_token_logprob_std": 0.0074328292835962075,
+      "low_logprob_frac_mean": 0.008977356828113155,
+      "cumulative_logprob_mean": -26.23886953928168,
+      "common_prefix_len": 1,
+      "mean_position_consensus": 0.20074970308788598,
+      "position_consensus_first50": 0.503125,
+      "pairwise_first_divergence_mean": 18.216666666666665,
+      "cross_logprob_std_mean": 0.14486450399318213,
+      "reasoning_head": "To solve the expression \\(\\sqrt{(3-2\\sqrt{3})^2} + \\sqrt{(3+2\\sqrt{3})^2}\\), we need to carefully evaluate each term separately.\n\nFirst, consider \\(\\sqrt{(3-2\\sqrt{3})^2}\\):\n- The square root of a squared term is the absolute value of the term inside the square.\n- Therefore, \\(\\sqrt{(3-2\\sqrt{3})^2} = |3-2\\sqrt{3}|\\).\n\nNext, we need to determine the sign of \\(3-2\\sqrt{3}\\):\n- We know that \\(\\sqrt{",
+      "answer_counts": {
+        "4\\sqrt{3": 64
+      },
+      "id": "937",
+      "benchmark": "deepscaler",
+      "gold": "6",
+      "exogenous_difficulty": 0.3554435483870968
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "B",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.984375,
+      "maj_answer": "B",
+      "maj_answer_frac": 0.984375,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.2841576872239784,
+      "sim_to_first_min": 0.10055423594615993,
+      "avg_pairwise_sim": 0.24844346509388185,
+      "min_pairwise_sim": 0.05847953216374269,
+      "completion_len_mean": 334.671875,
+      "completion_len_std": 47.11523595382257,
+      "avg_token_logprob_mean": -0.15127154410944568,
+      "avg_token_logprob_std": 0.023355741974797006,
+      "low_logprob_frac_mean": 0.04152730398106058,
+      "cumulative_logprob_mean": -50.811163535697254,
+      "common_prefix_len": 0,
+      "mean_position_consensus": 0.17127113526570048,
+      "position_consensus_first50": 0.3609375,
+      "pairwise_first_divergence_mean": 8.916666666666666,
+      "cross_logprob_std_mean": 0.33176528976491065,
+      "reasoning_head": "To solve this problem, we need to understand the relative motion between the ejecta and the center of the Galaxy. Both are in inertial frames of reference, and the center of the Galaxy is moving towards the ejecta at 60,000 km/s from the ejecta's perspective.\n\n### Step-by-Step Solution:\n\n1. **Relative Motion:**\n   - The center of the Galaxy is moving towards the ejecta at 60,000 km/s in the ejecta",
+      "answer_counts": {
+        "B": 63,
+        "C": 1
+      },
+      "id": "gpqa_122",
+      "benchmark": "gpqa_diamond",
+      "gold": "C",
+      "exogenous_difficulty": 0.11320564516129032
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "A",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 1.0,
+      "maj_answer": "A",
+      "maj_answer_frac": 1.0,
+      "n_unique_answers": 1,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.18157469026387366,
+      "sim_to_first_min": 0.08992094861660078,
+      "avg_pairwise_sim": 0.20206599690622043,
+      "min_pairwise_sim": 0.06225848003434951,
+      "completion_len_mean": 663.328125,
+      "completion_len_std": 101.17590725555355,
+      "avg_token_logprob_mean": -0.23796720620742373,
+      "avg_token_logprob_std": 0.04557818861420024,
+      "low_logprob_frac_mean": 0.07963672005376432,
+      "cumulative_logprob_mean": -154.30359098569198,
+      "common_prefix_len": 32,
+      "mean_position_consensus": 0.16777777777777778,
+      "position_consensus_first50": 0.78,
+      "pairwise_first_divergence_mean": 36.78333333333333,
+      "cross_logprob_std_mean": 0.4369534542256727,
+      "reasoning_head": "To determine the major product of the reaction between 5-fluorocyclopenta-1,3-diene and maleic anhydride, we need to consider the mechanism and stereochemistry involved.\n\n### Step 1: Understand the Reactants\n- **5-Fluorocyclopenta-1,3-diene**: This is a five-membered cyclic alkene with a fluorine atom at the 5 position.\n- **Maleic Anhydride**: This is a cyclic anhydride, which can undergo a Diels-",
+      "answer_counts": {
+        "A": 64
+      },
+      "id": "gpqa_145",
+      "benchmark": "gpqa_diamond",
+      "gold": "C",
+      "exogenous_difficulty": 0.0625
+    },
+    {
+      "n_samples": 64,
+      "stored_maj_answer": "A",
+      "stored_p_top": 1.0,
+      "resample_matches_stored_maj": true,
+      "resample_p_top": 0.984375,
+      "maj_answer": "A",
+      "maj_answer_frac": 0.984375,
+      "n_unique_answers": 2,
+      "n_unique_texts": 64,
+      "n_unique_reasoning": 64,
+      "n_unique_token_ids": 64,
+      "exact_reasoning_match_rate": 0.015625,
+      "reasoning_prefix200_same": false,
+      "sim_to_first_mean": 0.15816437349748239,
+      "sim_to_first_min": 0.0412725709372313,
+      "avg_pairwise_sim": 0.1321582356504241,
+      "min_pairwise_sim": 0.020050125313283207,
+      "completion_len_mean": 749.890625,
+      "completion_len_std": 115.26343701325835,
+      "avg_token_logprob_mean": -0.18874788401926065,
+      "avg_token_logprob_std": 0.04120235116090751,
+      "low_logprob_frac_mean": 0.060297563589936896,
+      "cumulative_logprob_mean": -139.4563560234053,
+      "common_prefix_len": 0,
+      "mean_position_consensus": 0.10306894618834081,
+      "position_consensus_first50": 0.316875,
+      "pairwise_first_divergence_mean": 8.533333333333333,
+      "cross_logprob_std_mean": 0.41705180033669903,
+      "reasoning_head": "To identify the correct 1H NMR data for the compound, let's break down the information step by step:\n\n1. **Structure of the Compound:**\n   - The compound is a di-substituted 6-membered aromatic ring with 8 carbon atoms, indicating a benzene ring with two substituents.\n   - It contains a carbonyl group (C=O) and an aromatic-halogen bond (C-X, where X is a halogen).\n\n2. **FTIR Spectrum Information:*",
+      "answer_counts": {
+        "A": 63,
+        "B": 1
+      },
+      "id": "gpqa_86",
+      "benchmark": "gpqa_diamond",
+      "gold": "B",
+      "exogenous_difficulty": 0.084375
+    }
+  ],
+  "cross_model": [
+    {
+      "id": "11874",
+      "scr7b_maj_wrong_answer": "6924764",
+      "qwen25_05b": {
+        "maj": "0",
+        "p_top": 0.16981132075471697,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\binom{49",
+        "p_top": 0.0625,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "12859810",
+        "p_top": 0.140625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "6,924,764",
+        "p_top": 0.5625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "6924764",
+        "p_top": 0.921875,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "12473",
+      "scr7b_maj_wrong_answer": "220",
+      "qwen25_05b": {
+        "maj": "220",
+        "p_top": 0.5,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "220",
+        "p_top": 0.5,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "220",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "220",
+        "p_top": 0.890625,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "220",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "12827",
+      "scr7b_maj_wrong_answer": "26",
+      "qwen25_05b": {
+        "maj": "26",
+        "p_top": 0.6166666666666667,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "$$",
+        "p_top": 0.171875,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "26",
+        "p_top": 0.711864406779661,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "26",
+        "p_top": 0.5625,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "26",
+        "p_top": 0.953125,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "12867",
+      "scr7b_maj_wrong_answer": "2",
+      "qwen25_05b": {
+        "maj": "-8",
+        "p_top": 0.296875,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "-8",
+        "p_top": 0.515625,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "2",
+        "p_top": 0.5625,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "\\]",
+        "p_top": 0.125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "2",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "13184",
+      "scr7b_maj_wrong_answer": "32",
+      "qwen25_05b": {
+        "maj": "64",
+        "p_top": 0.26229508196721313,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "7",
+        "p_top": 0.03125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "32",
+        "p_top": 0.3125,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "32",
+        "p_top": 0.9375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "32",
+        "p_top": 0.53125,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "1401",
+      "scr7b_maj_wrong_answer": "25",
+      "qwen25_05b": {
+        "maj": "25",
+        "p_top": 0.53125,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "The answer is 25.",
+        "p_top": 0.140625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "25",
+        "p_top": 0.896551724137931,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "25",
+        "p_top": 0.328125,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "25",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "14993",
+      "scr7b_maj_wrong_answer": "39",
+      "qwen25_05b": {
+        "maj": "39",
+        "p_top": 0.6875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "39",
+        "p_top": 0.1875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "39",
+        "p_top": 0.96875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "Since we can't have a fraction of a platform, we'll need to round up to the nearest whole number. Therefore, the minimum number of platforms required to transport all the slabs is 39.",
+        "p_top": 0.125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "39",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "1670",
+      "scr7b_maj_wrong_answer": "(-\\infty, -2] \\cup [3, \\infty)",
+      "qwen25_05b": {
+        "maj": "-\\infty,-2]\\cup[3,\\infty",
+        "p_top": 0.7777777777777778,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "(-\\infty, -2] \\cup [3, \\infty)",
+        "p_top": 0.25,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "-\\infty,-2]\\cup[3,\\infty",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "(-\\infty, -2] \\cup [3, \\infty)",
+        "p_top": 0.59375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "(-\\infty, -2] \\cup [3, \\infty)",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "17214",
+      "scr7b_maj_wrong_answer": "135^\\circ",
+      "qwen25_05b": {
+        "maj": "135^\\circ",
+        "p_top": 0.5254237288135594,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "-45",
+        "p_top": 0.15625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "135^\\circ",
+        "p_top": 0.828125,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "\\frac{3\\pi",
+        "p_top": 0.5,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "135^\\circ",
+        "p_top": 0.8125,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "17252",
+      "scr7b_maj_wrong_answer": "\\sqrt{6 + 2\\sqrt{2",
+      "qwen25_05b": {
+        "maj": "sqrt6+2sqrt2",
+        "p_top": 0.609375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\sqrt{6 + 2\\sqrt{2",
+        "p_top": 0.21875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "sqrt6+2sqrt2",
+        "p_top": 0.640625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "2",
+        "p_top": 0.375,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "\\sqrt{6 + 2\\sqrt{2",
+        "p_top": 0.765625,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "21529",
+      "scr7b_maj_wrong_answer": "2^{49/6",
+      "qwen25_05b": {
+        "maj": "2^49/32",
+        "p_top": 0.06521739130434782,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "256",
+        "p_top": 0.140625,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "2^49/6",
+        "p_top": 0.6333333333333333,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "2^{49/6",
+        "p_top": 0.203125,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "2^{49/6",
+        "p_top": 0.9375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "22551",
+      "scr7b_maj_wrong_answer": "368 \\text{ cubic feet",
+      "qwen25_05b": {
+        "maj": "368\\textcubicfeet",
+        "p_top": 0.796875,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "= 162 square feet",
+        "p_top": 0.078125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "368",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "368",
+        "p_top": 0.484375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "368 \\text{ cubic feet",
+        "p_top": 0.8125,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "23641",
+      "scr7b_maj_wrong_answer": "-2\\sqrt{2",
+      "qwen25_05b": null,
+      "llama32_1b": {
+        "maj": "\\frac{5",
+        "p_top": 0.15625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": null,
+      "phi4_mini": {
+        "maj": "\\frac{6",
+        "p_top": 0.375,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "\\frac{6",
+        "p_top": 0.5625,
+        "wrong": false,
+        "same_as_scr7b": false
+      }
+    },
+    {
+      "id": "24723",
+      "scr7b_maj_wrong_answer": "\\sqrt{2",
+      "qwen25_05b": {
+        "maj": "1",
+        "p_top": 0.5217391304347826,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\frac{4",
+        "p_top": 0.453125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "\\sqrt{2",
+        "p_top": 0.578125,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "Therefore, the radius of the sphere is \\( 1 \\), and the volume of the sphere is \\( \\frac{4}{3} \\pi \\).",
+        "p_top": 0.234375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "\\sqrt{2",
+        "p_top": 0.984375,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "24798",
+      "scr7b_maj_wrong_answer": "50",
+      "qwen25_05b": {
+        "maj": "50",
+        "p_top": 0.5,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "50",
+        "p_top": 0.234375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "50",
+        "p_top": 0.84375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "50",
+        "p_top": 0.921875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "50",
+        "p_top": 0.890625,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "24959",
+      "scr7b_maj_wrong_answer": "15 \\text{ and",
+      "qwen25_05b": {
+        "maj": "15\\textand",
+        "p_top": 0.7457627118644068,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "Therefore, A makes 15 parts per hour and B makes 20 parts per hour.",
+        "p_top": 0.046875,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "15\\textand",
+        "p_top": 0.859375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "Therefore, person A makes 15 parts per hour, and person B makes 20 parts per hour.",
+        "p_top": 0.296875,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "15 \\text{ and",
+        "p_top": 0.796875,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "25178",
+      "scr7b_maj_wrong_answer": "180",
+      "qwen25_05b": {
+        "maj": "288",
+        "p_top": 0.19047619047619047,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "36",
+        "p_top": 0.171875,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "180",
+        "p_top": 0.84375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "18",
+        "p_top": 0.1875,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "180",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "25540",
+      "scr7b_maj_wrong_answer": "15",
+      "qwen25_05b": {
+        "maj": "0",
+        "p_top": 0.09523809523809523,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\frac{29",
+        "p_top": 0.09375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "15",
+        "p_top": 0.4909090909090909,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "30",
+        "p_top": 0.09375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "15",
+        "p_top": 0.515625,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "26836",
+      "scr7b_maj_wrong_answer": "10040_5",
+      "qwen25_05b": {
+        "maj": "10040_5",
+        "p_top": 0.8125,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "10040",
+        "p_top": 0.515625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "10040_5",
+        "p_top": 0.9375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "10400_5",
+        "p_top": 0.34375,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "10040_5",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "27761",
+      "scr7b_maj_wrong_answer": "60",
+      "qwen25_05b": {
+        "maj": "72",
+        "p_top": 0.28125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "12",
+        "p_top": 0.328125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "60",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "18",
+        "p_top": 0.171875,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "60",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "28082",
+      "scr7b_maj_wrong_answer": "-\\sqrt{2",
+      "qwen25_05b": {
+        "maj": "-sqrt2",
+        "p_top": 0.734375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "-\\frac{1",
+        "p_top": 0.25,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "-\\sqrt{2",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "\\]",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "-\\sqrt{2",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "28566",
+      "scr7b_maj_wrong_answer": "900",
+      "qwen25_05b": {
+        "maj": "900",
+        "p_top": 0.328125,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "9 * 10 * 10 * 10 * 10 * 10 = 90000",
+        "p_top": 0.078125,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "900",
+        "p_top": 0.859375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "900",
+        "p_top": 0.9375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "900",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "28830",
+      "scr7b_maj_wrong_answer": "15",
+      "qwen25_05b": null,
+      "llama32_1b": {
+        "maj": "\\frac{29",
+        "p_top": 0.109375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "15",
+        "p_top": 0.49056603773584906,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "15",
+        "p_top": 0.09375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\frac{29",
+        "p_top": 0.5,
+        "wrong": true,
+        "same_as_scr7b": false
+      }
+    },
+    {
+      "id": "30267",
+      "scr7b_maj_wrong_answer": "\\pi",
+      "qwen25_05b": null,
+      "llama32_1b": {
+        "maj": "\\frac{1",
+        "p_top": 0.078125,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": null,
+      "phi4_mini": {
+        "maj": "\\pi",
+        "p_top": 0.5,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\pi",
+        "p_top": 0.765625,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "30435",
+      "scr7b_maj_wrong_answer": "0.3",
+      "qwen25_05b": null,
+      "llama32_1b": {
+        "maj": "2",
+        "p_top": 0.171875,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "0.3",
+        "p_top": 0.9516129032258065,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "4. \\(2\\sqrt{2}\\)",
+        "p_top": 0.078125,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "0.3",
+        "p_top": 0.859375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "33958",
+      "scr7b_maj_wrong_answer": "1657",
+      "qwen25_05b": {
+        "maj": "1657",
+        "p_top": 0.265625,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "1657",
+        "p_top": 0.46875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "1657",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "1656",
+        "p_top": 0.28125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "1657",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "34320",
+      "scr7b_maj_wrong_answer": "\\cfrac{29",
+      "qwen25_05b": null,
+      "llama32_1b": {
+        "maj": "\\frac{29",
+        "p_top": 0.21875,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "\\frac{29",
+        "p_top": 0.46875,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "\\frac{29",
+        "p_top": 0.4375,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "\\frac{29",
+        "p_top": 0.59375,
+        "wrong": false,
+        "same_as_scr7b": false
+      }
+    },
+    {
+      "id": "38203",
+      "scr7b_maj_wrong_answer": "D",
+      "qwen25_05b": {
+        "maj": "d",
+        "p_top": 0.23214285714285715,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "325",
+        "p_top": 0.3125,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "d",
+        "p_top": 0.2830188679245283,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "325",
+        "p_top": 0.5625,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "E",
+        "p_top": 0.46875,
+        "wrong": true,
+        "same_as_scr7b": false
+      }
+    },
+    {
+      "id": "39486",
+      "scr7b_maj_wrong_answer": "95040",
+      "qwen25_05b": {
+        "maj": "95040",
+        "p_top": 0.9375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "95040",
+        "p_top": 0.875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "95040",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "95,040",
+        "p_top": 0.5625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "95040",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "39604",
+      "scr7b_maj_wrong_answer": "\\begin{pmatrix",
+      "qwen25_05b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 0.8983050847457628,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.984375,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 0.890625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.640625,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "39627",
+      "scr7b_maj_wrong_answer": "\\begin{pmatrix",
+      "qwen25_05b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 0.8253968253968254,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.78125,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.609375,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "39645",
+      "scr7b_maj_wrong_answer": "\\begin{pmatrix",
+      "qwen25_05b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.96875,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.828125,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.984375,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "39871",
+      "scr7b_maj_wrong_answer": "\\begin{pmatrix",
+      "qwen25_05b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 0.8305084745762712,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.84375,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.90625,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.734375,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.96875,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "39958",
+      "scr7b_maj_wrong_answer": "\\sqrt{2",
+      "qwen25_05b": {
+        "maj": "1",
+        "p_top": 0.32608695652173914,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\sqrt{2",
+        "p_top": 0.3125,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "sqrt2",
+        "p_top": 0.6825396825396826,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "\\pm \\sqrt{2",
+        "p_top": 0.21875,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "\\sqrt{2",
+        "p_top": 0.703125,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "39973",
+      "scr7b_maj_wrong_answer": "(-\\sqrt{2",
+      "qwen25_05b": {
+        "maj": "-sqrt2",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\end{align*}",
+        "p_top": 0.125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "(-\\sqrt{2",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "(-\\sqrt{2",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "(-\\sqrt{2",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "40108",
+      "scr7b_maj_wrong_answer": "\\begin{pmatrix",
+      "qwen25_05b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 0.8620689655172413,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.875,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 1.0,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.75,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.984375,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "40209",
+      "scr7b_maj_wrong_answer": "\\begin{pmatrix",
+      "qwen25_05b": {
+        "maj": "\\beginpmatrix",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 0.921875,
+        "wrong": false,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "\\begin{pmatrix",
+        "p_top": 1.0,
+        "wrong": false,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "6247",
+      "scr7b_maj_wrong_answer": "1998",
+      "qwen25_05b": {
+        "maj": "1998",
+        "p_top": 0.48333333333333334,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "1",
+        "p_top": 0.25,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "1998",
+        "p_top": 0.515625,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "1998",
+        "p_top": 0.96875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "1998",
+        "p_top": 0.890625,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "937",
+      "scr7b_maj_wrong_answer": "4\\sqrt{3",
+      "qwen25_05b": {
+        "maj": "6",
+        "p_top": 0.3064516129032258,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "llama32_1b": {
+        "maj": "42",
+        "p_top": 0.15625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "4sqrt3",
+        "p_top": 0.640625,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "phi4_mini": {
+        "maj": "6",
+        "p_top": 0.890625,
+        "wrong": false,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "4\\sqrt{3",
+        "p_top": 0.984375,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "gpqa_122",
+      "scr7b_maj_wrong_answer": "B",
+      "qwen25_05b": {
+        "maj": "B",
+        "p_top": 0.484375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "B",
+        "p_top": 0.5806451612903226,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "B",
+        "p_top": 0.640625,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "A",
+        "p_top": 0.53125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "B",
+        "p_top": 0.5,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "gpqa_145",
+      "scr7b_maj_wrong_answer": "A",
+      "qwen25_05b": {
+        "maj": "A",
+        "p_top": 0.625,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "B",
+        "p_top": 0.453125,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_15b": {
+        "maj": "A",
+        "p_top": 0.734375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "B",
+        "p_top": 0.609375,
+        "wrong": true,
+        "same_as_scr7b": false
+      },
+      "qwen25_3b": {
+        "maj": "A",
+        "p_top": 0.953125,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    },
+    {
+      "id": "gpqa_86",
+      "scr7b_maj_wrong_answer": "A",
+      "qwen25_05b": {
+        "maj": "A",
+        "p_top": 0.796875,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "llama32_1b": {
+        "maj": "A",
+        "p_top": 0.609375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_15b": {
+        "maj": "A",
+        "p_top": 0.9375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "phi4_mini": {
+        "maj": "A",
+        "p_top": 0.84375,
+        "wrong": true,
+        "same_as_scr7b": true
+      },
+      "qwen25_3b": {
+        "maj": "A",
+        "p_top": 0.8125,
+        "wrong": true,
+        "same_as_scr7b": true
+      }
+    }
+  ]
+}

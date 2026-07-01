@@ -1,0 +1,85 @@
+{
+  "model": "qwen25_7b",
+  "model_path": "/root/autodl-tmp/prs-models/Qwen2.5-7B-Instruct",
+  "k": 64,
+  "temperature": 0.5,
+  "top_p": 0.95,
+  "seed": 41,
+  "tau": 1.0,
+  "out_dir": "data/scr_reasoning/qwen25_7b/t100",
+  "n_questions_total": 42,
+  "shard_id": 1,
+  "num_shards": 3,
+  "questions": [
+    {
+      "id": "12473",
+      "path": "data/scr_reasoning/qwen25_7b/t100/12473.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "13184",
+      "path": "data/scr_reasoning/qwen25_7b/t100/13184.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "1670",
+      "path": "data/scr_reasoning/qwen25_7b/t100/1670.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "21529",
+      "path": "data/scr_reasoning/qwen25_7b/t100/21529.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "24723",
+      "path": "data/scr_reasoning/qwen25_7b/t100/24723.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "25178",
+      "path": "data/scr_reasoning/qwen25_7b/t100/25178.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "27761",
+      "path": "data/scr_reasoning/qwen25_7b/t100/27761.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "28830",
+      "path": "data/scr_reasoning/qwen25_7b/t100/28830.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "33958",
+      "path": "data/scr_reasoning/qwen25_7b/t100/33958.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "39486",
+      "path": "data/scr_reasoning/qwen25_7b/t100/39486.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "39645",
+      "path": "data/scr_reasoning/qwen25_7b/t100/39645.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "39973",
+      "path": "data/scr_reasoning/qwen25_7b/t100/39973.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "6247",
+      "path": "data/scr_reasoning/qwen25_7b/t100/6247.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "gpqa_145",
+      "path": "data/scr_reasoning/qwen25_7b/t100/gpqa_145.jsonl",
+      "n_samples": 64
+    }
+  ]
+}

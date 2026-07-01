@@ -1,0 +1,85 @@
+{
+  "model": "qwen25_7b",
+  "model_path": "/root/autodl-tmp/prs-models/Qwen2.5-7B-Instruct",
+  "k": 64,
+  "temperature": 0.5,
+  "top_p": 0.95,
+  "seed": 41,
+  "tau": 1.0,
+  "out_dir": "data/scr_reasoning/qwen25_7b/t100",
+  "n_questions_total": 42,
+  "shard_id": 0,
+  "num_shards": 3,
+  "questions": [
+    {
+      "id": "11874",
+      "path": "data/scr_reasoning/qwen25_7b/t100/11874.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "12867",
+      "path": "data/scr_reasoning/qwen25_7b/t100/12867.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "14993",
+      "path": "data/scr_reasoning/qwen25_7b/t100/14993.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "17252",
+      "path": "data/scr_reasoning/qwen25_7b/t100/17252.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "23641",
+      "path": "data/scr_reasoning/qwen25_7b/t100/23641.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "24959",
+      "path": "data/scr_reasoning/qwen25_7b/t100/24959.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "26836",
+      "path": "data/scr_reasoning/qwen25_7b/t100/26836.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "28566",
+      "path": "data/scr_reasoning/qwen25_7b/t100/28566.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "30435",
+      "path": "data/scr_reasoning/qwen25_7b/t100/30435.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "38203",
+      "path": "data/scr_reasoning/qwen25_7b/t100/38203.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "39627",
+      "path": "data/scr_reasoning/qwen25_7b/t100/39627.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "39958",
+      "path": "data/scr_reasoning/qwen25_7b/t100/39958.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "40209",
+      "path": "data/scr_reasoning/qwen25_7b/t100/40209.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "gpqa_122",
+      "path": "data/scr_reasoning/qwen25_7b/t100/gpqa_122.jsonl",
+      "n_samples": 64
+    }
+  ]
+}

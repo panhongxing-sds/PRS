@@ -1,0 +1,91 @@
+{
+  "version": "core_v1",
+  "benchmarks": {
+    "deepscaler": {
+      "path": "data/core/deepscaler.jsonl",
+      "n": 2000,
+      "grading": "math",
+      "max_new_tokens": 2048,
+      "rationale": "Deepscaler 核心集 3000 题（原 2200 + 从 5000 池补 800），SCR 主战场"
+    },
+    "competition_math_l5_500": {
+      "path": "data/core/competition_math_l5_500.jsonl",
+      "n": 500,
+      "grading": "math",
+      "max_new_tokens": 2048,
+      "rationale": "竞赛数学，AUROC~0.83，稳定 blind"
+    },
+    "math_level4plus_300": {
+      "path": "data/core/math_level4plus_300.jsonl",
+      "n": 262,
+      "grading": "math",
+      "max_new_tokens": 2048,
+      "rationale": "MATH level≥4，错题形态均衡"
+    },
+    "minerva": {
+      "path": "data/core/minerva.jsonl",
+      "n": 272,
+      "grading": "math",
+      "max_new_tokens": 2048,
+      "rationale": "高难度 STEM，AUROC~0.86"
+    },
+    "gpqa_diamond": {
+      "path": "data/core/gpqa_diamond.jsonl",
+      "n": 198,
+      "grading": "mcq",
+      "max_new_tokens": 2048,
+      "rationale": "MCQ 对照：低 AUROC 但存在高置信错"
+    },
+    "aime_2024": {
+      "path": "data/core/aime_2024.jsonl",
+      "n": 30,
+      "grading": "math",
+      "max_new_tokens": 4096,
+      "rationale": "极难竞赛题；错题几乎全 split，作离散错对照"
+    }
+  },
+  "excluded": [
+    {
+      "name": "deepscaler_1500",
+      "reason": "已合并入 deepscaler"
+    },
+    {
+      "name": "deepscaler_500",
+      "reason": "已合并入 deepscaler"
+    },
+    {
+      "name": "deepscaler_supp_800",
+      "reason": "已合并入 deepscaler（补足至 3000）"
+    },
+    {
+      "name": "aime_2025",
+      "reason": "与 aime_2024 重叠且抽取污染更重，仅保留 2024"
+    },
+    {
+      "name": "aimo_validation",
+      "reason": "错题几乎全 split，SCR≈0，无 spurious consensus 信号"
+    },
+    {
+      "name": "aimo_amc",
+      "reason": "同上"
+    },
+    {
+      "name": "math500",
+      "reason": "过易，仅用于早期 n-sweep"
+    },
+    {
+      "name": "gsm8k",
+      "reason": "过易，仅用于早期 n-sweep"
+    },
+    {
+      "name": "deepscaler_5000",
+      "reason": "未验证、规模过大，暂不纳入核心集"
+    }
+  ],
+  "sampling_defaults": {
+    "temperature": 0.5,
+    "top_p": 0.95,
+    "k": 64,
+    "seed": 41
+  }
+}

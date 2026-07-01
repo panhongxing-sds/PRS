@@ -1,0 +1,51 @@
+{
+  "total_questions": 3262,
+  "benchmarks": {
+    "deepscaler": 2000,
+    "competition_math_l5_500": 500,
+    "math_level4plus_300": 262,
+    "minerva": 272,
+    "gpqa_diamond": 198,
+    "aime_2024": 30
+  },
+  "excluded": [
+    {
+      "name": "deepscaler_1500",
+      "reason": "已合并入 deepscaler"
+    },
+    {
+      "name": "deepscaler_500",
+      "reason": "已合并入 deepscaler"
+    },
+    {
+      "name": "deepscaler_supp_800",
+      "reason": "已合并入 deepscaler（补足至 3000）"
+    },
+    {
+      "name": "aime_2025",
+      "reason": "与 aime_2024 重叠且抽取污染更重，仅保留 2024"
+    },
+    {
+      "name": "aimo_validation",
+      "reason": "错题几乎全 split，SCR≈0，无 spurious consensus 信号"
+    },
+    {
+      "name": "aimo_amc",
+      "reason": "同上"
+    },
+    {
+      "name": "math500",
+      "reason": "过易，仅用于早期 n-sweep"
+    },
+    {
+      "name": "gsm8k",
+      "reason": "过易，仅用于早期 n-sweep"
+    },
+    {
+      "name": "deepscaler_5000",
+      "reason": "未验证、规模过大，暂不纳入核心集"
+    }
+  ],
+  "seed": 41,
+  "note": "跨模型采样核心集；仅含实验证明对 spurious consensus 叙事有用的 benchmark"
+}

@@ -26,6 +26,7 @@ reimbursement budget live in **[`paper/EXPERIMENT_PLAN.md`](paper/EXPERIMENT_PLA
 | `paper/` | yes | LaTeX, result tables, `EXPERIMENT_PLAN.md` |
 | `third_party/TokUR/` | yes | official [Wang-ML-Lab/TokUR](https://github.com/Wang-ML-Lab/TokUR) (unmodified) |
 | `data/examples.jsonl` | yes | smoke-test data |
+| `experiments/spurious_consensus/` | yes | **Self-Consistency 高温采样实验**（K=64, 6 模型 × 2228 题 + 分析脚本 + 采样数据，见 [`experiments/spurious_consensus/README.md`](experiments/spurious_consensus/README.md)） |
 | `models/` | **no** | ~39 GB TFB checkpoints — download separately |
 | `outputs/` | **no** | experiment runs — regenerate on GPU |
 

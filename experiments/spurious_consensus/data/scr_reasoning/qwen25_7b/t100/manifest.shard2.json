@@ -1,0 +1,85 @@
+{
+  "model": "qwen25_7b",
+  "model_path": "/root/autodl-tmp/prs-models/Qwen2.5-7B-Instruct",
+  "k": 64,
+  "temperature": 0.5,
+  "top_p": 0.95,
+  "seed": 41,
+  "tau": 1.0,
+  "out_dir": "data/scr_reasoning/qwen25_7b/t100",
+  "n_questions_total": 42,
+  "shard_id": 2,
+  "num_shards": 3,
+  "questions": [
+    {
+      "id": "12827",
+      "path": "data/scr_reasoning/qwen25_7b/t100/12827.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "1401",
+      "path": "data/scr_reasoning/qwen25_7b/t100/1401.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "17214",
+      "path": "data/scr_reasoning/qwen25_7b/t100/17214.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "22551",
+      "path": "data/scr_reasoning/qwen25_7b/t100/22551.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "24798",
+      "path": "data/scr_reasoning/qwen25_7b/t100/24798.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "25540",
+      "path": "data/scr_reasoning/qwen25_7b/t100/25540.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "28082",
+      "path": "data/scr_reasoning/qwen25_7b/t100/28082.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "30267",
+      "path": "data/scr_reasoning/qwen25_7b/t100/30267.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "34320",
+      "path": "data/scr_reasoning/qwen25_7b/t100/34320.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "39604",
+      "path": "data/scr_reasoning/qwen25_7b/t100/39604.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "39871",
+      "path": "data/scr_reasoning/qwen25_7b/t100/39871.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "40108",
+      "path": "data/scr_reasoning/qwen25_7b/t100/40108.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "937",
+      "path": "data/scr_reasoning/qwen25_7b/t100/937.jsonl",
+      "n_samples": 64
+    },
+    {
+      "id": "gpqa_86",
+      "path": "data/scr_reasoning/qwen25_7b/t100/gpqa_86.jsonl",
+      "n_samples": 64
+    }
+  ]
+}
