@@ -80,7 +80,7 @@ python clean_samples.py
 
 ## 主要结论
 
-详见 [`REPORT.md`](REPORT.md)。核心发现：
+详见 [`REPORT.md`](REPORT.md) 与 **[`CPU_ANALYSIS_RESULTS.md`](CPU_ANALYSIS_RESULTS.md)**（2026-07-01 全量 CPU 复现汇总）。核心发现：
 
 1. SCR 随模型能力单调上升（0.5B 0.8% → 7B 10.5% 占错题）
 2. SCR 在 n≥8 后进入平台，多采样无法消除

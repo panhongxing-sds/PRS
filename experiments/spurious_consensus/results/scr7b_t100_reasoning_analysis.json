@@ -1650,7 +1650,7 @@
       "scr7b_maj_wrong_answer": "6924764",
       "qwen25_05b": {
         "maj": "0",
-        "p_top": 0.16981132075471697,
+        "p_top": 0.17307692307692307,
         "wrong": true,
         "same_as_scr7b": false
       },
@@ -2216,12 +2216,7 @@
     {
       "id": "25540",
       "scr7b_maj_wrong_answer": "15",
-      "qwen25_05b": {
-        "maj": "0",
-        "p_top": 0.09523809523809523,
-        "wrong": true,
-        "same_as_scr7b": false
-      },
+      "qwen25_05b": null,
       "llama32_1b": {
         "maj": "\\frac{29",
         "p_top": 0.09375,
@@ -2470,7 +2465,7 @@
       "scr7b_maj_wrong_answer": "1657",
       "qwen25_05b": {
         "maj": "1657",
-        "p_top": 0.265625,
+        "p_top": 0.2833333333333333,
         "wrong": true,
         "same_as_scr7b": true
       },
@@ -2703,7 +2698,7 @@
       "scr7b_maj_wrong_answer": "\\begin{pmatrix",
       "qwen25_05b": {
         "maj": "\\beginpmatrix",
-        "p_top": 0.8305084745762712,
+        "p_top": 0.8448275862068966,
         "wrong": true,
         "same_as_scr7b": false
       },
