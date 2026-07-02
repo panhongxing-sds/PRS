@@ -1037,130 +1037,94 @@ Uncertainty is scored with SC $u_{\mathrm{ans}}=1-p_{\mathrm{top}}$ and the fuse
 The paper-style eval subset removes \texttt{label\_drop} items ($n{=}228$ for Qwen2.5-3B, $n{=}239$ for Qwen2.5-7B).
 For Qwen2.5-7B, $106/300$ k9 rows had empty \texttt{answers[]}; SC@9 then uses the first nine non-empty strings from \texttt{answers} or, when needed, the \texttt{answers\_orig} prefix of the $K{=}64$ pool so that SC remains comparable at nine decodes.
 
-\begin{table}[htbp]
-  \centering
-  \small
-  \setlength{\tabcolsep}{6pt}
-  \renewcommand{\arraystretch}{1.1}
-  \caption{Answer accuracy on the random300 cohort ($n{=}300$).
-  $\Delta_{\mathrm{vote}}$ is PANDA@9 minus SC@9 majority accuracy (percentage points).}
-  \label{tab:random300-accuracy}
-  \begin{tabular}{lccc}
-    \toprule
-    \rowcolor{headerpink}
-    Method & Qwen2.5-3B & Qwen2.5-7B & $\Delta$(7B$-$3B) \\
-    \midrule
-    SC@9 majority vote
-      & 44.0\% (132/300) & 50.7\% (152/300) & +6.7\,pp \\
-    \rowcolor{rowgray}
-    \method{}@9 fair majority vote
-      & 50.7\% (152/300) & 58.3\% (175/300) & +7.7\,pp \\
-    \method{} greedy $a_0$
-      & 42.0\% (126/300) & 55.3\% (166/300) & +13.3\,pp \\
-    \midrule
-  \rowcolor{rowgray}
-    $\Delta_{\mathrm{vote}}$ (\method{}@9 $-$ SC@9)
-      & +6.7\,pp & +7.7\,pp & --- \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\noindent On the eval subset (no \texttt{label\_drop}), SC@9 reaches 46.5\% (3B) and 56.5\% (7B), while \method{}@9 reaches 50.4\% and 60.7\% ($\Delta_{\mathrm{vote}}$ $+$3.95 and $+$4.18\,pp).
+\paragraph{Tabular reporting.}
+For transparency and auditability we report this paired comparison as dense tables (not multi-panel figures); every entry is traceable to the aggregated JSON in \texttt{paper/analysis/}.
 
 \begin{table}[htbp]
   \centering
-  \small
-  \setlength{\tabcolsep}{5pt}
-  \renewcommand{\arraystretch}{1.1}
-  \caption{Error-detection AUROC / AUPRC under \texttt{label\_wrong\_clean}.
-  $\Delta_{\mathrm{UQ}}$ is \method{} minus SC AUROC (percentage points).}
-  \label{tab:random300-uq}
-  \begin{tabular}{lcccc}
+  \footnotesize
+  \setlength{\tabcolsep}{3.5pt}
+  \renewcommand{\arraystretch}{1.05}
+  \caption{Random300 primary outcomes: answer accuracy and error-detection UQ (\texttt{label\_wrong\_clean}).
+  Acc.\ columns report majority or greedy accuracy (correct$/n$).
+  UQ columns are AUROC\,/\,AUPRC; $\Delta_{\mathrm{vote}}$ is \method{}@9 minus SC@9 (pp); $\Delta_{\mathrm{UQ}}$ is \method{} minus SC AUROC (pp).
+  Eval rows drop \texttt{label\_drop} ($n{=}228$ for 3B, $n{=}239$ for 7B).}
+  \label{tab:random300-primary}
+  \begin{tabular}{llcccccc}
     \toprule
     \rowcolor{headerpink}
-    Split & Model & SC ($1{-}p_{\mathrm{top}}$) & \method{} & $\Delta_{\mathrm{UQ}}$ \\
+    Split & Model & SC@9 & \method{}@9 & Greedy $a_0$ & $\Delta_{\mathrm{vote}}$ & SC UQ & \method{} UQ \\
     \midrule
-    \multirow{2}{*}{$n{=}300$}
+    $n{=}300$
       & Qwen2.5-3B
-      & 0.772 / 0.801 & 0.803 / 0.821 & +3.1\,pp \\
+      & 44.0\% (132/300) & 50.7\% (152/300) & 42.0\% (126/300) & +6.7 & 0.772 / 0.801 & 0.803 / 0.821 \\
     \rowcolor{rowgray}
       & Qwen2.5-7B
-      & 0.773 / 0.741 & 0.784 / 0.711 & +1.1\,pp \\
+      & 50.7\% (152/300) & 58.3\% (175/300) & 55.3\% (166/300) & +7.7 & 0.773 / 0.741 & 0.784 / 0.711 \\
     \midrule
-    \multirow{2}{*}{Eval subset}
-      & Qwen2.5-3B ($n{=}228$)
-      & 0.823 / 0.847 & 0.862 / 0.902 & +3.95\,pp \\
+    Eval subset
+      & Qwen2.5-3B
+      & 46.5\% (106/228) & 50.4\% (115/228) & 42.1\% (96/228) & +3.95 & 0.823 / 0.847 & 0.862 / 0.902 \\
     \rowcolor{rowgray}
-      & Qwen2.5-7B ($n{=}239$)
-      & 0.789 / 0.747 & 0.825 / 0.769 & +3.60\,pp \\
+      & Qwen2.5-7B
+      & 56.5\% (135/239) & 60.7\% (145/239) & 56.9\% (136/239) & +4.18 & 0.789 / 0.747 & 0.825 / 0.769 \\
+    \midrule
+    \multicolumn{2}{l}{$\Delta_{\mathrm{UQ}}$ (\method{} $-$ SC, pp)}
+      & \multicolumn{2}{c}{3B: $+$3.1 (full), $+$3.95 (eval)}
+      & \multicolumn{2}{c}{7B: $+$1.1 (full), $+$3.60 (eval)}
+      & \multicolumn{2}{c}{7B$-$3B $\Delta_{\mathrm{vote}}$: $+$6.7 / $+$7.7\,pp} \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\begin{table}[htbp]
-  \centering
-  \small
-  \setlength{\tabcolsep}{4pt}
-  \renewcommand{\arraystretch}{1.1}
-  \caption{Confident-wrong rates on random300 ($n{=}300$).
-  Each cell is overall rate / rate \emph{given} SC majority wrong (counts in parentheses where noted in source JSON).
-  $\tau{=}8/9$ means a vote share of $8/9$.}
-  \label{tab:random300-confwrong}
-  \begin{tabular}{lcc}
-    \toprule
-    \rowcolor{headerpink}
-    Method & Qwen2.5-3B & Qwen2.5-7B \\
-    \midrule
-    \multicolumn{3}{l}{\textit{$\tau{=}0.9$}} \\
-    SC@9
-      & 3.7\% (11) / 6.5\%
-      & 6.7\% (20) / 13.5\% \\
-    \rowcolor{rowgray}
-    \method{}@9 vote
-      & 3.7\% (11) / 7.4\%
-      & 4.3\% (13) / 10.4\% \\
-    \midrule
-    \multicolumn{3}{l}{\textit{$\tau{=}8/9$}} \\
-    SC@9
-      & 5.3\% (16) / 9.5\%
-      & 8.7\% (26) / 17.6\% \\
-    \rowcolor{rowgray}
-    \method{}@9 vote
-      & 4.7\% (14) / 9.5\%
-      & 6.3\% (19) / 15.2\% \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-\noindent Greedy-$a_0$ collapse cases with dissent $bd{\approx}0$ count 40 (3B) and 42 (7B) on the full cohort.
+\noindent\textbf{7B SC join sensitivity (audit P0).}
+On the strict subset with nine SC votes from \texttt{sc\_vote\_stats} only (\emph{no} \texttt{answers\_orig} fallback, $n{=}246$ joined), SC@9 is 49.2\% (121/246), \method{}@9 is 56.1\% (138/246), and $\Delta_{\mathrm{vote}}$ is $+$6.9\,pp; SC/\method{} AUROC are 0.778 / 0.785 ($\Delta_{\mathrm{UQ}}$ $+$0.75\,pp).
+The main rows above use the fair nine-decode SC protocol documented in \texttt{random300\_qwen25\_7b\_planb\_metrics.json}.
 
 \begin{table}[htbp]
   \centering
-  \small
-  \setlength{\tabcolsep}{6pt}
-  \renewcommand{\arraystretch}{1.1}
-  \caption{SC@9 cohort statistics ($n{=}300$).}
-  \label{tab:random300-sc-cohort}
-  \begin{tabular}{lcc}
+  \footnotesize
+  \setlength{\tabcolsep}{3.5pt}
+  \renewcommand{\arraystretch}{1.05}
+  \caption{Random300 risk and SC cohort diagnostics ($n{=}300$).
+  Confident-wrong cells are \textbf{all-sample rate (\#cases)} / \textbf{rate given majority wrong}.
+  $\tau{=}8/9$ and $\tau{=}7/9$ are vote-share thresholds; $\tau{=}0.9$ is a calibrated confidence cutoff.}
+  \label{tab:random300-risk}
+  \begin{tabular}{llcc}
     \toprule
     \rowcolor{headerpink}
-    Statistic & Qwen2.5-3B & Qwen2.5-7B \\
+    Quantity & Method & Qwen2.5-3B & Qwen2.5-7B \\
     \midrule
-    Majority correct / wrong & 132 / 168 & 152 / 148 \\
-    Majority accuracy & 44.0\% & 50.7\% \\
+    \multicolumn{4}{l}{\textit{Confident-wrong @ $\tau{=}0.9$}} \\
+    & SC@9 & 3.7\% (11) / 6.5\% & 6.7\% (20) / 13.5\% \\
     \rowcolor{rowgray}
-    blind@9 (all nine wrong) & 109 (36.3\%) & 94 (31.3\%) \\
-    $\geq$1 correct @9 & 191 & 206 \\
-    Mean $p_{\mathrm{top}}$ & 0.545 & 0.646 \\
-    $p_{\mathrm{top}}$ min / max & 0.111 / 1.000 & 0.111 / 1.000 \\
+    & \method{}@9 vote & 3.7\% (11) / 7.4\% & 4.3\% (13) / 10.4\% \\
+    \multicolumn{4}{l}{\textit{Confident-wrong @ $\tau{=}8/9$}} \\
+    & SC@9 & 5.3\% (16) / 9.5\% & 8.7\% (26) / 17.6\% \\
+    \rowcolor{rowgray}
+    & \method{}@9 vote & 4.7\% (14) / 9.5\% & 6.3\% (19) / 15.2\% \\
+    \multicolumn{4}{l}{\textit{Confident-wrong @ $\tau{=}7/9$}} \\
+    & SC@9 & 7.0\% (21) / 12.5\% & 11.3\% (34) / 23.0\% \\
+    \rowcolor{rowgray}
+    & \method{}@9 vote & 6.7\% (20) / 13.5\% & 8.7\% (26) / 20.8\% \\
+    \midrule
+    \multicolumn{4}{l}{\textit{SC@9 cohort (stochastic $T{=}0.5$)}} \\
+    & Maj.\ correct / wrong & 132 / 168 & 152 / 148 \\
+    \rowcolor{rowgray}
+    & blind@9 (all nine wrong) & 109 (36.3\%) & 94 (31.3\%) \\
+    & $\geq$1 correct @9 & 191 & 206 \\
+    \rowcolor{rowgray}
+    & Mean $p_{\mathrm{top}}$ (min / max) & 0.545 (0.111 / 1.0) & 0.646 (0.111 / 1.0) \\
+    \midrule
+    \multicolumn{4}{l}{\textit{\method{} diagnostics}} \\
+    & Greedy $a_0$ wrong, $bd{\approx}0$ & 40 & 42 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \paragraph{Cross-scale comparison.}
-Scaling from Qwen2.5-3B to 7B raises absolute SC@9 accuracy from 44.0\% to 50.7\% and \method{}@9 from 50.7\% to 58.3\%.
-The \method{} advantage over SC at matched nine-decode voting stays large and stable ($+$6.7 to $+$7.7\,pp on $n{=}300$).
-On the eval UQ subset, \method{} improves AUROC over SC by $\sim$3.6--4.0\,pp for both scales, despite higher consensus (lower blind@9 and higher mean $p_{\mathrm{top}}$ on 7B).
+Table~\ref{tab:random300-primary} summarizes accuracy and UQ for both scales on $n{=}300$ and the eval subset; scaling 3B$\to$7B raises SC@9 from 44.0\% to 50.7\% and \method{}@9 from 50.7\% to 58.3\% with a stable $\Delta_{\mathrm{vote}}$ of $+$6.7 to $+$7.7\,pp.
+Table~\ref{tab:random300-risk} reports confident-wrong rates at $\tau\in\{0.9,8/9,7/9\}$ plus SC cohort diagnostics (7B shows higher consensus but lower \method{} confident-wrong than SC at matched $\tau$).
 
 \paragraph{Caveats.}
 SC uses stochastic $T{=}0.5$ sampling whereas \method{}@9 uses greedy perturbation decodes, so residual protocol asymmetry remains.

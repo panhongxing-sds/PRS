@@ -2,9 +2,22 @@
 
 **更新日期：** 2026-07-02  
 **Cohort：** `paper/analysis/deepscaler_random300_meta.json`（**n=300**，`seed=42`，自 2000 题随机抽样）  
-**LaTeX（论文正文）：** `paper/iclr2026/panda_iclr2026.tex` → Appendix~\ref{app:random300-fair}（\S\ref{app:random300-fair}: Paired Fair Comparison on DeepScaleR (Random300)）；表 \ref{tab:random300-accuracy}--\ref{tab:random300-sc-cohort}。
+**LaTeX（论文正文）：** `paper/iclr2026/panda_iclr2026.tex` → Appendix~\ref{app:random300-fair}（\S\ref{app:random300-fair}: Paired Fair Comparison on DeepScaleR (Random300)）；表 \ref{tab:random300-primary}、\ref{tab:random300-risk}（**附录以高密度表格为主，不引用三联图**；`figures/random300_planb_comparison.png` 与 `random300_confident_wrong.png` 仅作本地审阅）。
 
 **公平解码预算：** `SE_SAMPLES=0`，`N_REPHRASES=4`，`WEIGHT_SEEDS=42,43,44,45` → **每题 9 次 decode**（1 greedy + 4×2 rephrase 权重路径）；PANDA@9 公平多数票与 SC@9 使用相同 9 路预算。
+
+---
+
+## 呈现方式（表格优先）
+
+附录 LaTeX 使用 **两张综合表** 替代三联图，便于审计与并排比较 3B/7B：
+
+| LaTeX 标签 | 内容 |
+|------------|------|
+| `tab:random300-primary` | 准确率（SC@9 / PANDA@9 / greedy a0）、$\Delta_{\mathrm{vote}}$、UQ（AUROC/AUPRC）、eval 子集 |
+| `tab:random300-risk` | ConfWrong@$\tau\in\{0.9,8/9,7/9\}$、SC 队列统计、PANDA collapse 计数 |
+
+7B SC **严格 n=246** 敏感性（无 `answers_orig` fallback）见 `random300_planb_metrics.json` → `metrics_strict_sc_vote_n246`，正文附录以段落脚注形式收录。
 
 ---
 
@@ -23,7 +36,7 @@
 
 ---
 
-## 表 1 · 准确率（n=300）
+## 表 1（LaTeX `tab:random300-primary`）· 准确率 + UQ
 
 | 方法 | Qwen2.5-3B | Qwen2.5-7B | Δ(7B−3B) |
 |------|------------|------------|----------|
@@ -43,64 +56,25 @@
 
 ---
 
-## 表 2 · 不确定性（UQ，label_wrong_clean）
 
-### 全量 n=300
-
-| 指标 | Qwen2.5-3B | Qwen2.5-7B | Δ(PANDA−SC) 3B | Δ(PANDA−SC) 7B |
-|------|------------|------------|----------------|----------------|
-| SC `1−p_top` AUROC | 0.772 | 0.773 | — | — |
-| PANDA AUROC | 0.803 | 0.784 | +3.12 pp | +1.14 pp |
-| SC AUPRC | 0.801 | 0.741 | — | — |
-| PANDA AUPRC | 0.821 | 0.711 | — | — |
-
-### 论文 eval（无 label_drop）
-
-| 指标 | 3B (n=228) | 7B (n=239) |
-|------|------------------|------------------|
-| SC AUROC | 0.823 | 0.789 |
-| PANDA AUROC | 0.862 | 0.825 |
-| **Δ(PANDA−SC)** | **+3.95 pp** | **+3.60 pp** |
-| SC AUPRC | 0.847 | 0.747 |
-| PANDA AUPRC | 0.902 | 0.769 |
-
-`label_drop` 计数：3B **72**，7B **61**。
+（UQ 与准确率已合并进 LaTeX 主表 `tab:random300-primary`；`label_drop`：3B **72**，7B **61**。）
 
 ---
 
-## 表 3 · ConfWrong@τ（n=300）
+## 表 2（LaTeX `tab:random300-risk`）· ConfWrong + SC 队列（n=300）
 
-τ=**0.9** 与 τ=**8/9**（0.888…）；列为 **全体样本率** / **给定多数票错误条件下的率**（括号内为计数，见 JSON）。
+τ=**0.9**、**8/9**、**7/9**；列为 **全体样本率 (计数)** / **给定多数票错误条件下的率**（见 `random300_confident_wrong.json` 与各 `*_planb_metrics.json`）。
 
-### τ = 0.9
+| τ | 方法 | Qwen2.5-3B | Qwen2.5-7B |
+|---|------|------------|------------|
+| 0.9 | SC@9 | 3.7% (11) / 6.5% | 6.7% (20) / 13.5% |
+| 0.9 | PANDA@9 | 3.7% (11) / 7.4% | 4.3% (13) / 10.4% |
+| 8/9 | SC@9 | 5.3% (16) / 9.5% | 8.7% (26) / 17.6% |
+| 8/9 | PANDA@9 | 4.7% (14) / 9.5% | 6.3% (19) / 15.2% |
+| 7/9 | SC@9 | 7.0% (21) / 12.5% | 11.3% (34) / 23.0% |
+| 7/9 | PANDA@9 | 6.7% (20) / 13.5% | 8.7% (26) / 20.8% |
 
-| 方法 | Qwen2.5-3B | Qwen2.5-7B |
-|------|------------|------------|
-| SC@9 | 3.7% (11) / 6.5% | 6.7% (20) / 13.5% |
-| PANDA@9 投票 | 3.7% (11) / 7.4% | 4.3% (13) / 10.4% |
-
-### τ = 8/9
-
-| 方法 | Qwen2.5-3B | Qwen2.5-7B |
-|------|------------|------------|
-| SC@9 | 5.3% (16) / 9.5% | 8.7% (26) / 17.6% |
-| PANDA@9 投票 | 4.7% (14) / 9.5% | 6.3% (19) / 15.2% |
-
-PANDA a0 错误且 `bd≈0`（collapse）计数：3B **40**，7B **42**。
-
----
-
-## 表 4 · SC@9 队列统计（n=300）
-
-| 统计量 | Qwen2.5-3B | Qwen2.5-7B |
-|--------|------------|------------|
-| 多数票正确 | 132 | 152 |
-| 多数票错误 | 168 | 148 |
-| 多数票准确率 | 44.0% | 50.7% |
-| blind@9（9 路全错） | 109 (36.3%) | 94 (31.3%) |
-| 至少一路正确@9 | 191 | 206 |
-| `p_top` 均值 | 0.545 | 0.646 |
-| `p_top` min / max | 0.111 / 1.000 | 0.111 / 1.000 |
+**SC@9 队列：** blind@9 109 (36.3%) / 94 (31.3%)；mean `p_top` 0.545 / 0.646。PANDA a0 错误且 `bd≈0`：3B **40**，7B **42**。
 
 ---
 
