@@ -2,6 +2,8 @@
 
 **更新日期：** 2026-07-02  
 **Cohort：** `paper/analysis/deepscaler_random300_meta.json`（**n=300**，`seed=42`，自 2000 题随机抽样）  
+**LaTeX（论文正文）：** `paper/iclr2026/panda_iclr2026.tex` → Appendix~\ref{app:random300-fair}（\S\ref{app:random300-fair}: Paired Fair Comparison on DeepScaleR (Random300)）；表 \ref{tab:random300-accuracy}--\ref{tab:random300-sc-cohort}。
+
 **公平解码预算：** `SE_SAMPLES=0`，`N_REPHRASES=4`，`WEIGHT_SEEDS=42,43,44,45` → **每题 9 次 decode**（1 greedy + 4×2 rephrase 权重路径）；PANDA@9 公平多数票与 SC@9 使用相同 9 路预算。
 
 ---
