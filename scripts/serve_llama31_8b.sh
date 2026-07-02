@@ -18,14 +18,14 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-MODEL_PATH="${PRS_MODELS}/Meta-Llama-3.1-8B-Instruct"
+MODEL_PATH="${PANDA_MODELS}/Meta-Llama-3.1-8B-Instruct"
 [[ -f "${MODEL_PATH}/config.json" ]] || {
   echo "模型未下载: ${MODEL_PATH}" >&2
   echo "请先运行: bash scripts/download_llama31_8b.sh" >&2
   exit 1
 }
 
-LOG_DIR="${PRS_ROOT}/../logs"
+LOG_DIR="${PANDA_ROOT}/../logs"
 mkdir -p "${LOG_DIR}"
 LOG_FILE="${LOG_DIR}/vllm-llama31-8b-${PORT}.log"
 

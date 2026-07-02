@@ -5,7 +5,7 @@ math extractor at generation time (bug: a plain word like "indigo" -> "").
 For each raw record it re-extracts answer_raw/answer_normalized for the base
 generation and every perturbation run from the stored full_response using the
 dataset-appropriate extractor, recomputes is_correct via the dataset grader,
-then regenerates summary_metrics (ASE/PRS + clean label) and rebuilds
+then regenerates summary_metrics (ASE/PANDA + clean label) and rebuilds
 summary.jsonl / features.jsonl.
 
 No GPU / model calls: full_response is already saved in every raw json.
@@ -20,10 +20,10 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-from prs.ase.metrics import metrics_from_record
-from prs.ase.record import rebuild_summary_jsonl
-from prs.grading.answer_canonicalizer import grade_answer
-from prs.grading.extract import extract_answer_for_dataset
+from panda.core.metrics import metrics_from_record
+from panda.core.record import rebuild_summary_jsonl
+from panda.grading.answer_canonicalizer import grade_answer
+from panda.grading.extract import extract_answer_for_dataset
 
 RUN_SECTIONS = ("text_rephrase_runs", "weight_perturb_runs", "high_temp_sample_runs")
 

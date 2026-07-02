@@ -2,17 +2,17 @@
 # 看门狗：检测 GPU 空闲 / 进程挂掉，自动重启
 set -euo pipefail
 cd "$(dirname "$0")"
-export PRS_ROOT="${PRS_ROOT:-/root/PRS}"
-export PRS_MODELS="${PRS_MODELS:-/root/autodl-tmp/prs-models}"
+export PANDA_ROOT="${PANDA_ROOT:-/root/PANDA}"
+export PANDA_MODELS="${PANDA_MODELS:-/root/autodl-tmp/panda-models}"
 export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 LOG_DIR="${LOG_DIR:-logs/phase1}"
 INTERVAL="${WATCH_INTERVAL:-60}"
 
 # tag|path|k_chunk|prompt_batch|backend
 declare -A MODELS=(
-  [0]="llama32_1b|$PRS_MODELS/TFB-Llama-3.2-1B-Instruct|16|8|vllm"
-  [1]="phi4_mini|$PRS_MODELS/Phi-4-mini-instruct|16|4|vllm"
-  [2]="gemma3_4b|$PRS_MODELS/gemma-3-4b-it|8|2|hf"
+  [0]="llama32_1b|$PANDA_MODELS/TFB-Llama-3.2-1B-Instruct|16|8|vllm"
+  [1]="phi4_mini|$PANDA_MODELS/Phi-4-mini-instruct|16|4|vllm"
+  [2]="gemma3_4b|$PANDA_MODELS/gemma-3-4b-it|8|2|hf"
 )
 
 gpu_busy() {

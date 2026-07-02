@@ -2,7 +2,7 @@
 """Strict offline aggregation of math main-table metrics.
 
 Reads the strict labels already stored in summary.jsonl (written by the pipeline
-via `prs.grading.grade_answer`, which uses the strict three-way grader):
+via `panda.grading.grade_answer`, which uses the strict three-way grader):
   - `label_drop == 1`  -> sample could not be confidently graded; EXCLUDED.
   - `label_wrong_clean` -> 0 correct / 1 wrong on the kept subset.
 Computes AUROC / AUPRC / ACC* on the kept subset (y = 1 means WRONG, i.e. the
@@ -35,7 +35,7 @@ METHODS = [
     ("LL", "baseline_LL_nll", False),
     ("Self-Certainty", "baseline_SC_mean", True),
     ("DeepConf", "baseline_DC_min", True),
-    ("PRS (Ours)", "PRS", False),
+    ("PANDA (Ours)", "PANDA", False),
     ("F_resp", "F_resp", False),
     ("D_ans", "D_ans", False),
     ("D_reason", "D_reason", False),
@@ -159,7 +159,7 @@ def build(base: Path, seeds: list[int], ds_list: list[str]) -> str:
             for ds in ds_list:
                 m = metric(cache[(seed, ds)], key, inv)
                 cells.append(f"{fmt(m[0])} | {fmt(m[1])} | {fmt(m[2])}" if m else "— | — | —")
-            bold = "**" if name.startswith("PRS") else ""
+            bold = "**" if name.startswith("PANDA") else ""
             lines.append(f"| {bold}{name}{bold} | " + " | ".join(cells) + " |")
         lines.append("")
 
@@ -178,7 +178,7 @@ def build(base: Path, seeds: list[int], ds_list: list[str]) -> str:
                     p.append(m[1])
                     c.append(m[2])
             cells.append(f"{fmt_ms(a)} | {fmt_ms(p)} | {fmt_ms(c)}" if a else "— | — | —")
-        bold = "**" if name.startswith("PRS") else ""
+        bold = "**" if name.startswith("PANDA") else ""
         lines.append(f"| {bold}{name}{bold} | " + " | ".join(cells) + " |")
     lines.append("")
 
@@ -187,7 +187,7 @@ def build(base: Path, seeds: list[int], ds_list: list[str]) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base", default="/root/autodl-tmp/prs-outputs/maintable_qwen25_3b")
+    ap.add_argument("--base", default="/root/autodl-tmp/panda-outputs/maintable_qwen25_3b")
     ap.add_argument("--seeds", default="41,42,43")
     ap.add_argument("--datasets", default="math500,gsm8k,minerva")
     ap.add_argument("--out", default="/root/autodl-tmp/_math_tables_strict.md")

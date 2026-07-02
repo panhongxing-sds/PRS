@@ -3,8 +3,8 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-export PRS_ROOT="${PRS_ROOT:-/root/PRS}"
-export PRS_MODELS="${PRS_MODELS:-/root/autodl-tmp/prs-models}"
+export PANDA_ROOT="${PANDA_ROOT:-/root/PANDA}"
+export PANDA_MODELS="${PANDA_MODELS:-/root/autodl-tmp/panda-models}"
 
 echo "=== [1/6] Python 依赖 ==="
 pip install -q -U pip
@@ -25,10 +25,10 @@ for d in \
   TFB-Llama-3.2-1B-Instruct \
   Phi-4-mini-instruct \
   gemma-3-4b-it; do
-  if [[ -f "$PRS_MODELS/$d/config.json" ]]; then
-    du -sh "$PRS_MODELS/$d"
+  if [[ -f "$PANDA_MODELS/$d/config.json" ]]; then
+    du -sh "$PANDA_MODELS/$d"
   else
-    echo "[missing] $PRS_MODELS/$d — 先运行 ./download_models.sh"
+    echo "[missing] $PANDA_MODELS/$d — 先运行 ./download_models.sh"
     exit 1
   fi
 done
@@ -59,7 +59,7 @@ if [[ "${1:-}" == "--smoke" ]] || [[ "${SMOKE:-}" == "1" ]]; then
 import yaml, os
 cfg = yaml.safe_load(open("config.yaml"))
 cfg["model"]["tag"] = "llama32_1b"
-cfg["model"]["path"] = os.environ["PRS_MODELS"] + "/TFB-Llama-3.2-1B-Instruct"
+cfg["model"]["path"] = os.environ["PANDA_MODELS"] + "/TFB-Llama-3.2-1B-Instruct"
 cfg["sampling"]["k"] = 4
 yaml.dump(cfg, open("$CFG", "w"))
 PY
@@ -73,5 +73,5 @@ else
   echo "部署完成。开始全量采样:"
   echo "  GPU=0 ./run_phase1.sh"
   echo "或单模型:"
-  echo "  MODEL_TAG=phi4_mini MODEL_PATH=\$PRS_MODELS/Phi-4-mini-instruct ./run_sampling.sh"
+  echo "  MODEL_TAG=phi4_mini MODEL_PATH=\$PANDA_MODELS/Phi-4-mini-instruct ./run_sampling.sh"
 fi

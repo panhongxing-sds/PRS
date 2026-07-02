@@ -1,0 +1,229 @@
+% =============================================================
+%  Paper Revision TODO List
+%  Title : Beyond Self-Consistency: Perturbation-based Uncertainty
+%          Quantification for LLM Reasoning via Dissent and Hesitation
+%  Method: PANDA (Perturbation-based Analysis of Dissent and Hesitation)
+%  Build : pdflatex paper/todolist.tex
+%  Updated: 2026-07-02 (experiment status synced with local panda-outputs)
+% =============================================================
+\documentclass[11pt]{article}
+
+\usepackage[margin=2.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=magenta]{hyperref}
+
+\definecolor{p0}{RGB}{192,57,43}
+\definecolor{p1}{RGB}{211,140,0}
+\definecolor{p2}{RGB}{39,110,55}
+\definecolor{donecolor}{RGB}{120,120,120}
+\definecolor{skipcolor}{RGB}{150,150,150}
+
+\newcommand{\todo}{\item[$\square$]}
+\newcommand{\done}{\item[\textcolor{donecolor}{$\boxtimes$}]}
+\newcommand{\skipdone}{\item[\textcolor{skipcolor}{$\boxminus$}]}
+
+\newcommand{\tagp}[2]{\textbf{\textcolor{#1}{[#2]}}\ }
+\newcommand{\fixnote}[1]{\newline\textcolor{p2}{\itshape $\rightarrow$ #1}}
+\newcommand{\datapath}[1]{\newline\textcolor{donecolor}{\small\ttfamily #1}}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{0.6em}{}
+\setlist[itemize]{leftmargin=2.2em, itemsep=4pt, topsep=4pt}
+
+\title{\textbf{Paper Revision TODO List}\\[2pt]
+\large\itshape Beyond Self-Consistency: Perturbation-based Uncertainty Quantification for LLM Reasoning via Dissent and Hesitation}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+\vspace{-2.5em}
+
+\noindent\textbf{Priority legend:}\quad
+\tagp{p0}{P0} Must-have \quad
+\tagp{p1}{P1} Reviewers will ask \quad
+\tagp{p2}{P2} Polish \quad
+\textcolor{donecolor}{$\boxtimes$} Done \quad
+\textcolor{skipcolor}{$\boxminus$} Cancelled / not doing
+
+\bigskip
+
+% -------------------------------------------------------------
+\section{Done (Writing \& Setup)}
+\begin{itemize}
+  \done Finalized title and PANDA naming ($S_{\mathrm{PANDA}}$, tables, subsection titles).
+  \done Wrote the Abstract (collapse $\rightarrow$ PANDA $\rightarrow$ results).
+  \done Fixed typos, spacing, equation ref \texttt{eq:panda}, model/baseline names.
+  \done Removed all \texttt{\textbackslash cite} (Related Work deferred).
+  \done \tagp{p2}{P2} Streamlined Preliminaries (low-rank weight perturbation paragraph).
+  \done \textbf{Main body preserved exactly as user paste} (2026-07-02): no perturbation-type intro rewrite, no Algorithm/extra Method paragraphs, no Setup impl.\ details, original Failure Mode + \texttt{confidentwrong.png}, ``strongest overall'' Main Results, empty Case Analysis, original Conclusion.
+\end{itemize}
+
+% -------------------------------------------------------------
+\section{Experiments --- Data \& Analysis Done}
+\textit{All items below: \textbf{no new GPU} required; paste into paper.}
+
+\begin{itemize}
+  \done \textbf{Main table + ablation (N=8121).}
+        PANDA LODO AUROC 0.904; w/o Dissent 0.704; w/o Hesitation 0.897; w/o Fusion 0.877.
+        \datapath{paper/maintable/panda\_v2\_results.json, paper/maintable/ablation\_macro.json}
+
+  \done \textbf{CPU paper analyses.}
+        Weight acc 59.4\%$\rightarrow$74.5\%; bd=0 subset; collapse LODO.
+        \datapath{paper/analysis/cpu\_results.md, scripts/run\_cpu\_paper\_analyses.py}
+
+  \done \textbf{Self-Consistency failure mode (K=64).}
+        DeepScaleR / GPQA / AIME; CW@$\tau$; $n\in\{2,\ldots,64\}$; capability vs.\ SCR; matched-budget SC@8.
+        \datapath{experiments/spurious\_consensus/CPU\_ANALYSIS\_RESULTS.md, figures/*.png}
+
+  \done \textbf{SC vs.\ PANDA dissent key figure (CPU Option A).}
+        Panel (a): SC $1{-}p_{\mathrm{top}}$ vs.\ PANDA ablation; Panel (b): bd=0 proxy ($n{=}2960$, hes +0.123 vs bd).
+        \datapath{paper/analysis/figures/sc\_vs\_panda\_dissent.png, collapse\_gain.json, FAST\_PATH.md}
+
+  \done \textbf{bd=0 / collapse remainder analysis.}
+        text\_agree wrong 8.1\%$\rightarrow$ bd=0 wrong 3.2\% (96 hard cases); perturbation already mitigates collapse.
+        \datapath{paper/analysis/bd0\_subset\_analysis.md}
+
+  \done \textbf{Mechanism + temporal case analysis.}
+        Prefix re-query; enrichment; flip curves; \texttt{mechanism.png} in tex.
+        \datapath{paper/tables/mechanism\_results.json}
+
+  \done \textbf{SC qualitative case study.}
+        Fox bridge (gold=25, consensus 220); reasoning path diversity (SCR@1.0).
+        \datapath{experiments/spurious\_consensus/figures/case\_study\_12473.md}
+
+  \done \textbf{Cost / matched-budget numbers.}
+        SC@64 vs SC@8 vs PANDA ${\sim}9$ decodes/题.
+        \datapath{spurious\_consensus/CPU\_ANALYSIS\_RESULTS.md \S10}
+
+  \done \textbf{Dissent vs.\ hesitation complementarity (data).}
+        $\rho(\mathrm{bd},\mathrm{hes}){=}0.43$; bd=0上 hes +0.123 AUROC; quadrant stats in mechanism JSON.
+        \datapath{paper/analysis/cpu\_results.json, mechanism\_results.json}
+
+  \done \textbf{Baseline fairness (data).}
+        w/o Fusion AUROC 0.877 $>$ all baselines; SC-proxy vs bd\_text/bd\_full in CPU scripts.
+        \datapath{ablation\_macro.json, weak\_points\_countermeasures.md}
+
+  \done \textbf{Noised-model accuracy (not noise garbage).}
+        Macro weight-branch acc +15pp; per-model in \texttt{cpu\_results.json}.
+        \datapath{paper/analysis/cpu\_results.json}
+
+  \done \textbf{Process-signal mining (diagnostic only; \textbf{不改公式}).}
+        Confirmed keep bd+hes; skeleton strong on bd=0 only, hurts global fusion.
+        \datapath{paper/analysis/process\_signal\_mining.md, better\_signal\_recommendation.md}
+
+  \skipdone \textbf{TokUR EU re-run on this machine.}
+        No \texttt{tokur\_baseline.jsonl}; use existing main-table TokUR numbers in tex.
+        \fixnote{Do not run GPU\_PLAN TokUR queue.}
+
+  \skipdone \textbf{Sensitivity $K,\rho,r',R$; Q/K vs V/O ablation; open-ended task; DeepScaleR PANDA align (Option B GPU).}
+        \fixnote{Explicitly out of scope before submission; rebuttal only if requested.}
+\end{itemize}
+
+% -------------------------------------------------------------
+\section{Experiments --- Remaining (Writing / Paste Only)}
+\textit{No new experiments. All integration targets \textbf{appendix only} (main body untouched).}
+
+\begin{itemize}
+  \done \tagp{p0}{P0} \textbf{Implementation-details subsection.}
+        $R,W,K,M,r',\rho_\ell$, rephrasing model, greedy vs.\ sample per branch.
+        \fixnote{Moved to Appendix~\ref{app:impl} (not main Sec.\ 4.1).}
+
+  \done \tagp{p0}{P0} \textbf{Failure-mode subsection (Sec.\ 4.2).}
+        Paste SC figures + \texttt{sc\_vs\_panda\_dissent.png}; cite SCR plateau, n-sweep saturation, capability vs.\ SCR.
+        \fixnote{Main keeps original short paragraph + \texttt{confidentwrong.png}; extended SC/PANDA analysis in Appendix~\ref{app:sc-failure}.}
+
+  \done \tagp{p0}{P0} \textbf{Close motivation--method loop in text.}
+        Perturbation \emph{type} (temperature SC vs.\ text/weight); honest caveat: panel (a) disjoint datasets; bd=0 remainder narrative.
+        \fixnote{Appendix~\ref{app:sc-failure}, \ref{app:subsets}; main intro unchanged.}
+
+  \done \tagp{p1}{P1} \textbf{Case Analysis paragraph(s).}
+        Cite \texttt{case\_study\_12473.md} + PANDA bd$=0$ remainder ($n{=}96$).
+        \fixnote{Appendix~\ref{app:cases}; main Case Analysis subsection left empty.}
+
+  \done \tagp{p1}{P1} \textbf{Cost / efficiency paragraph.}
+        Pull table from SC \S10 + PANDA decode count; discuss memory (multiple weight instances).
+        \fixnote{Appendix~\ref{app:fairness} (not main Results).}
+
+  \done \tagp{p1}{P1} \textbf{Subset table (all / bd=0 / bd$>$0).}
+        PANDA vs bd vs SE vs hes; disclose SE$=$0.708 $>$ PANDA$=$0.623 on bd=0.
+        \fixnote{Appendix~\ref{app:subsets}; not in main body.}
+
+  \done \tagp{p1}{P1} \textbf{Dissent vs.\ hesitation complementarity figure/table.}
+        Scatter or $\rho$ table + bd=0 gain row; keep hes as \emph{complementary safety net}.
+        \fixnote{Appendix~\ref{app:complementarity} + Fig.~\ref{fig:app-sc-vs-panda} panel (b).}
+
+  \done \tagp{p1}{P1} \textbf{TokUR EU differentiation paragraph.}
+        Teacher-forced EU vs.\ perturbation dissent; explain AUPRC cells where TokUR wins.
+        \fixnote{Appendix~\ref{app:fairness}.}
+
+  \done \tagp{p1}{P1} \textbf{Baseline fairness paragraph.}
+        w/o Fusion 0.877; matched budget SC@8 vs PANDA ${\sim}9$ decodes.
+        \fixnote{Appendix~\ref{app:fairness}.}
+
+  \done \tagp{p1}{P1} \textbf{Weight perturbation accuracy disclosure.}
+        Per-model table (esp.\ Qwen3-8B 60.6\%$\rightarrow$62.9\%); frame as independent perturbation axis.
+        \fixnote{Appendix~\ref{app:weight-fidelity}.}
+\end{itemize}
+
+% -------------------------------------------------------------
+\section{Reviewer-Level Concerns (Non-Experiment)}
+\begin{itemize}
+  \done \tagp{p0}{P0} \textbf{Motivation--method logic gap.}
+        \fixnote{Appendix~\ref{app:sc-failure} perturbation-type narrative; main intro unchanged.}
+
+  \done \tagp{p0}{P0} \textbf{Hesitation in title/narrative.}
+        \fixnote{Appendix~\ref{app:complementarity}, \ref{app:subsets}; main ablation text unchanged.}
+
+  \done \tagp{p0}{P0} \textbf{Fairness (supervision + compute).}
+        \fixnote{Appendix~\ref{app:fairness}; w/o Fusion 0.877.}
+
+  \todo \tagp{p1}{P1} Position ``self-consistent collapse'' vs.\ prior overconfidence work (writing).
+
+  \skipdone \tagp{p1}{P1} Soften ``strongest overall'' $\rightarrow$ ``best in most settings'' (writing).
+        \fixnote{User preserved original ``strongest overall'' in main body; not changed.}
+
+  \done \tagp{p1}{P1} Scope statement: verifiable-answer reasoning; bd=0 limitations (writing).
+        \fixnote{Appendix~\ref{app:limitations} + \ref{app:subsets}.}
+\end{itemize}
+
+% -------------------------------------------------------------
+\section{Method (Writing Only)}
+\begin{itemize}
+  \done \tagp{p0}{P0} Algorithm box / pseudocode (base $\rightarrow$ perturb $\rightarrow$ bd + hes $\rightarrow$ LODO LR).
+        \fixnote{Appendix~\ref{app:algorithm} (Algorithm~\ref{alg:panda}); not in main Method.}
+
+  \done \tagp{p0}{P0} Define answer span $\alpha_j$.
+        \fixnote{Appendix~\ref{app:answer}; main Method keeps inline $\alpha_j$ in Hesitation only.}
+
+  \done \tagp{p0}{P0} Correctness labeling / answer matcher.
+        \fixnote{Appendix~\ref{app:answer}; not in main Method.}
+
+  \skipdone \tagp{p1}{P1} Q/K vs V/O perturb ablation (cancelled; no GPU).
+\end{itemize}
+
+% -------------------------------------------------------------
+\section{Misc.}
+\begin{itemize}
+  \done \tagp{p2}{P2} Limitations + Reproducibility Statement.
+        \fixnote{Appendix~\ref{app:limitations} + \ref{app:repro}; main Conclusion keeps brief limitations sentence.}
+
+  \done \tagp{p2}{P2} Appendix (prompts, per-model tables, SC analysis, cases, fairness).
+        \datapath{paper/iclr2026/panda\_iclr2026.tex Appendix A--N (14 sections)}
+
+  \todo \tagp{p2}{P2} Related Work (real citations only).
+
+  \todo \tagp{p2}{P2} Figure/table polish (relative gains, color scheme).
+
+  \done \tagp{p0}{P0} Sync \texttt{panda\_iclr2026.tex} with PANDA title/version if still on old PANDA draft.
+        \fixnote{Main body = user paste; appendix integrated 2026-07-02; synced to \texttt{panda\_iclr2026\_panda.tex}.}
+\end{itemize}
+
+\bigskip
+\noindent\rule{\linewidth}{0.4pt}\\[2pt]
+\small\textbf{Next action:} main body locked to user version. Remaining: Related Work (citations), positioning vs.\ prior overconfidence literature, optional figure polish.
+
+\end{document}

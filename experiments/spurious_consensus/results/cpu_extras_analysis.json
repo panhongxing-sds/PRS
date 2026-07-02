@@ -1,5 +1,5 @@
 {
-  "common_n": 2200,
+  "common_n": 2228,
   "cross_model_scr": {
     "tau": 0.9,
     "pairwise": [
@@ -8,7 +8,7 @@
         "model_b": "llama32_1b",
         "scr_both": 0,
         "same_wrong_answer": 0,
-        "scr_a": 10,
+        "scr_a": 11,
         "scr_b": 1
       },
       {
@@ -16,7 +16,7 @@
         "model_b": "qwen25_15b",
         "scr_both": 3,
         "same_wrong_answer": 3,
-        "scr_a": 10,
+        "scr_a": 11,
         "scr_b": 31
       },
       {
@@ -24,7 +24,7 @@
         "model_b": "phi4_mini",
         "scr_both": 0,
         "same_wrong_answer": 0,
-        "scr_a": 10,
+        "scr_a": 11,
         "scr_b": 35
       },
       {
@@ -32,15 +32,15 @@
         "model_b": "qwen25_3b",
         "scr_both": 1,
         "same_wrong_answer": 1,
-        "scr_a": 10,
-        "scr_b": 70
+        "scr_a": 11,
+        "scr_b": 71
       },
       {
         "model_a": "qwen25_05b",
         "model_b": "qwen25_7b",
         "scr_both": 5,
         "same_wrong_answer": 5,
-        "scr_a": 10,
+        "scr_a": 11,
         "scr_b": 88
       },
       {
@@ -65,7 +65,7 @@
         "scr_both": 1,
         "same_wrong_answer": 1,
         "scr_a": 1,
-        "scr_b": 70
+        "scr_b": 71
       },
       {
         "model_a": "llama32_1b",
@@ -89,7 +89,7 @@
         "scr_both": 12,
         "same_wrong_answer": 10,
         "scr_a": 31,
-        "scr_b": 70
+        "scr_b": 71
       },
       {
         "model_a": "qwen25_15b",
@@ -105,7 +105,7 @@
         "scr_both": 9,
         "same_wrong_answer": 8,
         "scr_a": 35,
-        "scr_b": 70
+        "scr_b": 71
       },
       {
         "model_a": "phi4_mini",
@@ -120,16 +120,16 @@
         "model_b": "qwen25_7b",
         "scr_both": 25,
         "same_wrong_answer": 21,
-        "scr_a": 70,
+        "scr_a": 71,
         "scr_b": 88
       }
     ],
     "scr_counts": {
-      "qwen25_05b": 10,
+      "qwen25_05b": 11,
       "llama32_1b": 1,
       "qwen25_15b": 31,
       "phi4_mini": 35,
-      "qwen25_3b": 70,
+      "qwen25_3b": 71,
       "qwen25_7b": 88
     }
   },
@@ -269,45 +269,45 @@
   "exogenous_difficulty": {
     "qwen25_05b": {
       "label": "Qwen-0.5B",
-      "scr_wrong_exo_mean": 0.31125,
-      "scr_wrong_n": 10,
-      "dispersed_wrong_exo_mean": 0.19177366328813822,
-      "dispersed_wrong_n": 1098
+      "scr_wrong_exo_mean": 0.29545454545454547,
+      "scr_wrong_n": 11,
+      "dispersed_wrong_exo_mean": 0.19130874998334976,
+      "dispersed_wrong_n": 1116
     },
     "llama32_1b": {
       "label": "Llama-1B",
       "scr_wrong_exo_mean": 0.0251008064516129,
       "scr_wrong_n": 1,
-      "dispersed_wrong_exo_mean": 0.19968652141352053,
-      "dispersed_wrong_n": 1418
+      "dispersed_wrong_exo_mean": 0.19886784567085303,
+      "dispersed_wrong_n": 1437
     },
     "qwen25_15b": {
       "label": "Qwen-1.5B",
-      "scr_wrong_exo_mean": 0.18133284844184716,
+      "scr_wrong_exo_mean": 0.18123204199023424,
       "scr_wrong_n": 31,
-      "dispersed_wrong_exo_mean": 0.12472905175675765,
-      "dispersed_wrong_n": 888
+      "dispersed_wrong_exo_mean": 0.12456106099696419,
+      "dispersed_wrong_n": 901
     },
     "phi4_mini": {
       "label": "Phi-3.8B",
       "scr_wrong_exo_mean": 0.1984015386152546,
       "scr_wrong_n": 35,
-      "dispersed_wrong_exo_mean": 0.14386017104770454,
-      "dispersed_wrong_n": 1031
+      "dispersed_wrong_exo_mean": 0.143115401215666,
+      "dispersed_wrong_n": 1044
     },
     "qwen25_3b": {
       "label": "Qwen-3B",
-      "scr_wrong_exo_mean": 0.14826131190437966,
-      "scr_wrong_n": 70,
-      "dispersed_wrong_exo_mean": 0.10035870865491688,
-      "dispersed_wrong_n": 804
+      "scr_wrong_exo_mean": 0.15061854694797996,
+      "scr_wrong_n": 71,
+      "dispersed_wrong_exo_mean": 0.10026421989792575,
+      "dispersed_wrong_n": 815
     },
     "qwen25_7b": {
       "label": "Qwen-7B",
-      "scr_wrong_exo_mean": 0.1780891981631627,
+      "scr_wrong_exo_mean": 0.1783022663449809,
       "scr_wrong_n": 88,
-      "dispersed_wrong_exo_mean": 0.08312799802708241,
-      "dispersed_wrong_n": 476
+      "dispersed_wrong_exo_mean": 0.08301522169044012,
+      "dispersed_wrong_n": 487
     }
   },
   "matched_budget_n8_vs_n64": {
@@ -315,17 +315,17 @@
       "label": "Qwen-0.5B",
       "n8": {
         "n": 8,
-        "n_questions": 1714,
-        "auroc_mean": 0.7848146444864189,
-        "auroc_std": 0.010412966781908768,
+        "n_questions": 1741,
+        "auroc_mean": 0.7816503800800784,
+        "auroc_std": 0.010639501677700416,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       },
       "n64": {
         "n": 64,
-        "n_questions": 468,
-        "auroc_mean": 0.784229155497653,
-        "auroc_std": 0.01091061883307358,
+        "n_questions": 486,
+        "auroc_mean": 0.7820359066763315,
+        "auroc_std": 0.011387676094227944,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       }
@@ -334,17 +334,17 @@
       "label": "Llama-1B",
       "n8": {
         "n": 8,
-        "n_questions": 2199,
-        "auroc_mean": 0.7803929356051643,
-        "auroc_std": 0.009680864675886107,
+        "n_questions": 2227,
+        "auroc_mean": 0.7771500685768877,
+        "auroc_std": 0.009205351040956891,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       },
       "n64": {
         "n": 64,
-        "n_questions": 2127,
-        "auroc_mean": 0.7704109238216336,
-        "auroc_std": 0.008017732172506883,
+        "n_questions": 2139,
+        "auroc_mean": 0.7694883087235812,
+        "auroc_std": 0.006170040331441034,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       }
@@ -353,17 +353,17 @@
       "label": "Qwen-1.5B",
       "n8": {
         "n": 8,
-        "n_questions": 1877,
-        "auroc_mean": 0.790091946248604,
-        "auroc_std": 0.008775608132685998,
+        "n_questions": 1905,
+        "auroc_mean": 0.7884353088077978,
+        "auroc_std": 0.00701515023936248,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       },
       "n64": {
         "n": 64,
-        "n_questions": 1159,
-        "auroc_mean": 0.7858566840491094,
-        "auroc_std": 0.006682535752309563,
+        "n_questions": 1177,
+        "auroc_mean": 0.7814644875569021,
+        "auroc_std": 0.006102088297534482,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       }
@@ -372,17 +372,17 @@
       "label": "Phi-3.8B",
       "n8": {
         "n": 8,
-        "n_questions": 2200,
-        "auroc_mean": 0.7378760057729385,
-        "auroc_std": 0.007427399755285492,
+        "n_questions": 2228,
+        "auroc_mean": 0.7387958449936992,
+        "auroc_std": 0.006972388986189386,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       },
       "n64": {
         "n": 64,
-        "n_questions": 2193,
-        "auroc_mean": 0.7248597485328538,
-        "auroc_std": 0.006000957948910578,
+        "n_questions": 2219,
+        "auroc_mean": 0.7246057115843024,
+        "auroc_std": 0.00618737908753018,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       }
@@ -391,17 +391,17 @@
       "label": "Qwen-3B",
       "n8": {
         "n": 8,
-        "n_questions": 2200,
-        "auroc_mean": 0.7735166830601692,
-        "auroc_std": 0.007608649790555346,
+        "n_questions": 2228,
+        "auroc_mean": 0.7730464180490211,
+        "auroc_std": 0.0063038373504970035,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       },
       "n64": {
         "n": 64,
-        "n_questions": 2196,
-        "auroc_mean": 0.7628276492605954,
-        "auroc_std": 0.004606562113779411,
+        "n_questions": 2223,
+        "auroc_mean": 0.7611508899893977,
+        "auroc_std": 0.004179111684136151,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       }
@@ -410,17 +410,17 @@
       "label": "Qwen-7B",
       "n8": {
         "n": 8,
-        "n_questions": 1719,
-        "auroc_mean": 0.7760192106002504,
-        "auroc_std": 0.006557875158014417,
+        "n_questions": 1747,
+        "auroc_mean": 0.7736650081884514,
+        "auroc_std": 0.007839387005393545,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       },
       "n64": {
         "n": 64,
-        "n_questions": 1159,
-        "auroc_mean": 0.7722863569564058,
-        "auroc_std": 0.006089755860144263,
+        "n_questions": 1182,
+        "auroc_mean": 0.7730778405902808,
+        "auroc_std": 0.005699390985126138,
         "scr09_mean": 1.0,
         "scr09_std": 0.0
       }

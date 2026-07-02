@@ -1,0 +1,128 @@
+=== PANDA CPU suite started Thu Jul  2 01:01:56 CST 2026 ===
+PRS_OUTPUTS=/root/autodl-tmp/prs-outputs
+
+>>> [panda_cpu] 01:01:56
+N=8121 join=8121 → /root/autodl-tmp/PRS/paper/analysis/cpu_results.json
+<<< [panda_cpu] done in 4s
+
+>>> [sc_all_models] 01:02:00
+/root/miniconda3/lib/python3.12/site-packages/sklearn/metrics/_ranking.py:469: UndefinedMetricWarning: Only one class is present in y_true. ROC AUC score is not defined in that case.
+  warnings.warn(
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:246: UserWarning: Glyph 26497 (\N{CJK UNIFIED IDEOGRAPH-6781}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:246: UserWarning: Glyph 38590 (\N{CJK UNIFIED IDEOGRAPH-96BE}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:246: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:246: UserWarning: Glyph 26131 (\N{CJK UNIFIED IDEOGRAPH-6613}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:247: UserWarning: Glyph 26497 (\N{CJK UNIFIED IDEOGRAPH-6781}) missing from font(s) DejaVu Sans.
+  fig.savefig(out, dpi=200)
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:247: UserWarning: Glyph 38590 (\N{CJK UNIFIED IDEOGRAPH-96BE}) missing from font(s) DejaVu Sans.
+  fig.savefig(out, dpi=200)
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:247: UserWarning: Glyph 20013 (\N{CJK UNIFIED IDEOGRAPH-4E2D}) missing from font(s) DejaVu Sans.
+  fig.savefig(out, dpi=200)
+/root/autodl-tmp/PRS/experiments/spurious_consensus/analyze_all_models.py:247: UserWarning: Glyph 26131 (\N{CJK UNIFIED IDEOGRAPH-6613}) missing from font(s) DejaVu Sans.
+  fig.savefig(out, dpi=200)
+共同题 N=2228
+  n-sweep Qwen-0.5B: n=1741
+  n-sweep Llama-1B: n=2227
+  n-sweep Qwen-1.5B: n=1905
+  n-sweep Phi-3.8B: n=2228
+  n-sweep Qwen-3B: n=2228
+  n-sweep Qwen-7B: n=1747
+
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/results/all_models_clean_metrics.json
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/results/all_models_clean_tables.md
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/figures/nsweep_irreducible.png
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/figures/capability_vs_scr.png
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/figures/confidence_collapse.png
+<<< [sc_all_models] done in 190s
+
+>>> [sc_extras] 01:05:10
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/results/cpu_extras_analysis.json
+<<< [sc_extras] done in 36s
+
+>>> [sc_reasoning] 01:05:46
+{
+  "n_questions": 42,
+  "resample_matches_stored_maj": 0.5238095238095238,
+  "all_64_same_answer": 0.5714285714285714,
+  "all_64_same_reasoning": 0.0,
+  "all_64_same_token_ids": 0.0,
+  "prefix200_all_same": 0.0,
+  "exact_reason_rate_eq1": 0.0,
+  "sim_to_first_mean_avg": 0.39270314477283014,
+  "sim_to_first_mean_median": 0.37506135622006087,
+  "high_sim_ge_0.9": 0.0,
+  "low_sim_lt_0.5": 0.6666666666666666,
+  "common_prefix_len_mean": 6.761904761904762,
+  "common_prefix_len_median": 1.0,
+  "position_consensus_first50_mean": 0.6080580357142857,
+  "pairwise_first_divergence_mean": 26.48670634920635,
+  "cross_logprob_std_mean": 0.16718488830532463,
+  "avg_token_logprob_mean": -0.06633058325856454,
+  "low_logprob_frac_mean": 0.014925393909190876
+}
+
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/results/scr7b_t100_reasoning_analysis.json
+→ /root/autodl-tmp/PRS/experiments/spurious_consensus/figures/scr7b_t100_reasoning_analysis.md
+<<< [sc_reasoning] done in 46s
+
+>>> [mechanism] 01:06:32
+Loading rows...
+Loaded 8121 samples
+Wrote /root/autodl-tmp/PRS/paper/tables/mechanism_results.json
+Wrote /root/autodl-tmp/PRS/paper/tables/table_mechanism.md
+<<< [mechanism] done in 1238s
+
+>>> [aggregate_prs_v2] 01:27:10
+Processing qwen25_3b...
+  n=2207
+Processing llama32_1b...
+  n=2054
+Processing llama31_8b...
+  n=2131
+Processing qwen3_8b...
+  n=1729
+Wrote /root/autodl-tmp/PRS/paper/maintable/prs_v2_results.json
+
+=== Cross-model macro LODO (N=8121) ===
+  bd-only:       0.893
+  PRS (bd+prox): 0.902  Δ=+0.008
+
+=== Ablation macro (N=8121 pooled LODO) ===
+  DH-Score (full)         AUROC=0.902  AUPRC=0.877
+  w/o Dissent             AUROC=0.704  AUPRC=0.622
+  w/o Hesitation          AUROC=0.893  AUPRC=0.853
+  w/o Text Pert.          AUROC=0.852  AUPRC=0.810
+  w/o Weight Pert.        AUROC=0.880  AUPRC=0.825
+  w/o Fusion              AUROC=0.877  AUPRC=0.877
+  w/o Prox.               AUROC=0.903  AUPRC=0.878
+
+=== Table 3: PRS AUROC (math, 3-seed mean±std) ===
+| Model | MATH-500 | GSM8K | Minerva |
+|-------|--:|--:|--:|
+| Qwen2.5-3B | 83.82 ± 1.38 | 93.42 ± 0.99 | 78.58 ± 1.86 |
+| Llama-3.2-1B | 73.28 ± 2.65 | 84.15 ± 0.89 | 89.60 ± 0.85 |
+| Llama-3.1-8B | 77.07 ± 0.23 | 89.33 ± 0.32 | 87.21 ± 0.59 |
+| Qwen3-8B | 92.76 ± 2.17 | 98.57 ± 0.31 | 92.92 ± 5.26 |
+
+=== Drop-one ablation Qwen2.5-3B (Δ AUROC pp vs full) ===
+  Minerva full=83.82%
+    −D_base: 74.18%  Δ=-9.65pp
+    −T: 81.70%  Δ=-2.13pp
+    +F legacy: 84.34%  Δ=+0.52pp
+  MATH-500 full=93.42%
+    −D_base: 73.05%  Δ=-20.37pp
+    −T: 93.03%  Δ=-0.39pp
+    +F legacy: 93.36%  Δ=-0.06pp
+  GSM8K full=78.58%
+    −D_base: 68.33%  Δ=-10.25pp
+    −T: 80.07%  Δ=+1.49pp
+    +F legacy: 78.85%  Δ=+0.27pp
+<<< [aggregate_prs_v2] done in 96s
+
+=== ALL CPU DONE Thu Jul  2 01:28:46 CST 2026 ===
+Summary: paper/analysis/CPU_DONE.md
+Log: /root/autodl-tmp/PRS/paper/analysis/logs/run_all_cpu_20260702_010156.log

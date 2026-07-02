@@ -1,0 +1,104 @@
+{
+  "panda": {
+    "name": "PANDA bd+hes",
+    "auroc": 0.9043535225989799,
+    "auprc": 0.8746006409065862
+  },
+  "ranked": [
+    {
+      "name": "add\u2192bd+hes+base_ans_mar_mean",
+      "auroc": 0.9079880280381823,
+      "auprc": 0.8825221658452795
+    },
+    {
+      "name": "replace\u2192bd+W_n_tokens_avg",
+      "auroc": 0.9073703637053442,
+      "auprc": 0.8803853414799306
+    },
+    {
+      "name": "replace\u2192bd+base_ans_mar_mean",
+      "auroc": 0.9062060397007886,
+      "auprc": 0.889054353322679
+    },
+    {
+      "name": "replace\u2192bd+T_mar_sum_total",
+      "auroc": 0.9057674993535801,
+      "auprc": 0.8767662563760293
+    },
+    {
+      "name": "replace\u2192bd+mar_sum",
+      "auroc": 0.9057674993535801,
+      "auprc": 0.8767662563760293
+    },
+    {
+      "name": "add\u2192bd+hes+T_mar_top10_sum_total",
+      "auroc": 0.9057144280736966,
+      "auprc": 0.8746982451806399
+    },
+    {
+      "name": "bd+hes+mar_top10 (dual proc)",
+      "auroc": 0.9057144280736966,
+      "auprc": 0.8746982451806399
+    },
+    {
+      "name": "replace\u2192bd+T_mar_top10_sum_total",
+      "auroc": 0.9052395729537018,
+      "auprc": 0.8791157966095047
+    },
+    {
+      "name": "replace\u2192bd+mar_top10",
+      "auroc": 0.9052395729537018,
+      "auprc": 0.8791157966095047
+    },
+    {
+      "name": "add\u2192bd+hes+W_n_tokens_avg",
+      "auroc": 0.9049718163639898,
+      "auprc": 0.8745503533705654
+    },
+    {
+      "name": "add\u2192bd+hes+T_mar_sum_total",
+      "auroc": 0.904787003315313,
+      "auprc": 0.8743723902950459
+    },
+    {
+      "name": "add\u2192bd+hes+W_operator_flip_rate",
+      "auroc": 0.9047823657709767,
+      "auprc": 0.8748257245699563
+    },
+    {
+      "name": "PANDA bd+hes",
+      "auroc": 0.9043535225989799,
+      "auprc": 0.8746006409065862
+    },
+    {
+      "name": "add\u2192bd+hes+T_ent_prox_exp_tau16",
+      "auroc": 0.9029384143518909,
+      "auprc": 0.8724660568402602
+    },
+    {
+      "name": "replace\u2192bd+W_operator_flip_rate",
+      "auroc": 0.9022190286527653,
+      "auprc": 0.8688645336407221
+    },
+    {
+      "name": "replace\u2192bd+T_ent_prox_exp_tau16",
+      "auroc": 0.9015350828271904,
+      "auprc": 0.8704571903083642
+    },
+    {
+      "name": "replace\u2192bd+tau16",
+      "auroc": 0.9015350828271904,
+      "auprc": 0.8704571903083642
+    },
+    {
+      "name": "add\u2192bd+hes+T_formula_skeleton_entropy",
+      "auroc": 0.9005391087016749,
+      "auprc": 0.859589311641554
+    },
+    {
+      "name": "replace\u2192bd+T_formula_skeleton_entropy",
+      "auroc": 0.8937751806651245,
+      "auprc": 0.8564792405859203
+    }
+  ]
+}

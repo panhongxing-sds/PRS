@@ -1,0 +1,295 @@
+% !TEX program = xelatex
+\documentclass[11pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
+\geometry{margin=2.2cm}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\title{\textbf{PANDA core method 实验报告}\\[0.4em]
+\large 基于答案级语义碎裂的数学推理不确定性检测\\
+\small Minerva / MATH-500 / GSM8K 三数据集对比}
+\author{实验汇报稿}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本报告在三个数学推理子集（Minerva、MATH-500、GSM8K，各约 200 题）上评估
+\textbf{PANDA core method} 用于检测模型最终答案是否错误的能力。
+核心思想是：在文本改写（text adversarial）与权重扰动（weight adversarial）下
+\textbf{自由生成}多个语义答案，对答案做等价聚类后计算\textbf{答案簇分布的不确定性}，
+而非对固定答案 $a_0$ 做 teacher-forcing 似然打分。
+实验表明，联合文本--权重碎裂指标 \textbf{TW-ASE} 显著优于 TokUR 权重 epistemic baseline
+（Clean AUROC：TW-ASE 0.808/0.875/0.967 \emph{vs.} TokUR EU 0.574/0.580/0.520；
+另报告 AUPRC 与 TokUR 式 ACC*，见表~\ref{tab:main}）；
+结构化 token/process 特征可作为小幅辅助，但难以替代答案级 ASE。
+\end{abstract}
+
+\section{研究动机}
+
+大模型数学推理中，token 级概率往往混淆\textbf{表达不确定性}与\textbf{语义不确定性}。
+Semantic Entropy 等工作指出：应将多次生成的\textbf{最终答案}归并为语义簇，再计算簇分布熵。
+本实验进一步引入两类\textbf{对抗式扰动}以诱导答案分布：
+\begin{itemize}
+  \item \textbf{Text-side}：对题面做语义等价的 API 改写（$N{=}8$ 个 rephrase），每次自由生成完整解答；
+  \item \textbf{Weight-side}：对 $q/k$ 投影施加低秩高斯权重扰动（$M{=}8$ 个 seed），在原题上重新生成。
+\end{itemize}
+标签 $y$ 定义为模型\textbf{基线生成} $a_0$ 是否与参考答案等价错误；不确定性分数 $s$ 越高，表示越可能错误。
+
+\section{方法}
+
+\subsection{单题实验流程}
+
+对每道题 $q$，参考答案 $a^\ast$：
+\begin{enumerate}
+  \item \textbf{Clean 生成}：得到基线答案 $a_0$（仅用于打标签，\emph{不作为} UQ 分数）；
+  \item \textbf{Text 分支}：$N{=}8$ 个 rephrase 题面 $q^{(i)}_{\mathrm{text}}$，各自自由生成，抽取最终答案；
+  \item \textbf{Weight 分支}：$M{=}8$ 组权重扰动 $\theta^{(j)}$，在原题 $q$ 上生成；
+  \item \textbf{联合分支}：合并 $N{+}M$ 个答案计算 TW-ASE。
+\end{enumerate}
+每题共 $1{+}8{+}8{=}17$ 次生成（greedy 解码，$\texttt{temperature}{=}0$）。
+
+\subsection{数学答案聚类}
+
+对答案集合 $\{a_k\}_{k=1}^{n}$，先用规则抽取 boxed 最终答案并归一化，再定义等价关系
+$a_i \sim a_j \Leftrightarrow \texttt{math\_equal}(\tilde a_i, \tilde a_j)$。
+用并查集得到 $K$ 个语义簇 $\{C_1,\ldots,C_K\}$，簇质量
+\begin{equation}
+  p_k = \frac{|C_k|}{n}, \quad k=1,\ldots,K.
+\end{equation}
+
+\subsection{PANDA core method}
+
+对答案 multiset 计算（实现中主分数取 $U$）：
+\begin{align}
+  p_{\max} &= \max_k p_k, \\
+  U_{\mathrm{ASE}} &= 1 - p_{\max} \label{eq:U} \\
+  H &= -\sum_{k=1}^{K} p_k \log p_k, \\
+  H_{\mathrm{norm}} &= \begin{cases}
+    H / \log K, & K > 1, \\
+    0, & K = 1.
+  \end{cases}
+\end{align}
+\textbf{解释}：$U_{\mathrm{ASE}}$ 衡量``最大共识簇''之外的质量占比；
+$U$ 越大，说明扰动下答案越分裂（fragmentation 越强），越可疑。
+当所有生成落入同一语义簇时，$U{=}0$（稳定，无论对错）。
+
+\paragraph{三分支定义.}
+设 $\mathcal{A}_{\mathrm{T}}$、$\mathcal{A}_{\mathrm{W}}$ 分别为 text / weight 分支答案集合：
+\begin{align}
+  \mathrm{T\text{-}ASE} &= U(\mathcal{A}_{\mathrm{T}}), \\
+  \mathrm{W\text{-}ASE} &= U(\mathcal{A}_{\mathrm{W}}), \\
+  \mathrm{TW\text{-}ASE} &= U(\mathcal{A}_{\mathrm{T}} \cup \mathcal{A}_{\mathrm{W}}).
+\end{align}
+簇数量 $K$ 记为 \texttt{T\_num\_clusters}、\texttt{W\_num\_clusters}、\texttt{TW\_num\_clusters}，亦可单独作为检测分数。
+
+\subsection{权重扰动（Weight Adversarial）}
+
+对 Transformer 的 $q/k$ 投影施加\textbf{低秩高斯扰动}：
+$\Delta W = \sigma \cdot (U V^\top)$，$\mathrm{rank}{=}4$，$\sigma{=}0.03$，
+8 个随机种子独立采样。扰动后\textbf{整题重新生成}，记录完整 token trace（非 teacher-forcing）。
+
+\subsection{TokUR Baseline（对比方法）}
+
+作为\textbf{基线}，我们实现 TokUR 风格的\textbf{权重 epistemic uncertainty}：
+固定基线答案 $a_0$，对 prompt + $a_0$ 做 teacher-forcing（\emph{非}自由生成），
+在 $q/k$ 投影上施加 $K{=}8$ 次低秩高斯权重扰动（$\sigma{=}0.1$，$\mathrm{rank}{=}8$）。
+对每个答案 token 位置 $t$，记 $K$ 次扰动下的 log-probability 为 $\{\ell_k(t)\}_{k=1}^K$，定义
+\begin{equation}
+  \mathrm{EU}^{W}(t) = \mathrm{Var}_{k=1..K}\big[\ell_k(t)\big],
+\end{equation}
+TokUR 分数取 token 级 EU 之和（与实现中 \texttt{tokur\_eu\_sum} 一致）：
+\begin{equation}
+  S_{\mathrm{TokUR}} = \sum_{t \in \text{answer span}} \mathrm{EU}^{W}(t).
+\end{equation}
+\textbf{与 ASE 的本质区别}：TokUR 问``固定 $a_0$ 在权重扰动下有多不确定'';
+ASE 问``扰动后\textbf{自由生成}的语义答案是否分裂''。前者是 token-level epistemic proxy，
+后者是 answer-level semantic fragmentation。
+
+\subsection{Token / Process 辅助特征（简述）}
+
+在 weight 分支上额外提取结构化特征，例如：
+\begin{itemize}
+  \item \texttt{W\_math\_token\_flip\_max}：数学 token 翻转不稳定度；
+  \item \texttt{W\_alternative\_answer\_mass\_topk}：top-$k$ 中竞争答案簇质量；
+  \item \texttt{final\_answer\_equiv\_last\_equation}：最终答案与末行公式是否一致（越低越可疑）。
+\end{itemize}
+主表仅报告与 TW-ASE 的\textbf{两特征 logistic 融合}（表~\ref{tab:fusion}），不作大规模特征工程。
+
+\subsection{Clean Label 协议}
+
+原始 grader 使用 \texttt{math\_equal}；\textbf{Clean label} 使用增强的
+\texttt{math\_equal\_clean}（分数/矩阵/LaTeX 归一化 + 相对数值容差）。
+若仅 clean 判对而原始判错，记为 \textbf{relabeled}。
+Minerva 另有人工核验的 14 题 \texttt{MANUAL\_RELABEL}。
+检测指标（TokUR 协议，$y{=}0$ 表示正确、分数越高越可疑）：
+\textbf{AUROC}、\textbf{AUPRC}，以及 \textbf{ACC*}（按不确定性分数降序取 Top-50\% 样本的正确率）。
+主结果见表~\ref{tab:main}；完整 ASE 变体见表~\ref{tab:extended}。
+
+\section{实验设置}
+
+\begin{table}[h]
+  \centering
+  \caption{实验配置摘要}
+  \label{tab:setup}
+  \begin{tabular}{ll}
+    \toprule
+    项目 & 配置 \\
+    \midrule
+    模型 & TFB-Qwen2.5-3B-Instruct \\
+    数据集 & Minerva / MATH-500 / GSM8K（各 $\leq 200$ 题） \\
+    Text rephrase & $N{=}8$（API 缓存于 \texttt{qaac\_api\_bench}) \\
+    Weight perturb (ASE) & $M{=}8$，$\sigma{=}0.03$，rank$=4$，seeds 42--49 \\
+    TokUR baseline & teacher-force $a_0$，$K{=}8$，$\sigma{=}0.1$，rank$=8$ \\
+    解码 & greedy，\texttt{max\_new\_tokens}$=2048$ \\
+    评估 & Clean-label AUROC / AUPRC / ACC*（越高越好） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{实验结果}
+
+\subsection{数据集与标签统计}
+
+\begin{table}[h]
+  \centering
+  \caption{三数据集样本量与 Clean 标签统计}
+  \label{tab:label}
+  \begin{tabular}{lrrrr}
+    \toprule
+    数据集 & $N$ & Clean 准确率 & 错误数 & Relabeled \\
+    \midrule
+    Minerva   & 197 & 36.5\% & 125 & 22 \\
+    MATH-500  & 200 & 65.5\% & 69  & 4  \\
+    GSM8K     & 200 & 85.5\% & 29  & 0  \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Minerva 难度最高、标签噪声最大（22 题经 canonical grader 修正）；
+GSM8K 最简单，clean 与 original 标签完全一致（relabeled$=0$）。
+
+\subsection{表 1：Answer-level Fragmentation 主结果}
+
+\input{../tables/table_main.tex}
+
+\textbf{主要观察：}
+\begin{itemize}
+  \item \textbf{TW-ASE} 在 AUROC/AUPRC 上全面优于 TokUR EU（AUROC 平均提升约 $+0.27$），验证 answer-level fragmentation 相对 teacher-forcing epistemic 的优势；
+  \item TokUR EU 的 AUROC 仅 $\approx 0.52$--$0.58$，接近随机；但其 ACC* 在 MATH-500/GSM8K 上较高（0.66/0.85），反映 Top-50\% 选择性拒答与 AUROC 排序能力并不等价；
+  \item ASE 的 ACC* 普遍低于 TokUR（如 Minerva TW-ASE ACC*$=0.11$），因高 $U$ 样本中错例占比高，Top-50\% 未必对应高准确率子集；
+  \item MATH-500 上 T-ASE AUROC $>$ W-ASE；Minerva 上 W-ASE 略强于 T-ASE；
+  \item GSM8K 上 TW-ASE AUROC 极高（0.967），与任务较易、错例常呈答案分裂有关（见讨论）。
+\end{itemize}
+
+\subsection{扩展表：含簇数量变体}
+
+\input{../tables/table_extended.tex}
+
+\subsection{表 2：Token / Process 辅助信号}
+
+\begin{table}[h]
+  \centering
+  \caption{Token/process 辅助特征的 Clean AUROC}
+  \label{tab:token}
+  \begin{tabular}{lccc}
+    \toprule
+    方法 & Minerva & MATH-500 & GSM8K \\
+    \midrule
+    W\_math\_token\_flip\_max       & 0.748 & 0.753 & 0.678 \\
+    W\_alt.\ answer\_mass (top-$k$) & 0.746 & 0.802 & 0.717 \\
+    W\_confident\_fragmentation     & 0.745 & 0.814 & 0.717 \\
+    W\_formula\_skeleton\_entropy   & 0.693 & 0.726 & 0.595 \\
+    final\_ans.\ $\equiv$ last eq.  & 0.590 & 0.532 & 0.580 \\
+    \midrule
+    \textbf{TW-ASE}                 & \textbf{0.808} & \textbf{0.873} & \textbf{0.967} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+所有 token/process 指标均\textbf{低于}同数据集 TW-ASE，支持``答案级碎裂为主信号、token 为辅助''的叙事。
+
+\subsection{表 3：Minimal Add-on 融合}
+
+\begin{table}[h]
+  \centering
+  \caption{以 TW-ASE 为主、叠加 1--2 个辅助特征的 Logistic 融合 AUROC}
+  \label{tab:fusion}
+  \begin{tabular}{lccc}
+    \toprule
+    模型 & Minerva & MATH-500 & GSM8K \\
+    \midrule
+    TW-ASE                              & 0.808 & 0.873 & 0.967 \\
+    TW-ASE + alt.\ answer mass          & 0.816 & 0.874 & 0.967 \\
+    TW-ASE + final $\equiv$ last eq.    & 0.820 & 0.874 & 0.968 \\
+    TW-ASE + both                       & 0.831 & 0.876 & 0.967 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Minerva 上融合增益最明显（$+0.02\sim0.03$）；
+MATH-500 / GSM8K 上 TW-ASE 已接近饱和，融合收益有限。
+
+\section{讨论}
+
+\paragraph{1. 为何放弃 teacher-forcing / TokUR 主线？}
+TokUR EU 固定 $a_0$ 做 teacher-forcing，衡量权重扰动下 token log-prob 的方差；
+本实验测得 AUROC 仅 0.52--0.58（表~\ref{tab:main}），接近随机。
+ASE 则在扰动下\textbf{重新生成}并观察语义答案簇是否分裂，TW-ASE 达 0.81--0.97。
+这说明数学 UQ 的关键信号在\textbf{语义答案分布}，而非固定轨迹上的 token epistemic 波动。
+
+\paragraph{2. Minerva 标签清洗的重要性.}
+22 题 relabel 将准确率从 25.4\% 提升至 36.5\%，避免格式等价误判系统性压低 AUROC。
+汇报时应同时说明 \textbf{Original vs Clean} 标签差异。
+
+\paragraph{3. GSM8K 上 TW-ASE $=$ 0.967 是否``夸张''？}
+清洗流程已执行，但 \textbf{relabeled$=0$}，Clean 与 Original AUROC 相同。
+该子集 Clean 准确率 85.5\%，29 个错例中 24 个 TW-ASE $\geq 0.3$，仅 5 个 stable-wrong；
+Bootstrap 95\% CI 约为 $[0.94,\,0.99]$。
+因此高 AUROC 主要来自\textbf{任务较易 + 错例多呈答案碎裂}，而非标签被洗高。
+同时 W-ASE 仅 0.723，说明并非所有指标都异常偏高。
+
+\paragraph{4. 与 Semantic Entropy 的关系.}
+本工作可视为在\textit{对抗扰动诱导的答案分布}上计算语义熵/碎裂度：
+$H$ 与 $H_{\mathrm{norm}}$ 已记录，但主表统一采用 $U_{\mathrm{ASE}}=1-p_{\max}$，因其对``单簇主导''更直观。
+
+\section{结论}
+
+\begin{enumerate}
+  \item \textbf{Answer-level fragmentation (TW-ASE)} 显著优于 TokUR EU baseline，是跨三数据集的最强检测信号；
+  \item \textbf{Token/process} 特征有判别力，但应作为轻量辅助而非主线；
+  \item \textbf{Clean label} 在 Minerva 等复杂题型上不可或缺；GSM8K 需结合难度与 CI 解读高 AUROC；
+  \item 后续可扩展 DeepScaler 等更难数据集，并报告 Original/Clean 双轨指标与 stable-wrong 案例分析。
+\end{enumerate}
+
+\appendix
+\section{核心公式速查}
+
+\begin{align*}
+  &\text{簇质量: } p_k = |C_k|/n, \quad
+  U_{\mathrm{ASE}} = 1 - \max_k p_k, \quad
+  H = -\textstyle\sum_k p_k \log p_k \\
+  &\mathrm{T\text{-}ASE} = U(\mathcal{A}_{\mathrm{T}}),\;
+   \mathrm{W\text{-}ASE} = U(\mathcal{A}_{\mathrm{W}}),\;
+   \mathrm{TW\text{-}ASE} = U(\mathcal{A}_{\mathrm{T}} \cup \mathcal{A}_{\mathrm{W}})
+\end{align*}
+
+\section{复现路径}
+
+\begin{itemize}
+  \item 原始数据：\texttt{/HDDDATA/phx/PANDA/outputs/ase\_full/\{dataset\}/raw\_runs/}
+  \item 论文表格（AUROC/AUPRC/ACC*）：\texttt{python -m panda.core.analyze\_paper\_tables --out-dir ... --paper-dir paper/}
+  \item 单数据集 AUROC 表：\texttt{python -m panda.core.analyze\_main\_tables --dataset <name>}
+  \item TokUR baseline：\texttt{python -m panda.core.score\_tokur\_baseline --dataset <name>}
+  \item 生成物：\texttt{paper/tables/table\_main.\{md,tex\}}, \texttt{table\_extended.\{md,tex\}}, \texttt{results.json}
+\end{itemize}
+
+\end{document}

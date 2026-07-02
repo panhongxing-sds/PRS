@@ -13,7 +13,7 @@ export PYTHONPATH="${ROOT}/src${PYTHONPATH:+:$PYTHONPATH}"
 MODEL_TAG="${1:?model_tag}"
 SEEDS="${SEEDS:-41,42,43}"
 DATASETS="${DATASETS:-minerva,math500,gsm8k,deepscaler,leg_counting,zebra_puzzles,color_cube,humaneval}"
-OUT_BASE="${OUT_BASE:-$PRS_OUTPUTS/maintable_${MODEL_TAG}}"
+OUT_BASE="${OUT_BASE:-$PANDA_OUTPUTS/maintable_${MODEL_TAG}}"
 PAPER_DIR="${PAPER_DIR:-$ROOT/paper/maintable/${MODEL_TAG}}"
 
 declare -A MODEL_LABEL=(
@@ -29,13 +29,13 @@ mkdir -p "$PAPER_DIR"
 for seed in $(echo "$SEEDS" | tr ',' ' '); do
   OUT="$OUT_BASE/seed${seed}"
   if [[ -d "$OUT" ]]; then
-    python3 -m prs.ase.recompute_metrics \
+    python3 -m panda.core.recompute_metrics \
       --out-dir "$OUT" \
       --datasets "$DATASETS" 2>/dev/null || true
   fi
 done
 
-python3 -m prs.ase.analyze_maintable \
+python3 -m panda.core.analyze_maintable \
   --out-dir "$OUT_BASE" \
   --paper-dir "$PAPER_DIR" \
   --model-label "$LABEL" \

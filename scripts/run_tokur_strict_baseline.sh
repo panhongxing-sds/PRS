@@ -1,16 +1,16 @@
 #!/bin/bash
 source "$(dirname "$0")/env.sh"
-# Strict TokUR baseline for ASE paper tables (official vLLM + TFB, NOT post-hoc PRS weight EU).
+# Strict TokUR baseline for ASE paper tables (official vLLM + TFB, NOT post-hoc PANDA weight EU).
 #
 # Pipeline per dataset:
-#   1. Export ASE raw_runs → TokUR/datasets/ase_{dataset}.jsonl
+#   1. Export ASE raw_runs → TokUR/datasets/panda_{dataset}.jsonl
 #   2. greedy_unc_single_batch_refine.py (temp=0, native EU during generation)
-#   3. pkl → outputs/ase_full/{dataset}/tokur_baseline.jsonl
+#   3. pkl → outputs/panda_full/{dataset}/tokur_baseline.jsonl
 #
 # Official settings (TokUR repo):
 #   TFB-Qwen2.5-3B-Instruct: bayes_sigma=0.1, rank-8 basis on q_proj+v_proj, num_samples=5
 #   greedy temperature=0, stop_token_ids [151645, 151643] for Qwen
-#   multi-seed paper eval: 96 89 64 (default single seed 96 for ASE jsonl)
+#   multi-seed paper eval: 96 89 64 (default single seed 96 for PANDA jsonl)
 #
 # Usage:
 #   bash scripts/run_tokur_strict_baseline.sh
@@ -20,10 +20,10 @@ source "$(dirname "$0")/env.sh"
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-TOKUR_ROOT="${TOKUR_ROOT:-$PRS_ROOT/third_party/TokUR}"
-OUT_DIR="${OUT_DIR:-$PRS_OUTPUTS/ase_full}"
+TOKUR_ROOT="${TOKUR_ROOT:-$PANDA_ROOT/third_party/TokUR}"
+OUT_DIR="${OUT_DIR:-$PANDA_OUTPUTS/panda_full}"
 MODEL_TAG="${MODEL_TAG:-qwen3b}"
-MODEL_BASE_DIR="${MODEL_BASE_DIR:-$PRS_MODELS}"
+MODEL_BASE_DIR="${MODEL_BASE_DIR:-$PANDA_MODELS}"
 DATASETS="${DATASETS:-math500 gsm8k deepscaler minerva}"
 SEEDS="${SEEDS:-96}"
 SKIP_GENERATE="${SKIP_GENERATE:-0}"
@@ -35,7 +35,7 @@ BATCH_SIZE="${BATCH_SIZE:-16}"
 PARALLEL_SHARDS="${PARALLEL_SHARDS:-0}"
 
 export HF_ENDPOINT="${HF_ENDPOINT:-https://hf-mirror.com}"
-export TOKUR_VENV="${TOKUR_VENV:-${PRS_ROOT}/.tokur_venv}"
+export TOKUR_VENV="${TOKUR_VENV:-${PANDA_ROOT}/.tokur_venv}"
 export TOKUR_PY="${TOKUR_PY:-${TOKUR_VENV}/bin/python}"
 export PATH="${TOKUR_VENV}/bin:${PATH}"
 export TMPDIR="${TMPDIR:-/tmp}"
@@ -52,22 +52,22 @@ fi
 resolve_model_path() {
   case "$MODEL_TAG" in
     qwen3b)
-      for p in "$MODEL_BASE_DIR/TFB-Qwen2.5-3B-Instruct" "$PRS_MODELS/TFB-Qwen2.5-3B-Instruct"; do
+      for p in "$MODEL_BASE_DIR/TFB-Qwen2.5-3B-Instruct" "$PANDA_MODELS/TFB-Qwen2.5-3B-Instruct"; do
         [[ -d "$p" ]] && echo "$p" && return 0
       done ;;
     qwen8b)
-      for p in "$MODEL_BASE_DIR/TFB-Qwen3-8B" "$PRS_MODELS/TFB-Qwen3-8B"; do
+      for p in "$MODEL_BASE_DIR/TFB-Qwen3-8B" "$PANDA_MODELS/TFB-Qwen3-8B"; do
         [[ -d "$p" ]] && echo "$p" && return 0
       done ;;
     llama8b)
-      for p in "$MODEL_BASE_DIR/TFB-Meta-Llama-3.1-8B-Instruct" "$PRS_MODELS/TFB-Llama-3.1-8B-Instruct"; do
+      for p in "$MODEL_BASE_DIR/TFB-Meta-Llama-3.1-8B-Instruct" "$PANDA_MODELS/TFB-Llama-3.1-8B-Instruct"; do
         [[ -d "$p" ]] && echo "$p" && return 0
       done ;;
     llama1b)
       for p in \
         "$MODEL_BASE_DIR/TFB-Llama3.2-1B-Instruct" \
-        "$PRS_MODELS/TFB-Llama-3.2-1B-Instruct" \
-        "$PRS_MODELS/TFB-Llama3.2-1B-Instruct"; do
+        "$PANDA_MODELS/TFB-Llama-3.2-1B-Instruct" \
+        "$PANDA_MODELS/TFB-Llama3.2-1B-Instruct"; do
         [[ -d "$p" ]] && echo "$p" && return 0
       done ;;
     *)
@@ -78,7 +78,7 @@ resolve_model_path() {
   return 1
 }
 
-# Per-model TokUR dataset slug (jsonl + pkl subdir). Legacy qwen3b/ase_full keeps ase_{ds}.
+# Per-model TokUR dataset slug (jsonl + pkl subdir). Legacy qwen3b/panda_full keeps panda_{ds}.
 tokur_dataset_slug() {
   local dataset=$1
   if [[ "${TOKUR_DS_LEGACY:-0}" == "1" ]]; then
@@ -89,8 +89,8 @@ tokur_dataset_slug() {
 }
 
 MODEL_PATH="$(resolve_model_path)" || exit 1
-# Legacy: existing qwen2.5 strict pkls live under results/qwen3b_results_vllm_pg/ase_{dataset}/
-if [[ "$MODEL_TAG" == "qwen3b" && "$(basename "$OUT_DIR")" == "ase_full" ]]; then
+# Legacy: existing qwen2.5 strict pkls live under results/qwen3b_results_vllm_pg/panda_{dataset}/
+if [[ "$MODEL_TAG" == "qwen3b" && "$(basename "$OUT_DIR")" == "panda_full" ]]; then
   TOKUR_DS_LEGACY=1
 else
   TOKUR_DS_LEGACY=0
@@ -103,27 +103,27 @@ fi
 "$TOKUR_PY" -c "import json; c=json.load(open('$MODEL_PATH/config.json')); print('bayes_sigma', c.get('bayes_sigma'), 'num_samples', c.get('num_samples'), 'basis_idx len', len(c.get('basis_idx',[])))"
 
 cd "$ROOT"
-PRS_PY="${ROOT}/src"
+PANDA_PY="${ROOT}/src"
 
 for dataset in $DATASETS; do
   echo "======== strict TokUR: $dataset ========"
   TOKUR_DS="$(tokur_dataset_slug "$dataset")"
-  ASE_JSONL="$TOKUR_ROOT/datasets/${TOKUR_DS}.jsonl"
+  PANDA_JSONL="$TOKUR_ROOT/datasets/${TOKUR_DS}.jsonl"
 
   if [[ "$SKIP_EXPORT" != "1" ]]; then
-    PYTHONPATH="${PRS_PY}:${PYTHONPATH:-}" python3 -m prs.ase.export_tokur_jsonl \
+    PYTHONPATH="${PANDA_PY}:${PYTHONPATH:-}" python3 -m panda.core.export_tokur_jsonl \
       --out-dir "$OUT_DIR" \
       --dataset "$dataset" \
-      --jsonl "$ASE_JSONL" \
+      --jsonl "$PANDA_JSONL" \
       --tokur-root "$TOKUR_ROOT"
   fi
 
-  if [[ ! -f "$ASE_JSONL" ]]; then
-    echo "Missing $ASE_JSONL (export failed?)" >&2
+  if [[ ! -f "$PANDA_JSONL" ]]; then
+    echo "Missing $PANDA_JSONL (export failed?)" >&2
     exit 1
   fi
-  TOTAL=$(wc -l < "$ASE_JSONL" | tr -d ' ')
-  echo "ASE jsonl: $ASE_JSONL ($TOTAL lines)"
+  TOTAL=$(wc -l < "$PANDA_JSONL" | tr -d ' ')
+  echo "PANDA jsonl: $PANDA_JSONL ($TOTAL lines)"
 
   if [[ "$SKIP_GENERATE" != "1" ]]; then
     for seed in $SEEDS; do
@@ -146,7 +146,7 @@ for dataset in $DATASETS; do
         run_shard() {
           cd "$TOKUR_ROOT"
           env -u PYTHONPATH CUDA_VISIBLE_DEVICES=$gpu "$TOKUR_PY" run/greedy_unc_single_batch_refine.py \
-            --dataset-path "$ASE_JSONL" \
+            --dataset-path "$PANDA_JSONL" \
             --dataset-start "$start" \
             --dataset-end "$end" \
             --model-path "$MODEL_PATH" \
@@ -171,7 +171,7 @@ for dataset in $DATASETS; do
   fi
   LEGACY_FLAG=""
   [[ "$TOKUR_DS_LEGACY" == "1" ]] && LEGACY_FLAG="--legacy-tokur-ds"
-  PYTHONPATH="${PRS_PY}:${PYTHONPATH:-}" python3 -m prs.ase.score_tokur_official \
+  PYTHONPATH="${PANDA_PY}:${PYTHONPATH:-}" python3 -m panda.core.score_tokur_official \
     --out-dir "$OUT_DIR" \
     --dataset "$dataset" \
     --tokur-root "$TOKUR_ROOT" \
@@ -186,5 +186,5 @@ done
 
 echo ""
 echo "Done. Re-run ASE tables:"
-echo "  python3 -m prs.ase.recompute_metrics --out-dir $OUT_DIR --datasets $(echo $DATASETS | tr ' ' ',')"
-echo "  python3 -m prs.ase.analyze_main_tables --out-dir $OUT_DIR --datasets $(echo $DATASETS | tr ' ' ',')"
+echo "  python3 -m panda.core.recompute_metrics --out-dir $OUT_DIR --datasets $(echo $DATASETS | tr ' ' ',')"
+echo "  python3 -m panda.core.analyze_main_tables --out-dir $OUT_DIR --datasets $(echo $DATASETS | tr ' ' ',')"

@@ -30,3 +30,20 @@ bundles/*.part_*
 bundles/_restore_*
 bundles/*.log
 push.log
+
+# PANDA runtime paths (symlinks or local dirs)
+panda-models/
+panda-outputs/
+prs-models/
+prs-outputs/
+
+# vLLM / local venvs
+.vllm_venv/
+
+# Python cache anywhere
+**/__pycache__/
+*.pyc
+
+# Local PDFs / scratch
+*.CANCELLED_BY_USER
+scripts/*.bak.*

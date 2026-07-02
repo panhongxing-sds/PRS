@@ -1,0 +1,146 @@
+{
+  "N": 8121,
+  "spearman_bd_hes": 0.4292358834296128,
+  "panda_ablation_macro": {
+    "DH-Score (full)": {
+      "auroc": 0.9043535225989799,
+      "auprc": 0.8746006409065862
+    },
+    "w/o Dissent": {
+      "auroc": 0.7043613499153261,
+      "auprc": 0.6215411728541549
+    },
+    "w/o Hesitation": {
+      "auroc": 0.897429254990964,
+      "auprc": 0.8500004558706716
+    },
+    "w/o Text Pert.": {
+      "auroc": 0.861977510723872,
+      "auprc": 0.7892898329398269
+    },
+    "w/o Weight Pert.": {
+      "auroc": 0.8708290384363894,
+      "auprc": 0.8290846572034392
+    },
+    "w/o Fusion": {
+      "auroc": 0.8773964757959645,
+      "auprc": 0.8773964757959645
+    },
+    "w/o Prox.": {
+      "auroc": 0.8955279131768119,
+      "auprc": 0.8690473133724632
+    }
+  },
+  "panda_subsets": [
+    {
+      "name": "all",
+      "n": 8121,
+      "wrong_rate": 0.40635389730328775,
+      "lodo_panda": 0.9043535225989799,
+      "lodo_bd": 0.897429254990964,
+      "lodo_hes": 0.7043613499153261,
+      "lodo_wo_dissent": 0.7043613499153261,
+      "lodo_wo_hesitation": 0.897429254990964,
+      "delta_panda_vs_bd": 0.006924267608015899,
+      "delta_hes_vs_bd_on_subset": -0.19306790507563798
+    },
+    {
+      "name": "bd0",
+      "n": 2960,
+      "wrong_rate": 0.032432432432432434,
+      "lodo_panda": 0.6225303064448072,
+      "lodo_bd": 0.5,
+      "lodo_hes": 0.6225303064448072,
+      "lodo_wo_dissent": 0.6225303064448072,
+      "lodo_wo_hesitation": 0.5,
+      "delta_panda_vs_bd": 0.12253030644480722,
+      "delta_hes_vs_bd_on_subset": 0.12253030644480722
+    },
+    {
+      "name": "bd0_wrong",
+      "n": 96,
+      "note": "insufficient class balance for AUROC"
+    },
+    {
+      "name": "text_agree_wrong",
+      "n": 126,
+      "note": "insufficient class balance for AUROC"
+    }
+  ],
+  "collapse_lodo": {
+    "all": {
+      "name": "all",
+      "n": 8121,
+      "wrong_rate": 0.40635389730328775,
+      "lodo_panda": 0.9043535225989799,
+      "lodo_bd": 0.897429254990964,
+      "lodo_hes": 0.7043613499153261,
+      "lodo_wo_dissent": 0.7043613499153261,
+      "lodo_wo_hesitation": 0.897429254990964,
+      "delta_panda_vs_bd": 0.006924267608015899,
+      "delta_hes_vs_bd_on_subset": -0.19306790507563798
+    },
+    "bd0": {
+      "name": "bd0",
+      "n": 2960,
+      "wrong_rate": 0.032432432432432434,
+      "lodo_panda": 0.6225303064448072,
+      "lodo_bd": 0.5,
+      "lodo_hes": 0.6225303064448072,
+      "lodo_wo_dissent": 0.6225303064448072,
+      "lodo_wo_hesitation": 0.5,
+      "delta_panda_vs_bd": 0.12253030644480722,
+      "delta_hes_vs_bd_on_subset": 0.12253030644480722
+    },
+    "bd0_wrong": {
+      "name": "bd0_wrong",
+      "n": 96,
+      "note": "insufficient class balance for AUROC"
+    },
+    "text_agree_wrong": {
+      "name": "text_agree_wrong",
+      "n": 126,
+      "note": "insufficient class balance for AUROC"
+    }
+  },
+  "bd0_wrong_cache_n": 96,
+  "sc_deepscaler": {
+    "qwen25_3b": {
+      "auroc_u_ans": 0.7744379394392042,
+      "scr90_pct_wrong": 0.062146892655367235,
+      "scr90_n": 66,
+      "n": 2000,
+      "maj_at_64": 0.469
+    },
+    "llama32_1b": {
+      "auroc_u_ans": 0.7579620308227691,
+      "scr90_pct_wrong": 0.0007122507122507123,
+      "scr90_n": 1,
+      "n": 2000,
+      "maj_at_64": 0.29800000000000004
+    }
+  },
+  "minerva_overlap": {
+    "available": true,
+    "n": 198,
+    "model": "qwen25_3b",
+    "seed": 41,
+    "dataset": "minerva",
+    "auroc_sc_u_ans": 0.9422401872141262,
+    "auroc_panda_bd": 0.8678332092330603,
+    "auroc_panda_hes": 0.7418359748962876,
+    "auroc_panda_uw": 0.8819274545261142,
+    "scr90_wrong_n": 0,
+    "bd0_n": 22,
+    "bd0_wrong_n": 4
+  },
+  "collapse_proxy_counts": {
+    "bd0_wrong_fast": 83,
+    "text_agree_wrong": 130
+  },
+  "outputs": {
+    "figure": "/root/autodl-tmp/PANDA/paper/analysis/figures/sc_vs_panda_dissent.png",
+    "json": "/root/autodl-tmp/PANDA/paper/analysis/collapse_gain.json",
+    "fast_path_md": "/root/autodl-tmp/PANDA/paper/analysis/FAST_PATH.md"
+  }
+}

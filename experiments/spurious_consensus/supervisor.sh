@@ -4,7 +4,7 @@
 # 直到真正完整才进入下一个模型。无人值守、可断点续跑。
 set -uo pipefail
 cd "$(dirname "$0")"
-export PRS_ROOT=/root/PRS
+export PANDA_ROOT=/root/PANDA
 LOG=logs/supervisor
 mkdir -p "$LOG"
 SUP_LOG="$LOG/supervisor.log"
@@ -61,7 +61,7 @@ run_model(){
     for s in 0 1 2; do
       env GPU=$s MODEL_TAG="$tag" MODEL_PATH="$path" \
         SHARD_ID=$s NUM_SHARDS=3 K_CHUNK=64 PROMPT_BATCH=$batch \
-        PRS_ROOT=/root/PRS \
+        PANDA_ROOT=/root/PANDA \
         bash run_shard.sh > "$LOG/${tag}.shard${s}.log" 2>&1 &
       pids+=($!)
     done
@@ -71,18 +71,18 @@ run_model(){
   log "$tag 达到最大重试仍未完整，继续后续模型"; return 1
 }
 
-PRS_MODELS=/root/autodl-tmp/prs-models
+PANDA_MODELS=/root/autodl-tmp/panda-models
 
 log "开始校验+补跑链路 (max_model_len 已修正为 5120)"
 
 # 阶段1：7B 补全（deepscaler 已完整，补 gpqa/aime shard1 缺口）
-run_model qwen25_7b  "$PRS_MODELS/Qwen2.5-7B-Instruct"  8   || true
+run_model qwen25_7b  "$PANDA_MODELS/Qwen2.5-7B-Instruct"  8   || true
 
 # 阶段2：0.5B
-run_model qwen25_05b "$PRS_MODELS/Qwen2.5-0.5B-Instruct" 16 || true
+run_model qwen25_05b "$PANDA_MODELS/Qwen2.5-0.5B-Instruct" 16 || true
 
 # 阶段3：1.5B
-run_model qwen25_15b "$PRS_MODELS/Qwen2.5-1.5B-Instruct" 16 || true
+run_model qwen25_15b "$PANDA_MODELS/Qwen2.5-1.5B-Instruct" 16 || true
 
 log "=== 全部完成 ==="
 for tag in qwen25_7b qwen25_05b qwen25_15b; do

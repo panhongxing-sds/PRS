@@ -7,15 +7,15 @@ import math
 import numpy as np
 import pytest
 
-from prs.baselines.from_record import (
+from panda.baselines.from_record import (
     _collect_se_sample_answers,
     _collect_tw_sample_answers,
     baselines_from_record,
     enrich_row_with_baselines,
     sample_baselines_from_record,
 )
-from prs.baselines.sample_scores import graph_uncertainty, semantic_entropy_h, u_deg, u_ecc
-from prs.baselines.token_scores import (
+from panda.baselines.sample_scores import graph_uncertainty, semantic_entropy_h, u_deg, u_ecc
+from panda.baselines.token_scores import (
     deepconf_mean,
     log_likelihood_nll,
     predictive_entropy,
@@ -50,7 +50,7 @@ def test_deepconf_from_topk():
 
 
 def test_semantic_entropy_uniform_clusters(monkeypatch):
-    monkeypatch.setenv("PRS_SE_CLUSTER", "math_equal")
+    monkeypatch.setenv("PANDA_SE_CLUSTER", "math_equal")
     h = semantic_entropy_h(["1", "2", "3", "4"])
     assert h["baseline_SE_num_clusters"] == 4
     assert h["baseline_SE_H"] == pytest.approx(math.log(4), rel=1e-5)
@@ -82,6 +82,7 @@ def test_se_uses_high_temp_not_tw():
     assert b["baseline_SE_status"] == "ok"
     assert b["baseline_SE_num_clusters"] == 2
     assert math.isfinite(b["baseline_U_Ecc"])
+    assert b["baseline_U_Ecc_graph_mode"] == "math_equal"
 
 
 def test_se_missing_without_high_temp_samples():
@@ -92,7 +93,8 @@ def test_se_missing_without_high_temp_samples():
     b = sample_baselines_from_record(record)
     assert b["baseline_SE_status"] == "missing_high_temp_samples"
     assert math.isnan(b["baseline_SE_H"])
-    assert math.isfinite(b["baseline_U_Ecc"])
+    assert math.isnan(b["baseline_U_Ecc"])
+    assert math.isnan(b["baseline_U_Deg"])
 
 
 def test_baselines_from_record():

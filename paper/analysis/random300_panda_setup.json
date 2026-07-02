@@ -1,0 +1,19 @@
+{
+  "tokur_dataset_full2000": "/root/autodl-tmp/PANDA/third_party/TokUR/datasets/deepscaler.jsonl",
+  "tokur_random300": "/root/autodl-tmp/PANDA/third_party/TokUR/datasets/deepscaler_random300.jsonl",
+  "tokur_scr500_backup": "/root/autodl-tmp/PANDA/third_party/TokUR/datasets/deepscaler_scr500_only_backup.jsonl",
+  "bench_jsonl": "/root/autodl-tmp/panda-outputs/bench/deepscaler_random300.jsonl",
+  "variants_path": "/root/autodl-tmp/panda-outputs/qaac_api_bench/deepscaler_random300/variants.jsonl",
+  "n_questions": 300,
+  "n_rephrases": 4,
+  "variants_augment_mode": "deterministic_prefix",
+  "meta": "/root/autodl-tmp/PANDA/paper/analysis/deepscaler_random300_meta.json",
+  "out_base": "/root/autodl-tmp/panda-outputs/maintable_qwen25_3b_deepscaler_random300",
+  "vllm_python": "/root/miniconda3/bin/python",
+  "model_path_vllm": "/root/autodl-tmp/panda-models/TFB-Qwen2.5-3B-Instruct",
+  "vllm_env": {
+    "VLLM_USE_V1": "0",
+    "max_model_len": 8192,
+    "gpu_memory_utilization": 0.8
+  }
+}

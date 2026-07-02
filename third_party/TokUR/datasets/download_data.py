@@ -1,4 +1,4 @@
-"""Download TokUR / PRS benchmark JSONL files from HuggingFace."""
+"""Download TokUR / PANDA benchmark JSONL files from HuggingFace."""
 
 from __future__ import annotations
 

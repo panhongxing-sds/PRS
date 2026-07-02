@@ -11,7 +11,7 @@ Partial datasets are reported as-is (available raw/features, no 400/272 gate).
 | Llama-3.2-1B | 0.592 | 0.840 | 0.200 | 0.727 | 0.842 | 0.430 | 0.795 | 0.801 | 0.670 | — | — | — |
 | Qwen3-8B | — | — | — | — | — | — | — | — | — | — | — | — |
 
-## PRS
+## PANDA
 
 | Model | Minerva AUROC | Minerva AUPRC | Minerva ACC* | MATH-500 AUROC | MATH-500 AUPRC | MATH-500 ACC* | GSM8K AUROC | GSM8K AUPRC | GSM8K ACC* | DeepScaler AUROC | DeepScaler AUPRC | DeepScaler ACC* |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |

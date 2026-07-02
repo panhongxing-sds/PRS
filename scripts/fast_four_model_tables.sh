@@ -11,7 +11,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 export PYTHONPATH="${ROOT}/src${PYTHONPATH:+:$PYTHONPATH}"
-LOG="$PRS_OUTPUTS/ase_four_models_tables.log"
+LOG="$PANDA_OUTPUTS/ase_four_models_tables.log"
 mkdir -p "$(dirname "$LOG")"
 
 MAX_JOBS="${MAX_JOBS:-16}"
@@ -25,10 +25,10 @@ declare -A NEED=(
 )
 
 declare -a MODELS=(
-  "qwen25_3b|$PRS_OUTPUTS/ase_full"
-  "llama32_1b|$PRS_OUTPUTS/ase_llama32_1b"
-  "llama31_8b|$PRS_OUTPUTS/ase_llama31_8b"
-  "qwen3_8b|$PRS_OUTPUTS/ase_qwen3_8b"
+  "qwen25_3b|$PANDA_OUTPUTS/panda_full"
+  "llama32_1b|$PANDA_OUTPUTS/ase_llama32_1b"
+  "llama31_8b|$PANDA_OUTPUTS/ase_llama31_8b"
+  "qwen3_8b|$PANDA_OUTPUTS/ase_qwen3_8b"
 )
 
 log() { echo "[$(date '+%F %T')] $*" | tee -a "$LOG"; }
@@ -86,7 +86,7 @@ for entry in "${MODELS[@]}"; do
       run_pool PIDS
       (
         log "recompute $tag $ds"
-        python3 -m prs.ase.recompute_metrics --out-dir "$out" --datasets "$ds"
+        python3 -m panda.core.recompute_metrics --out-dir "$out" --datasets "$ds"
       ) >>"$LOG" 2>&1 &
       PIDS+=($!)
     done
@@ -95,7 +95,7 @@ for entry in "${MODELS[@]}"; do
   run_pool PIDS
   (
     log "paper_tables $tag"
-    python3 -m prs.ase.analyze_paper_tables \
+    python3 -m panda.core.analyze_paper_tables \
       --out-dir "$out" \
       --paper-dir "$ROOT/paper/models/${tag}" \
       --datasets "$ds_csv" \

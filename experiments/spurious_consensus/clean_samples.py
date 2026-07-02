@@ -17,11 +17,11 @@ from glob import glob
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-_PRS = Path(os.environ.get("PRS_ROOT", "/root/PRS")) / "src"
+_PRS = Path(os.environ.get("PANDA_ROOT", "/root/PANDA")) / "src"
 if str(_PRS) not in sys.path:
     sys.path.insert(0, str(_PRS))
 
-from prs.grading.answer_canonicalizer import canonicalize_answer, math_equal_clean
+from panda.grading.answer_canonicalizer import canonicalize_answer, math_equal_clean
 
 from grading import extract_mcq_letter, extract_answer
 

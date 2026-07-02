@@ -2,7 +2,7 @@
 
 model:
   tag: qwen25_3b
-  path: $PRS_MODELS/TFB-Qwen2.5-3B-Instruct
+  path: $PANDA_MODELS/TFB-Qwen2.5-3B-Instruct
 
 benchmarks:
   - deepscaler

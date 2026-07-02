@@ -1,0 +1,15 @@
+{
+  "source": "experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler.jsonl",
+  "output": "experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler_random300_k9.jsonl",
+  "meta": "paper/analysis/deepscaler_random300_meta.json",
+  "n_questions": 300,
+  "majority_correct_at_k9": 121,
+  "majority_wrong_at_k9": 125,
+  "blind_at_9_all_wrong": 137,
+  "any_correct_at_k9": 163,
+  "p_top_at_k9": {
+    "mean": 0.6642550651696992,
+    "min": 0.1111111111111111,
+    "max": 1.0
+  }
+}

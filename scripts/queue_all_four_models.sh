@@ -3,21 +3,21 @@ source "$(dirname "$0")/env.sh"
 # Run ASE generate + metrics + tables for all four TFB models (no TokUR).
 #
 # Usage:
-#   nohup bash scripts/queue_all_four_models.sh >> $PRS_OUTPUTS/ase_four_models.log 2>&1 &
+#   nohup bash scripts/queue_all_four_models.sh >> $PANDA_OUTPUTS/ase_four_models.log 2>&1 &
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-# shellcheck source=scripts/ase_gpu_lock.sh
-source "$ROOT/scripts/ase_gpu_lock.sh"
+# shellcheck source=scripts/panda_gpu_lock.sh
+source "$ROOT/scripts/panda_gpu_lock.sh"
 
-QUEUE_LOG="$PRS_OUTPUTS/ase_four_models.log"
+QUEUE_LOG="$PANDA_OUTPUTS/ase_four_models.log"
 mkdir -p "$(dirname "$QUEUE_LOG")"
 
 log() { echo "[$(date '+%F %T')] $*" | tee -a "$QUEUE_LOG"; }
 
-export ASE_FAST=1
-export ASE_SKIP_TOKUR=1
+export PANDA_FAST=1
+export PANDA_SKIP_TOKUR=1
 # Official TokUR runs separately: bash scripts/queue_strict_tokur_four_models.sh
 export MAX_SAMPLES="${MAX_SAMPLES:-400}"
 export MAX_SAMPLES_MINERVA="${MAX_SAMPLES_MINERVA:-272}"
@@ -56,15 +56,15 @@ run_pipeline_gpu() {
   case "$tag" in
     llama31_8b|qwen3_8b) seq_flag=1 ;;
   esac
-  ASE_SKIP_TOKUR=1 ASE_SKIP_GENERATE="$skip_gen" ASE_FAST=1 ASE_8B_SEQUENTIAL="$seq_flag" \
-    bash "$ROOT/scripts/run_ase_model_pipeline.sh" "$tag" "$path" "$out" >> "$QUEUE_LOG" 2>&1
+  PANDA_SKIP_TOKUR=1 PANDA_SKIP_GENERATE="$skip_gen" PANDA_FAST=1 PANDA_8B_SEQUENTIAL="$seq_flag" \
+    bash "$ROOT/scripts/run_panda_model_pipeline.sh" "$tag" "$path" "$out" >> "$QUEUE_LOG" 2>&1
 }
 
 declare -a MODELS=(
-  "qwen25_3b|$PRS_MODELS/TFB-Qwen2.5-3B-Instruct|$PRS_OUTPUTS/ase_full"
-  "llama32_1b|$PRS_MODELS/TFB-Llama-3.2-1B-Instruct|$PRS_OUTPUTS/ase_llama32_1b"
-  "llama31_8b|$PRS_MODELS/TFB-Llama-3.1-8B-Instruct|$PRS_OUTPUTS/ase_llama31_8b"
-  "qwen3_8b|$PRS_MODELS/TFB-Qwen3-8B|$PRS_OUTPUTS/ase_qwen3_8b"
+  "qwen25_3b|$PANDA_MODELS/TFB-Qwen2.5-3B-Instruct|$PANDA_OUTPUTS/panda_full"
+  "llama32_1b|$PANDA_MODELS/TFB-Llama-3.2-1B-Instruct|$PANDA_OUTPUTS/ase_llama32_1b"
+  "llama31_8b|$PANDA_MODELS/TFB-Llama-3.1-8B-Instruct|$PANDA_OUTPUTS/ase_llama31_8b"
+  "qwen3_8b|$PANDA_MODELS/TFB-Qwen3-8B|$PANDA_OUTPUTS/ase_qwen3_8b"
 )
 
 log "Four-model ASE queue started (fast mode, no TokUR)"
@@ -74,7 +74,7 @@ for entry in "${MODELS[@]}"; do
 
   if targets_met "$out"; then
     log "SKIP $tag — raw complete (minerva=$(raw_count "$out" minerva) math500=$(raw_count "$out" math500) gsm8k=$(raw_count "$out" gsm8k) deepscaler=$(raw_count "$out" deepscaler))"
-    export ASE_SKIP_GENERATE=1
+    export PANDA_SKIP_GENERATE=1
     if run_pipeline_gpu "$tag" "$path" "$out" 1; then
       touch "$out/PIPELINE_DONE"
       log "DONE $tag (metrics/tables only)"
@@ -84,7 +84,7 @@ for entry in "${MODELS[@]}"; do
     continue
   fi
 
-  export ASE_SKIP_GENERATE=0
+  export PANDA_SKIP_GENERATE=0
   log "START $tag → $out"
   log "  progress: minerva=$(raw_count "$out" minerva)/$(need_for minerva) math500=$(raw_count "$out" math500)/$(need_for math500) gsm8k=$(raw_count "$out" gsm8k)/$(need_for gsm8k) deepscaler=$(raw_count "$out" deepscaler)/$(need_for deepscaler)"
 

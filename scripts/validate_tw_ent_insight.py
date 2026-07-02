@@ -18,8 +18,8 @@ from sklearn.metrics import roc_auc_score
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from prs.ase.reasoning_token_features import _classify_token  # noqa: E402
-from prs.grading.math_grader import math_equal  # noqa: E402
+from panda.core.reasoning_token_features import _classify_token  # noqa: E402
+from panda.grading.math_grader import math_equal  # noqa: E402
 
 MATH_DS = ("minerva", "math500", "gsm8k")
 SEEDS = (41, 42, 43)
@@ -29,7 +29,7 @@ MODELS = {
     "llama31_8b": "maintable_llama31_8b",
     "qwen3_8b": "maintable_qwen3_8b",
 }
-CACHE = Path("/root/autodl-tmp/prs-outputs/.tw_ent_insight_cache.pkl")
+CACHE = Path("/root/autodl-tmp/panda-outputs/.tw_ent_insight_cache.pkl")
 CALC = frozenset({"numeric", "symbol", "variable"})
 TAIL_L = 16
 TOP_PCT = 0.10
@@ -76,7 +76,7 @@ def extract_tw_features(base: dict, pert_runs: list[dict], a0: str) -> dict[str,
     reject_full, reject_calc = [], []
     delta_full, delta_calc = [], []
 
-    base_full = _ent_sum(base.get("token_trace") or [], calc_only=False)
+    bpanda_full = _ent_sum(base.get("token_trace") or [], calc_only=False)
     base_calc = _ent_sum(base_pre, calc_only=True)
 
     for run in runs:
@@ -94,8 +94,8 @@ def extract_tw_features(base: dict, pert_runs: list[dict], a0: str) -> dict[str,
             full_sums.append(hf)
             if dis:
                 reject_full.append(hf)
-            if np.isfinite(base_full):
-                delta_full.append(abs(hf - base_full))
+            if np.isfinite(bpanda_full):
+                delta_full.append(abs(hf - bpanda_full))
         if np.isfinite(hc):
             calc_sums.append(hc)
             if dis:
@@ -311,7 +311,7 @@ def main() -> None:
     import argparse
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/prs-outputs"))
+    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/panda-outputs"))
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--use-cache", action="store_true")
     ap.add_argument("--md-out", type=Path, default=ROOT / "paper/tables/table_tw_ent_insight.md")

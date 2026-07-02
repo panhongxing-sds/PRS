@@ -1,10 +1,10 @@
 import numpy as np
 import pytest
 
-from prs.scores.fragility import adversarial_drop, log_margin, margin_collapse
-from prs.scores.uncertainty import epistemic_uncertainty
-from prs.scores.composite import compute_token_scores, zscore
-from prs.types import TokenFeatures
+from panda.scores.fragility import adversarial_drop, log_margin, margin_collapse
+from panda.scores.uncertainty import epistemic_uncertainty
+from panda.scores.composite import compute_token_scores, zscore
+from panda.types import TokenFeatures
 
 
 def test_adversarial_drop():

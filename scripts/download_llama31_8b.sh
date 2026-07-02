@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# 下载 Meta-Llama-3.1-8B-Instruct 并转换为 TFB（PRS 实验所需）
+# 下载 Meta-Llama-3.1-8B-Instruct 并转换为 TFB（PANDA 实验所需）
 # 用法: bash scripts/download_llama31_8b.sh
 set -euo pipefail
 source "$(dirname "$0")/activate_env.sh"
 
-BASE_MODEL="${PRS_MODELS}/Meta-Llama-3.1-8B-Instruct"
-TFB_MODEL="${PRS_MODELS}/TFB-Llama-3.1-8B-Instruct"
+BASE_MODEL="${PANDA_MODELS}/Meta-Llama-3.1-8B-Instruct"
+TFB_MODEL="${PANDA_MODELS}/TFB-Llama-3.1-8B-Instruct"
 MS_ID="LLM-Research/Meta-Llama-3.1-8B-Instruct"
 
-mkdir -p "${PRS_MODELS}"
+mkdir -p "${PANDA_MODELS}"
 
 if [[ ! -f "${BASE_MODEL}/config.json" ]]; then
   echo ">>> 下载基础模型 ${MS_ID} -> ${BASE_MODEL}"
@@ -31,5 +31,5 @@ else
   echo ">>> TFB 模型已存在: ${TFB_MODEL}"
 fi
 
-echo ">>> 完成。运行 ASE pipeline 示例:"
-echo "  ASE_8B_SEQUENTIAL=1 ASE_FAST=1 bash scripts/run_ase_model_pipeline.sh llama31_8b ${TFB_MODEL}"
+echo ">>> 完成。运行 PANDA pipeline 示例:"
+echo "  PANDA_8B_SEQUENTIAL=1 PANDA_FAST=1 bash scripts/run_panda_model_pipeline.sh llama31_8b ${TFB_MODEL}"

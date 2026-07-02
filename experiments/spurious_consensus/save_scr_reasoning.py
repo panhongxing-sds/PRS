@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, os.environ.get("PRS_ROOT", "/root/PRS") + "/src")
+sys.path.insert(0, os.environ.get("PANDA_ROOT", "/root/PANDA") + "/src")
 
 import yaml
 from vllm import LLM, SamplingParams
@@ -19,7 +19,7 @@ from grading import extract_answer
 from sampling_utils import build_prompt, load_tokenizer, prepare_vllm_model_path
 
 MODEL_PATH = os.environ.get(
-    "MODEL_PATH", "/root/autodl-tmp/prs-models/Qwen2.5-7B-Instruct"
+    "MODEL_PATH", "/root/autodl-tmp/panda-models/Qwen2.5-7B-Instruct"
 )
 OUT_DIR = ROOT / "data" / "scr_reasoning" / "qwen25_7b"
 SCR_LIST = ROOT / "figures" / "qwen25_7b_scr_questions_clean.md"

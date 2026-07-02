@@ -1,0 +1,54 @@
+# ASE multi-model experiment registry
+# Qwen2.5-3B (primary): outputs/panda_full
+# Additional models: outputs/ase_{tag}
+
+datasets: [minerva, math500, gsm8k]
+# logic (主表扩展；需 download_logic_code_datasets.sh + API variants)
+logic_code_datasets: [leg_counting, zebra_puzzles, color_cube]
+maintable_seeds: [41, 42, 43]
+max_samples: 300   # 定稿档：math500/gsm8k/逻辑集 cap 300；minerva 全量 272
+num_gpus: 8
+
+models:
+  qwen25_3b:
+    path: $PANDA_MODELS/TFB-Qwen2.5-3B-Instruct
+    out_dir: $PANDA_OUTPUTS/panda_full
+    status: ready
+
+  llama32_1b:
+    path: $PANDA_MODELS/TFB-Llama-3.2-1B-Instruct
+    out_dir: $PANDA_OUTPUTS/ase_llama32_1b
+    status: ready
+    note: TokUR paper main model (Llama-3.2-1B)
+
+  llama31_8b:
+    path: $PANDA_MODELS/TFB-Llama-3.1-8B-Instruct
+    out_dir: $PANDA_OUTPUTS/ase_llama31_8b
+    status: ready
+
+  qwen3_8b:
+    path: $PANDA_MODELS/TFB-Qwen3-8B
+    out_dir: $PANDA_OUTPUTS/ase_qwen3_8b
+    status: ready
+
+launch:
+  queue_script: scripts/queue_panda_extra_models.sh
+  single_model: scripts/run_panda_model_pipeline.sh
+  fast_mode: true  # PANDA_FAST=1: parallel datasets, --fast, sdpa, gsm8k 1024 tokens
+
+# 公平采样预算：所有采样类方法统一 K=8 次
+#   PANDA: R=4 (text) + W=4 (weight) = 8 ；SE: 8 个高温样本 ；U_Ecc/U_Deg 复用 R+W 的 8 个样本
+sampling_budget:
+  K: 8
+  n_rephrases: 4
+  weight_seeds: 4        # 42,43,44,45
+  se_samples: 8
+
+fast_profile:
+  parallel_datasets: true       # minerva|math500|gsm8k on GPU 0-1|2-4|5-7 simultaneously
+  weight_seeds: 4
+  topk_save: 10
+  attn: sdpa
+  max_new_tokens_gsm8k: 1024
+  llama32_1b_shards: 16         # 2 processes per GPU
+  expected_speedup: "~3-4x vs sequential full profile"

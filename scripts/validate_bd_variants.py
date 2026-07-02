@@ -17,8 +17,8 @@ from sklearn.metrics import roc_auc_score
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from prs.ase.cluster import cluster_answers  # noqa: E402
-from prs.grading.math_grader import math_equal  # noqa: E402
+from panda.core.cluster import cluster_answers  # noqa: E402
+from panda.grading.math_grader import math_equal  # noqa: E402
 
 MATH_DS = ("minerva", "math500", "gsm8k")
 SEEDS = (41, 42, 43)
@@ -28,7 +28,7 @@ MODELS = {
     "llama31_8b": "maintable_llama31_8b",
     "qwen3_8b": "maintable_qwen3_8b",
 }
-CACHE = Path("/root/autodl-tmp/prs-outputs/.bd_variant_cache.pkl")
+CACHE = Path("/root/autodl-tmp/panda-outputs/.bd_variant_cache.pkl")
 
 CONFIGS = [
     ("1 D_base", ["D_base"]),
@@ -310,7 +310,7 @@ def report(rows: list[dict], results: list[dict], md_out: Path) -> None:
         "",
     ]
     if best["macro"] <= ref4["macro"] + 0.001:
-        lines.append("**建议定稿**: `PRS = LODO(D_base, TW_ent_sum)` — 本轮未显著超过 #4。")
+        lines.append("**建议定稿**: `PANDA = LODO(D_base, TW_ent_sum)` — 本轮未显著超过 #4。")
     else:
         lines.append(f"**建议定稿**: `{best['name']}` — {', '.join(best['cols'])}")
 
@@ -322,7 +322,7 @@ def main() -> None:
     import argparse
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/prs-outputs"))
+    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/panda-outputs"))
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--use-cache", action="store_true")
     ap.add_argument("--md-out", type=Path, default=ROOT / "paper/tables/table_bd_variants_final.md")

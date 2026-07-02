@@ -1,6 +1,6 @@
 """Tests for prefix re-query drift signals."""
 
-from prs.ase.prefix_requery_core import (
+from panda.core.prefix_requery_core import (
     cross_prefix_drift,
     distribution_jsd,
     prefix_drift_flip,

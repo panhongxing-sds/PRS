@@ -1,0 +1,57 @@
+{
+  "source": "/root/autodl-tmp/PANDA/experiments/spurious_consensus/data/samples/samples_qwen25_3b_seed41_deepscaler.jsonl",
+  "method_note": "First 9 of K=64 prefix; majority vote via dist_stats; correctness via answer_correct_map on full K=64 row (analyze.py convention).",
+  "n_questions": 2000,
+  "all_answers_len_9": {
+    "count_at_least_9_answers": 2000,
+    "all_rows_have_at_least_9": true
+  },
+  "accuracy_sc_outcomes_k9": {
+    "majority_correct_at_k9": 878,
+    "majority_wrong_at_k9": 1122,
+    "majority_correct_at_k9_rate": 0.439,
+    "blind_at_9_all_wrong": 693,
+    "any_correct_at_k9": 1307,
+    "unanimous_correct_9_of_9": 319,
+    "unanimous_wrong_same_answer": 62
+  },
+  "consensus_metrics_k9": {
+    "p_top": {
+      "mean": 0.5561666666666667,
+      "median": 0.4444444444444444,
+      "min": 0.1111111111111111,
+      "max": 1.0,
+      "p25": 0.3333333333333333,
+      "p75": 0.8888888888888888
+    },
+    "entropy": {
+      "mean": 1.1165891927459783,
+      "median": 1.2148896539491205
+    },
+    "p_top_histogram": {
+      "[0-0.5)": 1003,
+      "[0.5-0.7)": 361,
+      "[0.7-0.9)": 284,
+      "[0.9-1.0]": 352
+    }
+  },
+  "compare_k64_same_questions": {
+    "majority_correct_at_k64": 938,
+    "majority_wrong_at_k64": 1062,
+    "flip_majority_wrong_at_64_to_majority_correct_at_9": 52,
+    "flip_majority_correct_at_64_to_majority_wrong_at_9": 112
+  },
+  "breakdown": {
+    "among_majority_wrong_at_k64": {
+      "n": 1062,
+      "blind_at_9_count": 686,
+      "blind_at_9_rate": 0.6459510357815442,
+      "p_top_at_9_mean": 0.4336681314082444
+    },
+    "among_majority_correct_at_k64": {
+      "n": 938,
+      "majority_wrong_at_9_count": 112,
+      "majority_wrong_at_9_rate": 0.11940298507462686
+    }
+  }
+}

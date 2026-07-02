@@ -55,4 +55,4 @@
 - Llama3.1: 0.846 vs bd 0.858 (-0.011)
 - Qwen2.5: 0.860 vs prox_lin 0.862
 
-**定稿建议**: `PRS = LODO(bd, T_ent_prox_lin)` — 新 variant 未超过 +0.002，保留 linear。
+**定稿建议**: `PANDA = LODO(bd, T_ent_prox_lin)` — 新 variant 未超过 +0.002，保留 linear。

@@ -8,7 +8,7 @@
 paper/
 ├── README.md                 # 本说明
 ├── report/
-│   └── ASE_experiment_report.tex   # 主报告（\input 引用 tables/）
+│   └── PANDA_experiment_report.tex   # 主报告（\input 引用 tables/）
 └── tables/
     ├── table_main.md         # 主结果：TokUR EU + T/W/TW-ASE
     ├── table_main.tex
@@ -25,17 +25,17 @@ paper/
 | **AUPRC** | PR-AUC |
 | **ACC*** | Top-50% accuracy：按不确定性分数降序取前 50% 样本的正确率（TokUR 协议） |
 
-所有指标在 **Clean label** 上计算（`label_wrong_clean`），实现见 `prs.metrics_tokur.compute_detection_metrics`。
+所有指标在 **Clean label** 上计算（`label_wrong_clean`），实现见 `panda.metrics_tokur.compute_detection_metrics`。
 
 ## 再生表格
 
 ```bash
-cd /home/phx/PRS
+cd /home/phx/PANDA
 export PYTHONPATH=src
 
-python3 -m prs.ase.analyze_paper_tables \
-  --out-dir /HDDDATA/phx/PRS/outputs/ase_full \
-  --paper-dir /home/phx/PRS/paper \
+python3 -m panda.core.analyze_paper_tables \
+  --out-dir /HDDDATA/phx/PANDA/outputs/panda_full \
+  --paper-dir /home/phx/PANDA/paper \
   --datasets minerva,math500,gsm8k,deepscaler
 ```
 
@@ -44,16 +44,16 @@ python3 -m prs.ase.analyze_paper_tables \
 ## 编译报告
 
 ```bash
-cd /home/phx/PRS/paper/report
-xelatex ASE_experiment_report.tex
+cd /home/phx/PANDA/paper/report
+xelatex PANDA_experiment_report.tex
 ```
 
 报告通过 `\input{../tables/table_main.tex}` 与 `\input{../tables/table_extended.tex}` 嵌入表格。
 
 ## 数据路径
 
-- 实验输出根目录：`/HDDDATA/phx/PRS/outputs/ase_full/`
-- 可选符号链接：`outputs/ase_full/paper` → 本目录
+- 实验输出根目录：`/HDDDATA/phx/PANDA/outputs/panda_full/`
+- 可选符号链接：`outputs/panda_full/paper` → 本目录
 
 ## 主结果速览（AUROC / AUPRC / ACC*，clean labels）
 

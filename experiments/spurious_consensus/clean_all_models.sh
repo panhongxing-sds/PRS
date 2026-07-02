@@ -2,7 +2,7 @@
 # 六模型统一 cleaned/canonicalized pipeline（逐文件，避免 OOM）
 set -euo pipefail
 cd "$(dirname "$0")"
-export PRS_ROOT="${PRS_ROOT:-/root/PRS}"
+export PANDA_ROOT="${PANDA_ROOT:-/root/PANDA}"
 
 TAGS=(qwen25_05b llama32_1b qwen25_15b phi4_mini qwen25_3b qwen25_7b)
 SEED=41

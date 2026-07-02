@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "prs"
+name = "panda"
 version = "0.1.0"
-description = "Perturbation Reliability Score (PRS) for LLM uncertainty and failure detection"
+description = "PANDA uncertainty score for LLM uncertainty and failure detection"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.10"

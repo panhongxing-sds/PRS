@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from prs.ase.analyze_maintable import aggregate_seed_metrics, fmt_mean_std
+from panda.core.analyze_maintable import aggregate_seed_metrics, fmt_mean_std
 
 
 def test_aggregate_seed_metrics_mean_std():

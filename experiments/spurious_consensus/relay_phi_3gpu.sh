@@ -3,10 +3,10 @@
 # 不打断当前正在跑的进程；llama 跑完才动手。
 set -uo pipefail
 cd "$(dirname "$0")"
-export PRS_MODELS="${PRS_MODELS:-/root/autodl-tmp/prs-models}"
-export PRS_ROOT="${PRS_ROOT:-/root/PRS}"
+export PANDA_MODELS="${PANDA_MODELS:-/root/autodl-tmp/panda-models}"
+export PANDA_ROOT="${PANDA_ROOT:-/root/PANDA}"
 LOG_DIR=logs/phase1
-PHI_PATH="$PRS_MODELS/Phi-4-mini-instruct"
+PHI_PATH="$PANDA_MODELS/Phi-4-mini-instruct"
 LLAMA_PID="$(cat $LOG_DIR/llama32_1b.pid 2>/dev/null || echo '')"
 
 echo "[relay $(date -Iseconds)] 等待 llama(pid=$LLAMA_PID) 结束..."
@@ -57,7 +57,7 @@ for s in 0 1 2; do
   gpu=$s
   nohup env GPU=$gpu MODEL_TAG=phi4_mini MODEL_PATH="$PHI_PATH" \
     SHARD_ID=$s NUM_SHARDS=3 K_CHUNK=64 PROMPT_BATCH=8 OUT_SUFFIX=".s3_${s}" \
-    PRS_MODELS="$PRS_MODELS" PRS_ROOT="$PRS_ROOT" \
+    PANDA_MODELS="$PANDA_MODELS" PANDA_ROOT="$PANDA_ROOT" \
     bash run_shard.sh > "$LOG_DIR/phi4_mini.s3_${s}.log" 2>&1 &
   echo $! > "$LOG_DIR/phi4_mini.s3_${s}.pid"
   echo "[relay] phi shard $s/3 -> GPU$gpu pid $!"

@@ -1,6 +1,6 @@
 {
   "model": "qwen25_7b",
-  "model_path": "/root/autodl-tmp/prs-models/Qwen2.5-7B-Instruct",
+  "model_path": "/root/autodl-tmp/panda-models/Qwen2.5-7B-Instruct",
   "k": 64,
   "temperature": 0.5,
   "top_p": 0.95,

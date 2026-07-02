@@ -1,6 +1,6 @@
 """Tests for TokUR-style detection metrics."""
 
-from prs.metrics_tokur import compute_detection_metrics, top_p_accuracy
+from panda.metrics_tokur import compute_detection_metrics, top_p_accuracy
 
 
 def test_top_p_accuracy_takes_most_confident_half():

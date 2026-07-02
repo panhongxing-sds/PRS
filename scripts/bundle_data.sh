@@ -2,9 +2,9 @@
 # Compress large data dirs, split for GitHub 100MB file limit, write MANIFEST.json
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
-cd "$PRS_ROOT"
+cd "$PANDA_ROOT"
 
-BUNDLES_DIR="${PRS_ROOT}/bundles"
+BUNDLES_DIR="${PANDA_ROOT}/bundles"
 PART_SIZE_MB=95
 PART_BYTES=$((PART_SIZE_MB * 1024 * 1024))
 mkdir -p "$BUNDLES_DIR"
@@ -71,7 +71,7 @@ bundle_one() {
 import json, sys, os
 name, ext, orig, arch, comp = sys.argv[1:6]
 parts = sys.argv[6:]
-manifest_path = os.path.join(os.environ.get("PRS_ROOT", "."), "bundles", "MANIFEST.json")
+manifest_path = os.path.join(os.environ.get("PANDA_ROOT", "."), "bundles", "MANIFEST.json")
 data = {}
 if os.path.isfile(manifest_path):
     with open(manifest_path) as f:
@@ -100,14 +100,14 @@ PY
 }
 
 export PART_SIZE_MB
-export PRS_ROOT
+export PANDA_ROOT
 PART_SIZE_MB=$PART_SIZE_MB
 
 # outputs (~85GB) and models (~39GB) are too large for GitHub — keep local only.
 # third_party/TokUR is tracked directly in git (~150MB, no file >100MB).
 # Uncomment below only for offline archival:
-# bundle_one outputs "$PRS_ROOT/outputs" 1
-# bundle_one tokur "$PRS_ROOT/third_party/TokUR" 0
+# bundle_one outputs "$PANDA_ROOT/outputs" 1
+# bundle_one tokur "$PANDA_ROOT/third_party/TokUR" 0
 
 echo "All bundles written under $BUNDLES_DIR"
 ls -lh "${BUNDLES_DIR}"/*.part_* 2>/dev/null | wc -l

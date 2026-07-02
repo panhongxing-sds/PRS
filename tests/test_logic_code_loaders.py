@@ -6,11 +6,11 @@ from pathlib import Path
 
 import pytest
 
-from prs.datasets.loaders import load_tokur_jsonl_rows
-from prs.datasets.registry import get_dataset_spec
-from prs.grading.answer_canonicalizer import grade_answer
-from prs.grading.code_grader import extract_code_block, normalize_code
-from prs.grading.logic_grader import extract_logic_answer, logic_equal
+from panda.datasets.loaders import load_tokur_jsonl_rows
+from panda.datasets.registry import get_dataset_spec
+from panda.grading.answer_canonicalizer import grade_answer
+from panda.grading.code_grader import extract_code_block, normalize_code
+from panda.grading.logic_grader import extract_logic_answer, logic_equal
 
 FIXTURES = Path(__file__).parent / "fixtures"
 

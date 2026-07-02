@@ -19,9 +19,9 @@ from sklearn.metrics import roc_auc_score
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from prs.ase.numeric_trajectory import extract_numbers  # noqa: E402
-from prs.ase.reasoning_token_features import _classify_token, _reasoning_text  # noqa: E402
-from prs.grading.math_grader import math_equal  # noqa: E402
+from panda.core.numeric_trajectory import extract_numbers  # noqa: E402
+from panda.core.reasoning_token_features import _classify_token, _reasoning_text  # noqa: E402
+from panda.grading.math_grader import math_equal  # noqa: E402
 
 MATH_DS = ("minerva", "math500", "gsm8k")
 SEEDS = (41, 42, 43)
@@ -31,7 +31,7 @@ MODELS = {
     "llama31_8b": "maintable_llama31_8b",
     "qwen3_8b": "maintable_qwen3_8b",
 }
-CACHE = Path("/root/autodl-tmp/prs-outputs/.proc_near_answer_cache.pkl")
+CACHE = Path("/root/autodl-tmp/panda-outputs/.proc_near_answer_cache.pkl")
 CALC = frozenset({"numeric", "symbol", "variable"})
 
 
@@ -296,7 +296,7 @@ def main() -> None:
     import argparse
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/prs-outputs"))
+    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/panda-outputs"))
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--use-cache", action="store_true")
     ap.add_argument("--md-out", type=Path, default=ROOT / "paper/tables/table_near_answer_token.md")

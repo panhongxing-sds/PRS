@@ -37,13 +37,13 @@ export OPENAI_BASE_URL="${OPENAI_BASE_URL:-${DEEPSEEK_BASE_URL:-https://api.shub
 DATASETS="${1:-minerva,math500,gsm8k,deepscaler}"
 shift || true
 
-BENCH=$PRS_OUTPUTS/qaac_api_bench
+BENCH=$PANDA_OUTPUTS/qaac_api_bench
 LOG_DIR="${BENCH}/logs"
 mkdir -p "$LOG_DIR"
 LOG="${LOG_DIR}/generate_$(echo "$DATASETS" | tr ',' '_')_$(date +%Y%m%d_%H%M%S).log"
 
 echo "API variants → datasets=$DATASETS log=$LOG"
-nohup python3 -m prs.token_qaac.generate_variants \
+nohup python3 -m panda.token_qaac.generate_variants \
   --datasets "$DATASETS" \
   --out-dir "$BENCH" \
   --max-samples 200 \

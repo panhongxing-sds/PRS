@@ -2,8 +2,8 @@
 # 启动/重启单个模型采样（默认 vLLM；Gemma 用 HF）
 set -euo pipefail
 cd "$(dirname "$0")"
-export PRS_ROOT="${PRS_ROOT:-/root/PRS}"
-export PRS_MODELS="${PRS_MODELS:-/root/autodl-tmp/prs-models}"
+export PANDA_ROOT="${PANDA_ROOT:-/root/PANDA}"
+export PANDA_MODELS="${PANDA_MODELS:-/root/autodl-tmp/panda-models}"
 export PYTORCH_CUDA_ALLOC_CONF="${PYTORCH_CUDA_ALLOC_CONF:-expandable_segments:True}"
 
 GPU="${1:?gpu}"

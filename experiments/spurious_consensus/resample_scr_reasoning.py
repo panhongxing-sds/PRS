@@ -8,13 +8,13 @@ from pathlib import Path
 
 ROOT = Path("/root/spurious-consensus")
 sys.path.insert(0, str(ROOT))
-sys.path.insert(0, "/root/PRS/src")
+sys.path.insert(0, "/root/PANDA/src")
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from sampling_utils import build_prompt
 
-MODEL = "/root/autodl-tmp/prs-models/Qwen2.5-7B-Instruct"
+MODEL = "/root/autodl-tmp/panda-models/Qwen2.5-7B-Instruct"
 OUT = ROOT / "results" / "scr7b_reasoning_resample.json"
 N = 8
 MAX_NEW = 1536

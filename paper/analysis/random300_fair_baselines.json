@@ -1,0 +1,25 @@
+{
+  "n": 300,
+  "cohort": "/root/autodl-tmp/PANDA/paper/analysis/deepscaler_random300_meta.json",
+  "accuracy": {
+    "sc9_majority": 0.44,
+    "panda_greedy_clean": 0.4,
+    "delta_panda_minus_sc_pp": -4.0
+  },
+  "uq_label": "label_wrong_clean (PANDA greedy answer)",
+  "auroc": {
+    "SC@9 (1-p_top)": 0.7722222222222223,
+    "PANDA": 0.8034722222222221,
+    "F_resp": 0.8049537037037038,
+    "bd (answer_drift)": 0.7170601851851851,
+    "reasoning_drift": 0.6307407407407408
+  },
+  "auprc": {
+    "SC@9 (1-p_top)": 0.8006489100257042,
+    "PANDA": 0.8212701125501645,
+    "F_resp": 0.815882190349419,
+    "bd (answer_drift)": 0.7054734786202506,
+    "reasoning_drift": 0.6987090990908346
+  },
+  "paired_auroc_delta_panda_minus_sc_pp": 3.124999999999989
+}

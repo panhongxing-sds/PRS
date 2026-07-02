@@ -8,7 +8,7 @@ from pathlib import Path
 
 from grading import extract_answer, is_correct  # noqa: F401 — re-export for sample.py
 
-_PRS = Path(os.environ.get("PRS_ROOT", "/root/PRS")) / "src"
+_PRS = Path(os.environ.get("PANDA_ROOT", "/root/PANDA")) / "src"
 if str(_PRS) not in sys.path:
     sys.path.insert(0, str(_PRS))
 
@@ -47,8 +47,18 @@ def clean_config_dict(cfgd: dict, model_path: str) -> dict:
         out["model_type"] = "llama"
         out["architectures"] = ["LlamaForCausalLM"]
     elif "qwen" in mt or "qwen" in lp:
-        out["model_type"] = "qwen2"
-        out["architectures"] = ["Qwen2ForCausalLM"]
+        is_qwen3 = (
+            "qwen3" in lp
+            or str(cfgd.get("head_dim")) == "128"
+            and cfgd.get("hidden_size") == 4096
+            and cfgd.get("num_key_value_heads") == 8
+        )
+        if is_qwen3:
+            out["model_type"] = "qwen3"
+            out["architectures"] = ["Qwen3ForCausalLM"]
+        else:
+            out["model_type"] = "qwen2"
+            out["architectures"] = ["Qwen2ForCausalLM"]
     else:
         out["architectures"] = orig_arch
     return out
@@ -102,7 +112,9 @@ def _clean_weights(src: Path, dst: Path) -> bool:
 def prepare_vllm_model_path(model_path: str) -> str:
     """为 vLLM 准备可加载目录（洗 config + 剔除 TFB 权重）。"""
     src = Path(model_path).resolve()
-    dst = src.parent / ".vllm_ready" / src.name
+    cfg_probe = clean_config_dict(_read_config(str(src)), str(src))
+    arch_tag = (cfg_probe.get("architectures") or [""])[0]
+    dst = src.parent / ".vllm_ready" / f"{src.name}.{arch_tag}"
     cfg_out = dst / "config.json"
     if cfg_out.exists():
         return str(dst)
@@ -215,7 +227,7 @@ def load_model(model_path: str, device: str):
 
 
 def build_prompt(problem: str, tokenizer, model_path: str, grading: str) -> str:
-    from prs.grading.tokur_records import build_prompt_tfb, _is_qwen_model
+    from panda.grading.tokur_records import build_prompt_tfb, _is_qwen_model
 
     if grading == "mcq":
         tail = (

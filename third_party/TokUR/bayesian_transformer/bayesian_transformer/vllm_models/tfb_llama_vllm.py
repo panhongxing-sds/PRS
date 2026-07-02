@@ -53,7 +53,8 @@ from vllm.model_executor.models.utils import (AutoWeightsLoader, PPMissingLayer,
                     maybe_prefix)
 
 
-from .tfb_llama import TFBLlamaConfig
+class TFBLlamaConfig(LlamaConfig):
+    model_type = "tfb_llama"
 
 
 class LowRankBayesianQKVParallelLinear(QKVParallelLinear):

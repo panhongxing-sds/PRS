@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 LOG_DIR=logs/qwen15b
 mkdir -p "$LOG_DIR"
 PREV_DIR=logs/qwen05b
-MODEL_PATH=/root/autodl-tmp/prs-models/Qwen2.5-1.5B-Instruct
+MODEL_PATH=/root/autodl-tmp/panda-models/Qwen2.5-1.5B-Instruct
 
 echo "[queue $(date -Iseconds)] 等待 0.5B 启动 (shard pid 文件出现)..." | tee -a "$LOG_DIR/queue.log"
 # 等 0.5B 的 shard pid 文件出现（即 7B 已完成、0.5B 已启动）
@@ -23,7 +23,7 @@ echo "[queue $(date -Iseconds)] 0.5B 完成，启动 1.5B 三卡分片" | tee -a
 for s in 0 1 2; do
   nohup env GPU=$s MODEL_TAG=qwen25_15b MODEL_PATH="$MODEL_PATH" \
     SHARD_ID=$s NUM_SHARDS=3 K_CHUNK=64 PROMPT_BATCH=16 \
-    PRS_ROOT=/root/PRS \
+    PANDA_ROOT=/root/PANDA \
     bash run_shard.sh > "$LOG_DIR/shard${s}.log" 2>&1 &
   echo "[queue] 1.5B shard $s -> GPU$s pid $!" | tee -a "$LOG_DIR/queue.log"
   echo $! > "$LOG_DIR/shard${s}.pid"

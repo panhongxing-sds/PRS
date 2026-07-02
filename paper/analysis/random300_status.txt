@@ -1,0 +1,218 @@
+Plan B (2026-07-02): Fair paired comparison — Qwen2.5-3B + Llama-3.2-1B on SAME 300 ids (seed=42 cohort).
+
+Shared cohort:
+  meta: PANDA/paper/analysis/deepscaler_random300_meta.json
+  variants: panda-outputs/qaac_api_bench/deepscaler_random300/variants.jsonl
+Fair budget: SE_SAMPLES=0, N_REPHRASES=4, WEIGHT_SEEDS=42,43,44,45, ASE seed=41, PANDA_SKIP_TOKUR=1
+
+scr500: STOPPED (guard active in run_random300_6gpu.sh — do not restart)
+
+=== Qwen2.5-3B (maintable_qwen25_3b_deepscaler_random300/seed41) ===
+Phase A (vLLM): COMPLETE 300/300 partials
+Phase B (HF ASE): RUNNING @ 2026-07-02T10:45:02+08:00
+  shard0 GPU0 PID 17791  (~2/50)  log: .../hf_deepscaler_random300_shard0.log
+  shard1 GPU1 PID 17792  (~4/50)  log: .../hf_deepscaler_random300_shard1.log
+  shard2 GPU2 PID 17793  (~3/50)  log: .../hf_deepscaler_random300_shard2.log
+  shard3 GPU3 PID 17794  (~4/50)  log: .../hf_deepscaler_random300_shard3.log
+  shard4 GPU4 PID 17795  (~4/50)  log: .../hf_deepscaler_random300_shard4.log
+  shard5 GPU5 PID 17796  (~3/50)  log: .../hf_deepscaler_random300_shard5.log
+Phase B watcher: PID 17040 (phase_b_after_a.sh — already launched Phase B)
+Finals (summary_metrics): ~20/300 (rising)
+ETA Qwen Phase B complete: ~75–90 min wall from Phase B start (~10:42), straggler ~50×~90s
+
+=== Llama-3.2-1B SC@9 (CPU, K=64 → first 9) ===
+DONE: experiments/spurious_consensus/data/samples/samples_llama32_1b_seed41_deepscaler_random300_k9.jsonl
+Stats: paper/analysis/random300_llama_k9_stats.json
+  n=300 majority@9 correct=81 wrong=219 any_correct=152 blind(all wrong @9)=148
+  p_top@9 mean=0.289 (Qwen same cohort: majority@9 correct=132 — see random300_k9_stats.json)
+
+=== Llama-3.2-1B PANDA 6-GPU ===
+Model: /root/autodl-tmp/panda-models/TFB-Llama-3.2-1B-Instruct (standard HF; no .vllm_ready required)
+OUT: /root/autodl-tmp/panda-outputs/maintable_llama32_1b_deepscaler_random300/seed41
+Launch: scripts/run_random300_llama_6gpu.sh all
+Orchestrator: WAITING — scripts/watch_qwen_then_launch_llama_6gpu.sh PID 22182
+  (auto-launches Llama 6-GPU + watch_random300_finish when Qwen 300/300)
+Llama Phase A+B PIDs: (pending — assigned at launch after Qwen done)
+ETA Llama Phase A+B after Qwen idle: ~50–80 min (1B faster than 3B; 6×5090 @ gpu-mem 0.80)
+
+Scripts added:
+  PANDA/scripts/run_random300_llama_6gpu.sh
+  PANDA/scripts/watch_qwen_then_launch_llama_6gpu.sh
+  PANDA/scripts/watch_random300_finish.sh
+
+Qwen SC@9 (reference): paper/analysis/random300_k9_stats.json + samples_qwen25_3b_seed41_deepscaler_random300_k9.jsonl
+
+=== Completion watcher 2026-07-02T10:45:14+08:00 ===
+Watcher PID 22661 polling every 60s for 300 finals in /root/autodl-tmp/panda-outputs/maintable_qwen25_3b_deepscaler_random300/seed41/deepscaler/raw_runs
+
+=== GPU utilization investigation 2026-07-02T10:48+08:00 ===
+
+BEFORE (complaint triage @ 10:46):
+  GPU0-5 util: 55,55,54,54,55,54 %  |  VRAM MiB: 8491,8489,8481,7893,8521,8515 / 32607 each
+  All 6 GPUs active (NOT 1–2 idle). Processes: 6× run_panda_experiment Phase B (PIDs 17791–17796), no run_vllm_phase/sample_vllm.
+  Watchers alive: 22182 (watch_qwen_then_launch_llama), 22661 (watch_random300_finish).
+
+ROOT CAUSE (low util vs 100%):
+  Qwen Phase B = HuggingFace ASE (not vLLM): per record ~9 serial greedy decodes (1 clean + 4 text + 4 weight perturbations),
+  each with output_scores + CPU token_trace build. 3B bf16 on RTX 5090 uses ~8.5GiB (~26% VRAM); SM util steady ~50–58% with brief dips to 0% between steps.
+  --fast already on (checkpoint_every=99, topk=10). flash_attn not installed. No dead/stalled shards; 0 error.json.
+
+ACTIONS (no Phase B restart — ~35/300 finals in flight):
+  - Verified all shard workers healthy; no --resume restart needed.
+  - Tuned scripts/run_random300_6gpu.sh for NEXT runs (Llama 6-GPU): GPU_MEMORY_UTIL default 0.90, VLLM_CHUNK_SIZE 512, TORCH_ALLOW_TF32=1,
+    PANDA_ATTN_IMPLEMENTATION env, optional PANDA_DYNAMIC_CLAIM=1 for Phase B load-balance at tail.
+  - Did NOT colocate Llama PANDA on GPUs during Qwen (would contend; Llama orchestrator waits for Qwen 300/300).
+  - Llama SC@9 CPU: DONE (not GPU).
+
+AFTER (script tune @ 10:48, workers unchanged):
+  GPU0-5 util: see live nvidia-smi (~50–58%) — expected for HF ASE Phase B.
+
+Qwen Phase B progress: ~35/300 finals (watcher count); shards ~6–12/50 each; ~265 records left → ETA ~45–55 min wall (6× ~65s/sample).
+Llama 6-GPU PANDA: QUEUED on PID 22182 after Qwen complete; ETA +50–80 min after Qwen idle.
+
+
+=== Completion watcher 2026-07-02T11:27:16+08:00 ===
+Phase B COMPLETE 300/300 finals @ 2026-07-02T11:27:16+08:00
+
+=== Completion watcher 2026-07-02T11:30:05+08:00 ===
+Watcher PID 43505 polling every 60s for 300 finals in /root/autodl-tmp/panda-outputs/maintable_qwen25_3b_deepscaler_random300/seed41/deepscaler/raw_runs
+
+=== Completion watcher 2026-07-02T11:30:05+08:00 ===
+Phase B COMPLETE 300/300 finals @ 2026-07-02T11:30:05+08:00
+
+=== INCIDENT RECOVERY 2026-07-02T11:28+08:00 ===
+SYMPTOM: GPUs idle ~11:27; user report "怎么不跑了".
+
+ROOT CAUSE (multi-part):
+1) Qwen Phase B finished 300/300 @ 11:27:16. GPUs went idle (expected: HF ASE shards exited).
+2) watch_qwen_then_launch_llama_6gpu.sh (PID 22182) printed "launching Llama" but BLOCKED in GPU-settle loop:
+   pgrep matched Qwen metrics job (`run_panda_experiment --mode metrics`, PID 36015) as a "Qwen ASE" worker → Llama never started.
+3) First manual Llama launch: vLLM Phase A crashed — `tfb_llama` not registered in tfb_vllm_register.py (Qwen-only registration).
+   Orchestrator also hit `wait: pid not a child` (mapfile+process substitution subshell); Phase B ran vacuous recompute on 0 records.
+
+NOT OOM: dmesg clean; random300 raw_runs error.json count=0 for Qwen cohort.
+
+FIX APPLIED:
+- Patched watch_qwen_then_launch_llama_6gpu.sh to ignore `--mode metrics` in ase_procs / settle loop.
+- Patched tfb_vllm_register.py: register VllmTFBLLamaForCausalLM + TFBLlamaConfig.
+- Patched run_random300_6gpu.sh: write phase PIDs to files (fix wait on orphaned children).
+- Killed stuck watch_qwen PID 22182; relaunched Llama orchestrator + watcher.
+
+RESTARTED PIDs @ ~11:30:
+- Llama orchestrator: run_random300_llama_6gpu.sh → PID 43504
+- Llama completion watcher: watch_random300_finish (OUT_BASE=llama, own LOCK) → PID 43505
+- Llama Phase A vLLM shards: 43633–43638 (GPUs 0–5)
+
+CURRENT PROGRESS:
+- Qwen2.5-3B: Phase B 300/300 finals; metrics/summary.jsonl 300 lines — PIPELINE DONE for Qwen.
+- Llama-3.2-1B: Phase A RUNNING (0/300 finals); Phase B pending after Phase A.
+
+ETA Llama: Phase A ~15–25 min + Phase B ~35–50 min (1B HF faster than 3B) → ~50–75 min from 11:30 if no further errors.
+
+UPDATE 2026-07-02T11:32:
+- Llama vLLM Phase A still fails after tfb_llama register fix: CUDA device-side assert in tfb_llama_vllm compute_logits during vLLM profile (repro with VLLM_USE_V1=0).
+- Failed vLLM runs WEDGED all 6 GPUs: 100% util, 0 MiB, no compute processes (driver reset unavailable in container).
+- ACTION REQUIRED: restart GPU instance / reboot host, then launch Llama HF-only:
+    cd PANDA && OUT_BASE=.../maintable_llama32_1b_deepscaler_random300 MODEL_PATH=.../TFB-Llama-3.2-1B-Instruct PANDA_DYNAMIC_CLAIM=1 bash scripts/run_random300_6gpu.sh phase_b
+  (skip vLLM Phase A until tfb_llama vLLM fixed; HF --mode all matches prior llama32_1b maintable runs)
+- Qwen metrics job may still be running (PID varies); safe to kill after summary.jsonl has 300 lines.
+
+=== Completion watcher 2026-07-02T11:33:18+08:00 ===
+Watcher PID 48889 polling every 60s for 300 finals in /root/autodl-tmp/panda-outputs/maintable_qwen25_3b_deepscaler_random300/seed41/deepscaler/raw_runs
+
+=== Completion watcher 2026-07-02T11:33:18+08:00 ===
+Phase B COMPLETE 300/300 finals @ 2026-07-02T11:33:18+08:00
+
+=== GPU wedge recovery + Llama HF Phase B relaunch 2026-07-02T11:35:20+08:00 ===
+GPU healthy: Y (initial nvidia-smi showed 100%% util / 0 MiB wedge; python3 torch matmul on cuda:0-5 OK; post-test nvidia-smi idle 0%%; Llama launch shows ~5.3-5.6 GiB ×6, 45-96%% util)
+Autodl instance reboot: NOT required (CUDA functional after wedge cleared)
+
+Qwen2.5-3B: VERIFIED intact — raw_runs 300/300, summary.jsonl 300 lines (metrics pipeline done)
+
+Llama-3.2-1B PANDA (HF phase_b only, skip vLLM Phase A):
+  Orchestrator: bash scripts/run_random300_6gpu.sh phase_b → PID 52942
+  Completion watcher: watch_random300_finish.sh → PID 52943
+  Phase B HF shards (GPUs 0-5): PIDs 52988, 52989, 52990, 52991, 52992, 52993
+  OUT: /root/autodl-tmp/panda-outputs/maintable_llama32_1b_deepscaler_random300/seed41
+  Progress: 0/300 finals → running (dynamic-claim ASE on 300 cohort)
+  Fix applied: panda/tfb_load.py manual safetensors load (TFB-Llama metadata format=safetensors vs transformers 4.56 expects format=pt)
+  First restart attempt @ 11:33 failed same error (pre-patch); relaunch @ 11:35 OK.
+
+ETA Llama Phase B complete: ~35-50 min wall from 11:35 (1B HF faster than Qwen 3B; 6×5090, ~40-65s/sample effective)
+
+=== Completion watcher 2026-07-02T11:35:37+08:00 ===
+Watcher PID 55433 polling every 60s for 300 finals in /root/autodl-tmp/panda-outputs/maintable_llama32_1b_deepscaler_random300/seed41/deepscaler/raw_runs
+
+=== Strong perturb queue 2026-07-02T11:48:45+08:00 ===
+Llama baseline: RUNNING ~40/300 finals (dynamic-claim HF Phase B); ETA ~84 min from rate @ 2026-07-02T11:48:45+08:00
+Baseline unchanged: weight_sigma=0.03, n_rephrases=4, weight_seeds=42,43,44,45, se_samples=0 → 9 decodes/q
+Strong perturb (queued after baseline): weight_sigma=0.03→0.06 (2× paper sigma); budget still 9 decodes/q
+OUT qwen strong: panda-outputs/maintable_qwen25_3b_deepscaler_random300_strong/seed41
+OUT llama strong: panda-outputs/maintable_llama32_1b_deepscaler_random300_strong/seed41
+Setup doc: paper/analysis/random300_strong_perturb_setup.json
+Orchestrator: scripts/watch_llama_baseline_then_strong_6gpu.sh (Qwen Phase A+B then Llama HF phase_b)
+Llama baseline PIDs: 52942 orch, 52988-52993 shards, watcher 55433
+Post-strong: confwrong / perturbation-strength analysis MUST re-run on qwen_strong join (not auto in baseline confwrong scripts)
+
+=== Strong perturb CANCELLED @ 2026-07-02T12:34+08:00 (user request) ===
+Strong (weight_sigma=0.06) rerun: CANCELLED — will NOT run.
+Killed: watch_llama_baseline_then_strong_6gpu.sh PID 63923 (was polling baseline, would auto-launch Qwen+Llama strong).
+Disabled auto-launch: renamed to .CANCELLED_BY_USER:
+  scripts/watch_llama_baseline_then_strong_6gpu.sh
+  scripts/run_random300_qwen_strong_6gpu.sh
+  scripts/run_random300_llama_strong_6gpu.sh
+
+Llama baseline (sigma=0.03) UNCHANGED — still running:
+  Phase B HF shards: PIDs 52988-52993 (6× GPU, dynamic-claim)
+  Completion watcher: PID 55433 → watch_random300_finish.sh
+    OUT_DIR=.../maintable_llama32_1b_deepscaler_random300/seed41
+    Will run metrics + SC@9 pairing when 300/300 finals (~5 min after last final)
+
+Progress @ 2026-07-02T12:33:40+08:00: 248/300 finals
+  shard0=35/50 shard1=42/50 shard2=41/50 shard3=44/50 shard4=44/50 shard5=42/50
+  tqdm (global dyn claim): ~248/300, ETA ~7–18 min wall (straggler shard4 ~17 min)
+ETA baseline Phase B complete: ~12:41–12:52 +08:00
+ETA metrics+pairing done (watcher 55433): ~+5 min after 300/300 → ~12:46–12:57 +08:00
+
+Remaining work (baseline only): ~52 samples + metrics — NOT strong queue.
+
+=== Completion watcher 2026-07-02T12:46:41+08:00 ===
+Phase B COMPLETE 300/300 finals @ 2026-07-02T12:46:41+08:00
+
+=== Completion watcher 2026-07-02T13:02:14+08:00 ===
+Metrics complete: summary at /root/autodl-tmp/panda-outputs/maintable_llama32_1b_deepscaler_random300/seed41/deepscaler/summary.jsonl
+
+=== Completion watcher 2026-07-02T13:02:16+08:00 ===
+CPU pairing: /root/autodl-tmp/PANDA/paper/analysis/random300_sc9_panda_join.jsonl (fair: /root/autodl-tmp/PANDA/paper/analysis/random300_fair_baselines.json if generated)
+
+=== Completion watcher 2026-07-02T13:02:16+08:00 ===
+Pipeline DONE @ 2026-07-02T13:02:16+08:00. Join: /root/autodl-tmp/PANDA/paper/analysis/random300_sc9_panda_join.jsonl
+
+=== Qwen2.5-7B random300 (job 96436109) @ 2026-07-02T13:04+08:00 ===
+Download+TFB: IN PROGRESS (modelscope ~27% shards; base config.json present; TFB-Qwen2.5-7B-Instruct not yet)
+Log: panda-outputs/download_qwen25_7b_tfb.log (via panda-outputs symlink)
+PANDA random300: NOT STARTED (0/300; OUT maintabledir absent until TFB ready)
+Launch: PANDA/scripts/run_random300_qwen25_7b_6gpu.sh
+
+=== Qwen3-8B Plan B random300 2026-07-02T13:04:09+08:00 ===
+SC@9: Option A GPU K=9 (no K=64); T=0.5 top_p=0.95 seed=41
+OUT: /root/autodl-tmp/panda-outputs/maintable_qwen3_8b_deepscaler_random300/seed41
+Plan: paper/analysis/random300_qwen_scale_plan.md
+Orchestrator: run_random300_qwen3_8b_full.sh (see logs/full_orchestrator.log)
+130124 bash /root/autodl-tmp/PANDA/scripts/run_random300_qwen3_8b_full.sh
+SC K9 shards: see logs/sc_k9_random300.log
+
+=== User pivot Qwen2.5-7B (not Qwen3-8B) @ 2026-07-02T13:04:49+08:00 ===
+STOPPED Qwen3-8B random300 jobs:
+  run_random300_qwen3_8b_full.sh (PRS+PANDA copies)
+  run_sc_k9_qwen3_8b_random300.sh + 6× sample_vllm.py (config_qwen3_8b, deepscaler_random300 k9)
+  (no run_vllm/run_ase qwen3 random300 were running at kill time)
+
+Qwen2.5-7B download+TFB: RUNNING (preserve job lineage 96436109 → current PIDs 113422/113451/113459)
+  Progress: ~46% by on-disk weight (~6.9G/15G); active shard downloads ~30–43% in log
+  TFB-Qwen2.5-7B-Instruct: NOT READY → PANDA random300 NOT launched yet
+  Log: prs-outputs/download_qwen25_7b_tfb.log
+
+NEXT: when TFB config.json exists → launch PANDA/scripts/run_random300_qwen25_7b_6gpu.sh (exists post-rename)
+  MODEL_PATH=/root/autodl-tmp/panda-models/TFB-Qwen2.5-7B-Instruct (symlink prs-models if needed)
+  Auto-launch watcher: PID 143767 (polls TFB config → run_random300_qwen25_7b_6gpu.sh)

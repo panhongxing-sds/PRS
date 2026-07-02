@@ -21,7 +21,7 @@ data/
 | top_p | 0.95 |
 | seed | 41 |
 | 后端 | vLLM |
-| 判分 | PRS `math_grader` / MCQ 字母匹配 |
+| 判分 | PANDA `math_grader` / MCQ 字母匹配 |
 
 ## 模型 × 样本文件（canonical）
 
@@ -62,4 +62,4 @@ Qwen-7B 在 SCR@1.0 子集（42 题）上的完整 reasoning + token logprob 重
 
 ## 重新采样
 
-若需从头生成，见 `README.md` 快速开始。模型权重不在 git 中，需自行下载到 `$PRS_MODELS`。
+若需从头生成，见 `README.md` 快速开始。模型权重不在 git 中，需自行下载到 `$PANDA_MODELS`。

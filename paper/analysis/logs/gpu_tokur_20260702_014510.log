@@ -1,0 +1,48 @@
+=== PANDA minimal GPU plan ===
+PRS_OUTPUTS=/root/autodl-tmp/prs-outputs
+PRS_MODELS=/root/autodl-tmp/prs-models
+GPU: NVIDIA GeForce RTX 5090, 32110 MiB
+
+[ok] TokUR venv: /root/autodl-tmp/PRS/.tokur_venv
+
+[cpu] Running fast paper CPU analyses (cache + summary)...
+N=8121 join=8121 → /root/autodl-tmp/PRS/paper/analysis/cpu_results.json
+
+real	0m4.228s
+user	0m13.635s
+sys	0m0.269s
+
+[gpu] Queue TokUR EU (Phase C) — 4×3×3 = 36 jobs, resumable
+  [run] qwen25_3b seed41 minerva
+WARN: TokUR failed qwen25_3b seed41 minerva (see log)
+  [run] qwen25_3b seed41 math500
+WARN: TokUR failed qwen25_3b seed41 math500 (see log)
+  [run] qwen25_3b seed41 gsm8k
+WARN: TokUR failed qwen25_3b seed41 gsm8k (see log)
+  [run] qwen25_3b seed42 minerva
+WARN: TokUR failed qwen25_3b seed42 minerva (see log)
+  [run] qwen25_3b seed42 math500
+WARN: TokUR failed qwen25_3b seed42 math500 (see log)
+  [run] qwen25_3b seed42 gsm8k
+WARN: TokUR failed qwen25_3b seed42 gsm8k (see log)
+  [run] qwen25_3b seed43 minerva
+WARN: TokUR failed qwen25_3b seed43 minerva (see log)
+  [run] qwen25_3b seed43 math500
+WARN: TokUR failed qwen25_3b seed43 math500 (see log)
+  [run] qwen25_3b seed43 gsm8k
+WARN: TokUR failed qwen25_3b seed43 gsm8k (see log)
+  [run] llama32_1b seed41 minerva
+WARN: TokUR failed llama32_1b seed41 minerva (see log)
+  [run] llama32_1b seed41 math500
+WARN: TokUR failed llama32_1b seed41 math500 (see log)
+  [run] llama32_1b seed41 gsm8k
+WARN: TokUR failed llama32_1b seed41 gsm8k (see log)
+  [run] llama32_1b seed42 minerva
+WARN: TokUR failed llama32_1b seed42 minerva (see log)
+  [run] llama32_1b seed42 math500
+WARN: TokUR failed llama32_1b seed42 math500 (see log)
+  [run] llama32_1b seed42 gsm8k
+WARN: TokUR failed llama32_1b seed42 gsm8k (see log)
+  [run] llama32_1b seed43 minerva
+WARN: TokUR failed llama32_1b seed43 minerva (see log)
+  [run] llama32_1b seed43 math500

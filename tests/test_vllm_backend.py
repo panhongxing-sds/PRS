@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
-from prs.ase.vllm_backend import _topk_renorm_entropy, _trace_from_vllm_logprobs
+from panda.core.vllm_backend import _topk_renorm_entropy, _trace_from_vllm_logprobs
 
 
 @dataclass

@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from prs.ase.ablation_recompute import (
+from panda.core.ablation_recompute import (
     _add_ablation_scores,
     _subset_record,
     summarize_ablation,
@@ -22,7 +22,7 @@ def test_subset_record():
 def test_add_ablation_scores():
     row = {"F_resp": 0.8, "D_ans": 0.4, "D_reason": 0.2, "T_ASE": 0.5, "W_ASE": 0.6}
     abl = _add_ablation_scores(row, lambda_a=0.05, lambda_r=0.03)
-    assert abl["abl_PRS_full"] == 0.8 + 0.05 * 0.4 + 0.03 * 0.2
+    assert abl["abl_PANDA_full"] == 0.8 + 0.05 * 0.4 + 0.03 * 0.2
     assert abl["abl_wo_F_resp"] == 0.05 * 0.4 + 0.03 * 0.2
     # F_resp branch ablation: swap TW source to T-ASE / W-ASE, keep drift terms
     assert abl["abl_F_resp_T"] == 0.5 + 0.05 * 0.4 + 0.03 * 0.2
@@ -49,8 +49,8 @@ def test_summarize_ablation():
             }
         )
     s = summarize_ablation(rows)
-    assert s["PRS (full)"]["auroc"] > 0.5
-    assert s["PRS (full)"]["delta"] == 0.0
+    assert s["PANDA (full)"]["auroc"] > 0.5
+    assert s["PANDA (full)"]["delta"] == 0.0
     for name in (
         "-F_resp", "-D_ans", "-D_reason", "F_resp=T-ASE", "F_resp=W-ASE",
         "S_tr=topk (B)", "S_tr=content (A)", "S_tr=math (legacy)",
@@ -60,7 +60,7 @@ def test_summarize_ablation():
 
 
 def test_trace_drift_variants_present():
-    from prs.ase.altmass_decomposition import altmass_variants_weight_branch
+    from panda.core.altmass_decomposition import altmass_variants_weight_branch
 
     def run(ans, toks):
         return {

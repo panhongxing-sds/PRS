@@ -18,7 +18,7 @@ from sklearn.metrics import roc_auc_score
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from prs.grading.math_grader import math_equal  # noqa: E402
+from panda.grading.math_grader import math_equal  # noqa: E402
 
 MATH_DS = ("minerva", "math500", "gsm8k")
 SEEDS = (41, 42, 43)
@@ -28,7 +28,7 @@ MODELS = {
     "llama31_8b": "maintable_llama31_8b",
     "qwen3_8b": "maintable_qwen3_8b",
 }
-CACHE = Path("/root/autodl-tmp/prs-outputs/.proc_near_answer_final_cache.pkl")
+CACHE = Path("/root/autodl-tmp/panda-outputs/.proc_near_answer_final_cache.pkl")
 
 CONFIGS: list[tuple[str, list[str]]] = [
     ("1 prox_lin", ["bd", "T_ent_prox_lin"]),
@@ -374,7 +374,7 @@ def report(rows: list[dict], results: list[dict], md_out: Path) -> None:
     ]
     if gain_vs_ref1 < 0.002:
         lines.append(
-            f"**定稿建议**: `PRS = LODO(bd, T_ent_prox_lin)` — 新 variant 未超过 +0.002，保留 linear。"
+            f"**定稿建议**: `PANDA = LODO(bd, T_ent_prox_lin)` — 新 variant 未超过 +0.002，保留 linear。"
         )
     else:
         lines.append(f"**定稿建议**: `{best['name']}` — `{', '.join(best['cols'])}`")
@@ -387,7 +387,7 @@ def main() -> None:
     import argparse
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/prs-outputs"))
+    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/panda-outputs"))
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--use-cache", action="store_true")
     ap.add_argument("--md-out", type=Path, default=ROOT / "paper/tables/table_near_answer_final.md")

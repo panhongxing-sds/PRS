@@ -53,7 +53,7 @@
 ### 2.3 采样协议
 
 - 每题 **K=64** 个独立样本，`temperature=0.5`，`top_p=0.95`，`seed=41`（单 seed）。
-- 采样后用 PRS 的 `extract_math_answer` / boxed / MCQ 规则抽取答案，`math_equal` 判分。
+- 采样后用 PANDA 的 `extract_math_answer` / boxed / MCQ 规则抽取答案，`math_equal` 判分。
 
 ### 2.4 数据清洗（`clean_samples.py`）
 

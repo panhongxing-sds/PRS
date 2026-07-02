@@ -2,10 +2,10 @@
 # Reassemble split archives from bundles/ and restore outputs/, models/, third_party/TokUR/
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
-cd "$PRS_ROOT"
-export PRS_ROOT
+cd "$PANDA_ROOT"
+export PANDA_ROOT
 
-BUNDLES_DIR="${PRS_ROOT}/bundles"
+BUNDLES_DIR="${PANDA_ROOT}/bundles"
 MANIFEST="${BUNDLES_DIR}/MANIFEST.json"
 [[ -f "$MANIFEST" ]] || { echo "Missing $MANIFEST"; exit 1; }
 
@@ -17,8 +17,8 @@ restore_one() {
 import hashlib, json, os, subprocess, sys
 
 name, dest_parent, dest_name = sys.argv[1:4]
-prs_root = os.environ["PRS_ROOT"]
-bundles_dir = os.path.join(prs_root, "bundles")
+panda_root = os.environ["PANDA_ROOT"]
+bundles_dir = os.path.join(panda_root, "bundles")
 with open(os.path.join(bundles_dir, "MANIFEST.json")) as f:
     entry = json.load(f)[name]
 
@@ -56,7 +56,7 @@ print(f"Restored {dest}")
 PY
 }
 
-restore_one outputs "$PRS_ROOT" outputs
-restore_one models "$PRS_ROOT" models
-restore_one tokur "$(dirname "$PRS_ROOT/third_party/TokUR")" "$(basename "$PRS_ROOT/third_party/TokUR")"
+restore_one outputs "$PANDA_ROOT" outputs
+restore_one models "$PANDA_ROOT" models
+restore_one tokur "$(dirname "$PANDA_ROOT/third_party/TokUR")" "$(basename "$PANDA_ROOT/third_party/TokUR")"
 echo "Extract complete."

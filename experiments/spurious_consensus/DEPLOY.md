@@ -13,8 +13,8 @@ GPU=0 ./run_phase1.sh      # 三模型全量采样
 ## 环境变量
 
 ```bash
-export PRS_ROOT=/root/PRS
-export PRS_MODELS=/root/autodl-tmp/prs-models
+export PANDA_ROOT=/root/PANDA
+export PANDA_MODELS=/root/autodl-tmp/panda-models
 ```
 
 ## 脚本一览
@@ -37,11 +37,11 @@ python check_samples.py --tag qwen25_3b
 python check_samples.py --tag phi4_mini
 
 # 单 benchmark 续跑
-MODEL_TAG=phi4_mini MODEL_PATH=$PRS_MODELS/Phi-4-mini-instruct \
+MODEL_TAG=phi4_mini MODEL_PATH=$PANDA_MODELS/Phi-4-mini-instruct \
   CUDA_VISIBLE_DEVICES=0 python sample_vllm.py --benchmark deepscaler --resume
 
 # Qwen 只补 deepscaler 缺口（约 800 题）
-MODEL_TAG=qwen25_3b MODEL_PATH=$PRS_MODELS/TFB-Qwen2.5-3B-Instruct \
+MODEL_TAG=qwen25_3b MODEL_PATH=$PANDA_MODELS/TFB-Qwen2.5-3B-Instruct \
   ./run_sampling_vllm.sh
 
 # OOM 时

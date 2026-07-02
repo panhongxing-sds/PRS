@@ -26,7 +26,7 @@ DS_LABEL = {
     "deepscaler": "DeepScaler",
 }
 # TokUR + top ASE methods for cross-model summary
-METHODS = ("TokUR EU", "PRS", "TW-ASE", "F_resp")
+METHODS = ("TokUR EU", "PANDA", "TW-ASE", "F_resp")
 
 
 def _fmt(x: float) -> str:

@@ -2,7 +2,7 @@
 
 跨模型验证：**多采样（self-consistency）改善 answer-level AUROC，但无法消除高置信度的稳定错误（spurious consensus / self-consistent collapse）**。
 
-> 本目录是 PRS 仓库下的独立实验子项目；采样数据已随仓库分发，分析脚本可直接运行。
+> 本目录是 PANDA 仓库下的独立实验子项目；采样数据已随仓库分发，分析脚本可直接运行。
 
 ## TL;DR
 
@@ -52,7 +52,7 @@ python analyze_scr_reasoning_t100.py
 
 ```bash
 bash setup_4090.sh
-export PRS_MODELS=/path/to/models
+export PANDA_MODELS=/path/to/models
 python build_questions.py
 python trim_deepscaler.py
 GPU=0 MODEL_TAG=qwen25_3b bash run_sampling.sh

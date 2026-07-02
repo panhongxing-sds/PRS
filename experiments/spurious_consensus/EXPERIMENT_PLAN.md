@@ -79,7 +79,7 @@ Phase 4  论文主图 + 案例      [待 Phase 3]
 | `phi4_mini` | Phi-4-mini-instruct | Microsoft | 3.8B | 128k | 待采样 |
 | `gemma3_4b` | gemma-3-4b-it | Google | 4B | 128k | 待采样 |
 
-模型路径见 `models.yaml`；权重目录 `$PRS_MODELS=/root/autodl-tmp/prs-models`。
+模型路径见 `models.yaml`；权重目录 `$PANDA_MODELS=/root/autodl-tmp/panda-models`。
 
 ### 3.3 采样协议（全实验统一）
 
@@ -90,7 +90,7 @@ Phase 4  论文主图 + 案例      [待 Phase 3]
 | top_p | 0.95 |
 | seed | 41（per-question：`seed * 100003 + qi`） |
 | max_new_tokens | math 类 2048；aime_2024 4096 |
-| 判分 | PRS `math_grader` / MCQ 字母匹配 |
+| 判分 | PANDA `math_grader` / MCQ 字母匹配 |
 | UQ 分数 | \(u_{\text{ans}} = 1 - p_{\text{top}}\)，\(p_{\text{top}}\) = majority 答案频率 |
 
 ---
@@ -109,14 +109,14 @@ Phase 4  论文主图 + 案例      [待 Phase 3]
 **目标**：每个模型 6 个 benchmark 全量 K=64 采样。
 
 ```bash
-export PRS_ROOT=/root/PRS
-export PRS_MODELS=/root/autodl-tmp/prs-models
+export PANDA_ROOT=/root/PANDA
+export PANDA_MODELS=/root/autodl-tmp/panda-models
 cd /root/spurious-consensus
 
 # 按模型依次跑（单卡 4090 24GB 可跑 ≤4B）
-MODEL_TAG=llama32_1b MODEL_PATH=$PRS_MODELS/TFB-Llama-3.2-1B-Instruct GPU=0 ./run_sampling.sh
-MODEL_TAG=phi4_mini   MODEL_PATH=$PRS_MODELS/Phi-4-mini-instruct      GPU=0 ./run_sampling.sh
-MODEL_TAG=gemma3_4b   MODEL_PATH=$PRS_MODELS/gemma-3-4b-it          GPU=0 ./run_sampling.sh
+MODEL_TAG=llama32_1b MODEL_PATH=$PANDA_MODELS/TFB-Llama-3.2-1B-Instruct GPU=0 ./run_sampling.sh
+MODEL_TAG=phi4_mini   MODEL_PATH=$PANDA_MODELS/Phi-4-mini-instruct      GPU=0 ./run_sampling.sh
+MODEL_TAG=gemma3_4b   MODEL_PATH=$PANDA_MODELS/gemma-3-4b-it          GPU=0 ./run_sampling.sh
 ```
 
 **产出**：`data/samples/samples_{TAG}_seed41_{benchmark}.jsonl`（每模型 6 文件，共 24 文件；不含 qwen 则 18 新文件）
@@ -326,7 +326,7 @@ K=64 错题谱（占 wrong 的比例）：split ~48%，moderate ~47%，spurious 
 
 ```bash
 # 采样
-MODEL_TAG=phi4_mini MODEL_PATH=$PRS_MODELS/Phi-4-mini-instruct ./run_sampling.sh
+MODEL_TAG=phi4_mini MODEL_PATH=$PANDA_MODELS/Phi-4-mini-instruct ./run_sampling.sh
 
 # 分析
 python analyze.py --samples 'data/samples/samples_phi4_mini_seed41_*.jsonl' \

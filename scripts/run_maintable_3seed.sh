@@ -19,14 +19,14 @@ MAX_SAMPLES="${MAX_SAMPLES:-300}"
 N_REPHRASES="${N_REPHRASES:-4}"
 WEIGHT_SEEDS="${WEIGHT_SEEDS:-42,43,44,45}"
 SE_SAMPLES="${SE_SAMPLES:-8}"
-ASE_FAST="${ASE_FAST:-1}"
+PANDA_FAST="${PANDA_FAST:-1}"
 DRY_RUN="${DRY_RUN:-0}"
 
 declare -A MODEL_PATH=(
-  [qwen25_3b]="${PRS_MODELS}/TFB-Qwen2.5-3B-Instruct"
-  [llama32_1b]="${PRS_MODELS}/TFB-Llama-3.2-1B-Instruct"
-  [llama31_8b]="${PRS_MODELS}/TFB-Llama-3.1-8B-Instruct"
-  [qwen3_8b]="${PRS_MODELS}/TFB-Qwen3-8B"
+  [qwen25_3b]="${PANDA_MODELS}/TFB-Qwen2.5-3B-Instruct"
+  [llama32_1b]="${PANDA_MODELS}/TFB-Llama-3.2-1B-Instruct"
+  [llama31_8b]="${PANDA_MODELS}/TFB-Llama-3.1-8B-Instruct"
+  [qwen3_8b]="${PANDA_MODELS}/TFB-Qwen3-8B"
 )
 
 MODEL_PATH="${MODEL_PATH[$MODEL_TAG]:-}"
@@ -35,7 +35,7 @@ if [[ -z "$MODEL_PATH" ]]; then
   exit 1
 fi
 
-OUT_BASE="${OUT_BASE:-$PRS_OUTPUTS/maintable_${MODEL_TAG}}"
+OUT_BASE="${OUT_BASE:-$PANDA_OUTPUTS/maintable_${MODEL_TAG}}"
 LOG="$OUT_BASE/logs"
 mkdir -p "$LOG"
 
@@ -62,7 +62,7 @@ for seed in "${SEED_ARR[@]}"; do
     fi
 
     # generate + metrics (single GPU; user can shard manually)
-    python3 -m prs.ase.run_ase_experiment \
+    python3 -m panda.core.run_panda_experiment \
       --mode all \
       --dataset "$ds" \
       --max-samples "$ms" \
@@ -71,18 +71,18 @@ for seed in "${SEED_ARR[@]}"; do
       --se-samples "$SE_SAMPLES" \
       --weight-sigma 0.03 \
       --weight-rank 4 \
-      --max-new-tokens "${ASE_MAX_TOKENS:-2048}" \
+      --max-new-tokens "${PANDA_MAX_TOKENS:-2048}" \
       --topk-save 10 \
       --model-path "$MODEL_PATH" \
       --out-dir "$OUT" \
       --device "${CUDA_DEVICE:-cuda:0}" \
       --resume \
-      ${ASE_FAST:+--fast} \
+      ${PANDA_FAST:+--fast} \
       > "$LOG/${ds}_seed${seed}.log" 2>&1 || echo "WARN: $ds seed$seed failed"
 
     # Official TokUR (third_party/TokUR greedy_unc + TFB; NOT score_tokur_baseline approx)
-    if [[ "${ASE_SKIP_TOKUR:-0}" != "1" ]]; then
-      OUT_DIR="$OUT" PRS_MODEL_TAG="$MODEL_TAG" DATASET="$ds" TOKUR_SEED="$seed" \
+    if [[ "${PANDA_SKIP_TOKUR:-0}" != "1" ]]; then
+      OUT_DIR="$OUT" PANDA_MODEL_TAG="$MODEL_TAG" DATASET="$ds" TOKUR_SEED="$seed" \
         bash scripts/run_tokur_official_maintable.sh \
         >> "$LOG/tokur_${ds}_seed${seed}.log" 2>&1 || echo "WARN: official TokUR $ds seed$seed failed"
     fi

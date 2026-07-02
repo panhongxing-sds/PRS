@@ -35,7 +35,7 @@ for ds in "${DATASETS[@]}"; do
     [[ "$RUNNING" -lt "$MAX_PARALLEL" ]] || sleep 2
   done
   echo "[recompute_parallel] start $ds $(date)"
-  python3 -m prs.ase.recompute_metrics --out-dir "$OUT_DIR" --datasets "$ds" &
+  python3 -m panda.core.recompute_metrics --out-dir "$OUT_DIR" --datasets "$ds" &
   PIDS+=($!)
   RUNNING=$((RUNNING + 1))
 done

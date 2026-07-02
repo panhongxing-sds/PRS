@@ -4,7 +4,7 @@ source "$(dirname "$0")/env.sh"
 # Waits for GPUs to be free of ASE generate, then runs one model at a time (8-GPU shards).
 #
 # Usage:
-#   nohup bash scripts/queue_strict_tokur_four_models.sh >> $PRS_OUTPUTS/strict_tokur_four.log 2>&1 &
+#   nohup bash scripts/queue_strict_tokur_four_models.sh >> $PANDA_OUTPUTS/strict_tokur_four.log 2>&1 &
 #
 # Env:
 #   DATASETS="minerva math500 gsm8k deepscaler"
@@ -14,10 +14,10 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-# shellcheck source=scripts/ase_gpu_lock.sh
-source "$ROOT/scripts/ase_gpu_lock.sh"
+# shellcheck source=scripts/panda_gpu_lock.sh
+source "$ROOT/scripts/panda_gpu_lock.sh"
 
-LOG="${LOG:-$PRS_OUTPUTS/strict_tokur_four.log}"
+LOG="${LOG:-$PANDA_OUTPUTS/strict_tokur_four.log}"
 mkdir -p "$(dirname "$LOG")"
 export PYTHONPATH="${ROOT}/src${PYTHONPATH:+:$PYTHONPATH}"
 
@@ -103,10 +103,10 @@ run_strict() {
 }
 
 declare -a MODELS=(
-  "qwen3b|$PRS_OUTPUTS/ase_full"
-  "llama1b|$PRS_OUTPUTS/ase_llama32_1b"
-  "llama8b|$PRS_OUTPUTS/ase_llama31_8b"
-  "qwen8b|$PRS_OUTPUTS/ase_qwen3_8b"
+  "qwen3b|$PANDA_OUTPUTS/panda_full"
+  "llama1b|$PANDA_OUTPUTS/ase_llama32_1b"
+  "llama8b|$PANDA_OUTPUTS/ase_llama31_8b"
+  "qwen8b|$PANDA_OUTPUTS/ase_qwen3_8b"
 )
 
 log "queue_strict_tokur_four_models START SKIP_IF_OFFICIAL=$SKIP_IF_OFFICIAL"

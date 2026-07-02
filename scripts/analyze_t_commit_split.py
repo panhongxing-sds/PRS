@@ -22,7 +22,7 @@ from sklearn.preprocessing import StandardScaler
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from prs.grading.math_grader import math_equal  # noqa: E402
+from panda.grading.math_grader import math_equal  # noqa: E402
 
 MATH_DS = ("minerva", "math500", "gsm8k")
 SEEDS = (41, 42, 43)
@@ -32,7 +32,7 @@ MODELS = {
     "llama31_8b": "maintable_llama31_8b",
     "qwen3_8b": "maintable_qwen3_8b",
 }
-CACHE = Path("/root/autodl-tmp/prs-outputs/.t_commit_feature_cache.pkl")
+CACHE = Path("/root/autodl-tmp/panda-outputs/.t_commit_feature_cache.pkl")
 W = 2
 
 
@@ -212,7 +212,7 @@ def report(rows: list[dict], md_out: Path) -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/prs-outputs"))
+    ap.add_argument("--out-root", type=Path, default=Path("/root/autodl-tmp/panda-outputs"))
     ap.add_argument("--workers", type=int, default=16)
     ap.add_argument("--use-cache", action="store_true")
     ap.add_argument("--md-out", type=Path, default=ROOT / "paper/tables/table_t_commit_split.md")

@@ -4,7 +4,7 @@ source "$(dirname "$0")/env.sh"
 # partial raw 视为满数据；默认强制重跑非 official 或过期的 baseline。
 #
 # Usage:
-#   nohup bash scripts/launch_official_tokur_all.sh >> $PRS_OUTPUTS/strict_tokur_four.log 2>&1 &
+#   nohup bash scripts/launch_official_tokur_all.sh >> $PANDA_OUTPUTS/strict_tokur_four.log 2>&1 &
 #
 # Env:
 #   SKIP_IF_OFFICIAL=0   强制全部重跑（默认）

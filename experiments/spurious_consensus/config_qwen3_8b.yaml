@@ -1,0 +1,29 @@
+# SC@9 GPU sampling — Qwen3-8B TFB on random300 cohort (fair K=9 decode)
+model:
+  tag: qwen3_8b
+  path: $PANDA_MODELS/TFB-Qwen3-8B
+
+benchmarks:
+  - deepscaler_random300
+
+seeds: [41]
+
+sampling:
+  temperature: 0.5
+  top_p: 0.95
+  k: 9
+  k_chunk: 9
+  prompt_batch: 2
+
+max_new_tokens:
+  deepscaler_random300: 2048
+
+vllm:
+  batch_size: 4
+  max_model_len: 8192
+  prompt_headroom: 1024
+  max_num_seqs: 36
+  gpu_memory_utilization: 0.78
+  dtype: bfloat16
+  enforce_eager: true
+  tensor_parallel_size: 1

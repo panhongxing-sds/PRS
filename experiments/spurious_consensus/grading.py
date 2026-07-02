@@ -1,4 +1,4 @@
-"""答案抽取与判分（依赖 PRS math_grader）。"""
+"""答案抽取与判分（依赖 PANDA math_grader）。"""
 from __future__ import annotations
 
 import os
@@ -6,11 +6,11 @@ import re
 import sys
 from pathlib import Path
 
-_PRS = Path(os.environ.get("PRS_ROOT", "/root/PRS")) / "src"
+_PRS = Path(os.environ.get("PANDA_ROOT", "/root/PANDA")) / "src"
 if str(_PRS) not in sys.path:
     sys.path.insert(0, str(_PRS))
 
-from prs.grading.math_grader import math_equal, extract_math_answer
+from panda.grading.math_grader import math_equal, extract_math_answer
 
 _BOXED_RE = re.compile(r"\\boxed\{([^}]+)\}")
 _MCQ_RE = re.compile(r"(?:^|[^A-Z])([A-D])(?:[^A-Z]|$)", re.IGNORECASE)
