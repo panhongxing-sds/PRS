@@ -1,0 +1,181 @@
+{
+  "model_key": "qwen25_7b",
+  "model_label": "Qwen2.5-7B",
+  "sc_k9_note": "106/300 rows had empty answers[]; SC uses first 9 non-empty from answers or answers_orig (K=64 prefix).",
+  "completion": {
+    "summary_lines": 300,
+    "k9_lines": 300,
+    "joined": 300
+  },
+  "sc9_cohort": {
+    "n": 300,
+    "majority_correct": 152,
+    "majority_wrong": 148,
+    "majority_accuracy": 0.5066666666666667,
+    "blind_at_9": 94,
+    "blind_rate": 0.31333333333333335,
+    "any_correct_at_9": 206,
+    "p_top_mean": 0.6455555555555557,
+    "p_top_min": 0.1111111111111111,
+    "p_top_max": 1.0
+  },
+  "sources": {
+    "k9": "experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler_random300_k9.jsonl",
+    "summary": "/root/autodl-tmp/panda-outputs/maintable_qwen25_7b_deepscaler_random300/seed41/deepscaler/summary.jsonl",
+    "join": "paper/analysis/random300_sc9_panda_join_qwen25_7b.jsonl"
+  },
+  "metrics_n300": {
+    "n": 300,
+    "label_drop_count": 61,
+    "accuracy": {
+      "sc9_majority_vote": 0.5066666666666667,
+      "panda9_majority_vote_fair": 0.5833333333333334,
+      "panda_greedy_a0": 0.5533333333333333,
+      "delta_fair_vote_minus_sc_pp": 7.666666666666666,
+      "delta_greedy_minus_sc_pp": 4.666666666666663
+    },
+    "uq_label_wrong_clean": {
+      "sc_1_minus_p_top_auroc": 0.7725027808676307,
+      "sc_1_minus_p_top_auprc": 0.7406975910424186,
+      "panda_auroc": 0.7839377085650723,
+      "panda_auprc": 0.7105480466483198,
+      "delta_panda_minus_sc_auroc_pp": 1.1434927697441588
+    },
+    "confident_wrong_sc@9": {
+      "tau_0.9": {
+        "tau": 0.9,
+        "confident_wrong_rate_all": 0.06666666666666667,
+        "confident_wrong_count_all": 20,
+        "confident_wrong_rate_given_majority_wrong": 0.13513513513513514,
+        "confident_wrong_count_given_majority_wrong": 20,
+        "majority_wrong_count": 148,
+        "n": 300
+      },
+      "tau_8_over_9": {
+        "tau": 0.8888888888888888,
+        "confident_wrong_rate_all": 0.08666666666666667,
+        "confident_wrong_count_all": 26,
+        "confident_wrong_rate_given_majority_wrong": 0.17567567567567569,
+        "confident_wrong_count_given_majority_wrong": 26,
+        "majority_wrong_count": 148,
+        "n": 300
+      },
+      "tau_7_over_9": {
+        "tau": 0.7777777777777778,
+        "confident_wrong_rate_all": 0.11333333333333333,
+        "confident_wrong_count_all": 34,
+        "confident_wrong_rate_given_majority_wrong": 0.22972972972972974,
+        "confident_wrong_count_given_majority_wrong": 34,
+        "majority_wrong_count": 148,
+        "n": 300
+      }
+    },
+    "confident_wrong_panda@9_vote": {
+      "tau_0.9": {
+        "tau": 0.9,
+        "confident_wrong_rate_all": 0.043333333333333335,
+        "confident_wrong_count_all": 13,
+        "confident_wrong_rate_given_majority_wrong": 0.104,
+        "confident_wrong_count_given_majority_wrong": 13,
+        "majority_wrong_count": 125,
+        "n": 300
+      },
+      "tau_8_over_9": {
+        "tau": 0.8888888888888888,
+        "confident_wrong_rate_all": 0.06333333333333334,
+        "confident_wrong_count_all": 19,
+        "confident_wrong_rate_given_majority_wrong": 0.152,
+        "confident_wrong_count_given_majority_wrong": 19,
+        "majority_wrong_count": 125,
+        "n": 300
+      },
+      "tau_7_over_9": {
+        "tau": 0.7777777777777778,
+        "confident_wrong_rate_all": 0.08666666666666667,
+        "confident_wrong_count_all": 26,
+        "confident_wrong_rate_given_majority_wrong": 0.208,
+        "confident_wrong_count_given_majority_wrong": 26,
+        "majority_wrong_count": 125,
+        "n": 300
+      }
+    },
+    "panda_collapse_a0_wrong_bd0_count": 42
+  },
+  "metrics_n228_eval": {
+    "n": 239,
+    "label_drop_count": 0,
+    "accuracy": {
+      "sc9_majority_vote": 0.5648535564853556,
+      "panda9_majority_vote_fair": 0.606694560669456,
+      "panda_greedy_a0": 0.5690376569037657,
+      "delta_fair_vote_minus_sc_pp": 4.184100418410042,
+      "delta_greedy_minus_sc_pp": 0.4184100418410108
+    },
+    "uq_label_wrong_clean": {
+      "sc_1_minus_p_top_auroc": 0.7894035087719299,
+      "sc_1_minus_p_top_auprc": 0.7473114717460465,
+      "panda_auroc": 0.8254035087719298,
+      "panda_auprc": 0.7685233727447423,
+      "delta_panda_minus_sc_auroc_pp": 3.599999999999992
+    },
+    "confident_wrong_sc@9": {
+      "tau_0.9": {
+        "tau": 0.9,
+        "confident_wrong_rate_all": 0.0502092050209205,
+        "confident_wrong_count_all": 12,
+        "confident_wrong_rate_given_majority_wrong": 0.11538461538461539,
+        "confident_wrong_count_given_majority_wrong": 12,
+        "majority_wrong_count": 104,
+        "n": 239
+      },
+      "tau_8_over_9": {
+        "tau": 0.8888888888888888,
+        "confident_wrong_rate_all": 0.07112970711297072,
+        "confident_wrong_count_all": 17,
+        "confident_wrong_rate_given_majority_wrong": 0.16346153846153846,
+        "confident_wrong_count_given_majority_wrong": 17,
+        "majority_wrong_count": 104,
+        "n": 239
+      },
+      "tau_7_over_9": {
+        "tau": 0.7777777777777778,
+        "confident_wrong_rate_all": 0.09623430962343096,
+        "confident_wrong_count_all": 23,
+        "confident_wrong_rate_given_majority_wrong": 0.22115384615384615,
+        "confident_wrong_count_given_majority_wrong": 23,
+        "majority_wrong_count": 104,
+        "n": 239
+      }
+    },
+    "confident_wrong_panda@9_vote": {
+      "tau_0.9": {
+        "tau": 0.9,
+        "confident_wrong_rate_all": 0.04184100418410042,
+        "confident_wrong_count_all": 10,
+        "confident_wrong_rate_given_majority_wrong": 0.10638297872340426,
+        "confident_wrong_count_given_majority_wrong": 10,
+        "majority_wrong_count": 94,
+        "n": 239
+      },
+      "tau_8_over_9": {
+        "tau": 0.8888888888888888,
+        "confident_wrong_rate_all": 0.06276150627615062,
+        "confident_wrong_count_all": 15,
+        "confident_wrong_rate_given_majority_wrong": 0.1595744680851064,
+        "confident_wrong_count_given_majority_wrong": 15,
+        "majority_wrong_count": 94,
+        "n": 239
+      },
+      "tau_7_over_9": {
+        "tau": 0.7777777777777778,
+        "confident_wrong_rate_all": 0.09205020920502092,
+        "confident_wrong_count_all": 22,
+        "confident_wrong_rate_given_majority_wrong": 0.23404255319148937,
+        "confident_wrong_count_given_majority_wrong": 22,
+        "majority_wrong_count": 94,
+        "n": 239
+      }
+    },
+    "panda_collapse_a0_wrong_bd0_count": 27
+  }
+}

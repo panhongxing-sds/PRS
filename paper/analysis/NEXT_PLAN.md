@@ -45,15 +45,15 @@
 - [x] **Llama-3.2-1B random300：** SC@9 + PANDA **300/300**（见下方「可忽略」）
 - [x] 磁盘清理；`.vllm_ready` 相关流程已移除/不再依赖
 - [x] 分析产物：`random300_planb_metrics.json`、figures、`random300_sc9_panda_join.jsonl`（及 Llama join）
+- [x] **Qwen2.5-7B random300：** Phase A+B **300/300**；`random300_qwen25_7b_planb_metrics.json`、join、摘要；跨尺度附录 `paper/appendix_random300_qwen_3b_7b.md`
+- [x] **3B join 恢复：** `random300_sc9_panda_join.jsonl`（300 行）；`compute_random300_planb_metrics.py` 支持 summary `PRS` 字段
+
 
 ---
 
 ## 进行中
 
-- [ ] **Qwen2.5-7B：** 基座权重约 **15G** 已落盘（`prs-models/Qwen2.5-7B-Instruct`），但 **2026-07-02 13:18** ModelScope 报错退出（缺 `vocab.json`、`tokenizer.json`）；**TFB 未转换**；**random300 实验未启动（0/300）**，无 7B vLLM/HF 进程
-- [ ] **Watcher（PID 143767，存活）：** 每 30s 等待 `prs-models/TFB-Qwen2.5-7B-Instruct/config.json`，就绪后执行 `run_random300_qwen25_7b_6gpu.sh`（日志：`panda-outputs/download_qwen25_7b_tfb.log`）
-- [x] **7B random300 SC@9 配对文件：** `samples_qwen25_7b_seed41_deepscaler_random300_k9.jsonl` **300 行**（无 random300 专用 K=64 分片文件；全量 deepscaler 三分片仍在）
-- [ ] **GitHub：** push 仍失败（见下文 P1）
+- [ ] **GitHub：** 附录与 7B 分析产物待 push（见下文 P1；勿提交权重与 raw_runs）
 
 ---
 
@@ -61,9 +61,9 @@
 
 ### P0 — 阻塞 cross-scale 主结论
 
-- [ ] **Qwen2.5-7B random300：** 完整 **Phase A（vLLM）+ Phase B（HF ASE）** → 300/300 finals + `summary.jsonl`
-- [ ] **7B SC@9 配对：** 确认/补齐 K=64 分片合并（若尚未有完整 `samples_qwen25_7b_*_random300_k9.jsonl`）；CPU subsample 取前 9（与 3B 同 protocol）
-- [ ] **重跑 Plan B 汇总：** 7B 完成后执行 `compute_random300_planb_metrics.py`，更新 **3B vs 7B** cross-scale 表（`random300_planb_metrics.json` + summary md）
+- [x] **Qwen2.5-7B random300：** 完整 **Phase A（vLLM）+ Phase B（HF ASE）** → 300/300 finals + `summary.jsonl`
+- [x] **7B SC@9 配对：** `samples_qwen25_7b_seed41_deepscaler_random300_k9.jsonl`（300 行）；空 `answers[]` 用 `answers_orig` 回退
+- [x] **跨尺度汇总：** `random300_qwen25_3b_planb_metrics.json`、`random300_qwen25_7b_planb_metrics.json`、`paper/appendix_random300_qwen_3b_7b.md`
 - [ ] **动机图：** 若 7B 数字显著改变叙事，按 `random300_motivation_figure_spec.md` 更新 figure（否则可跳过）
 
 **7B 粗算 ETA（6×5090，参考 3B 已跑通时长 × 1.5–2.5）：**
@@ -96,15 +96,15 @@
 
 ```
 进行中
-[ ] 7B 补齐 tokenizer + TFB 完成（下载曾失败）
-[ ] Watcher 待 TFB 后启动 run_random300_qwen25_7b_6gpu.sh
+[x] 7B TFB + random300 跑通
+[x] 7B run_random300_qwen25_7b_6gpu.sh 已完成
 [x] 7B random300 SC@9 k9.jsonl（300 行）
 
 P0
-[ ] 7B Phase A 300/300
-[ ] 7B Phase B 300/300 + summary.jsonl
-[ ] 7B SC@9 join（K=64 合并如需要）
-[ ] compute_random300_planb_metrics（含 3B vs 7B）
+[x] 7B Phase A 300/300
+[x] 7B Phase B 300/300 + summary.jsonl
+[x] 7B SC@9 join + answers_orig 修复
+[x] compute_random300_planb_metrics + 附录
 [ ] 动机 figure（按需）
 
 P1

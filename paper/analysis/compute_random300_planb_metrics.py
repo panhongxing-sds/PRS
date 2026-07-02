@@ -155,7 +155,7 @@ def analyze_model(key: str, cfg: dict, ids: list[str]) -> dict:
             "panda_maj_correct": pvs["maj_correct"],
             "panda_a0_correct": pvs["a0_correct"],
             "panda_bd": pvs["bd"],
-            "panda": float(summ.get("PANDA") or float("nan")),
+            "panda": float(summ.get("PANDA") if summ.get("PANDA") is not None else summ.get("PRS") if summ.get("PRS") is not None else float("nan")),
             "f_resp": float(summ.get("F_resp") or float("nan")),
         }
         per_question.append(row)

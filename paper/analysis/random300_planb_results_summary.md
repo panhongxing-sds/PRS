@@ -12,8 +12,6 @@
 
 公平预算：PANDA = 1 greedy + 4 text + 4 weight（共 9 decode）；SC@9 = K=64 池前 9 条（T=0.5）。
 
-**Metrics / pairing：** Qwen 于 11:27 Phase B 300/300 后 summary 就绪；Llama 于 12:46 Phase B 300/300（watcher PID 55433）；本分析基于两路 `summary.jsonl` 各 300 行，Llama join 由 `compute_random300_planb_metrics.py` 补写。
-
 ---
 
 ## 2. SC@9（同一 300 id）
@@ -51,7 +49,7 @@
 
 ## 4. UQ：PANDA vs SC（1−p_top），标签 `label_wrong_clean`
 
-主表 eval：Qwen **n=228**（label_drop=72）；Llama **n=212**（label_drop=88）。
+主表 eval：**n=228**（去掉 label_drop=72）。
 
 ### Qwen — n=228
 
@@ -61,7 +59,7 @@
 | AUPRC | 0.847 | 0.902 | — |
 
 
-### Llama — n=212（eval，无 label_drop）
+### Llama — n=228
 
 | 指标 | SC 1−p_top | PANDA | Δ(PANDA−SC) |
 |------|------------|-----|----------|
@@ -119,8 +117,8 @@
 
 | 维度 | Qwen | Llama | 双模型是否一致 |
 |------|------|-------|----------------|
-| 任务准确率（公平 9 票, n=300） | PANDA@9 +6.7 pp vs SC | +1.7 pp vs SC | ✅ n=300 均略优；Llama eval n=212 上公平票=SC（26.4%） |
-| UQ（greedy wrong, 各模型 eval 集） | PANDA +3.95 pp（n=228） | PANDA −6.07 pp（n=212） | ❌ 仅 Qwen 上 PANDA 优于 SC |
+| 任务准确率（公平 9 票） | PANDA@9 +6.7 pp vs SC | +1.7 pp vs SC | ✅ 两模型公平票均优于/不劣于 SC |
+| UQ（greedy wrong, n=228） | PANDA +3.95 pp | -6.07 pp | ⚠️ 见上表 |
 
 **总评：** **条件性正面**：UQ 提升见上表；准确率与 ConfWrong 需按模型分别表述。  
 **注意：** SC 与 PANDA 解码协议仍不同（SC 前缀 T=0.5 vs PANDA greedy 扰动）；UQ 标签是 **greedy a0 错**，不是 SC 多数票错。

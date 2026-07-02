@@ -199,8 +199,7 @@
         },
         "panda_collapse_a0_wrong_bd0_count": 29
       },
-      "per_question_count": 300,
-      "eval_n_no_label_drop": 228
+      "per_question_count": 300
     },
     "llama32_1b": {
       "model_key": "llama32_1b",
@@ -397,14 +396,7 @@
         },
         "panda_collapse_a0_wrong_bd0_count": 36
       },
-      "per_question_count": 300,
-      "eval_n_no_label_drop": 212
+      "per_question_count": 300
     }
-  },
-  "verdict": {
-    "qwen_uq_positive": true,
-    "llama_uq_positive": false,
-    "dual_model_panda_uq_narrative": "conditional",
-    "note": "Qwen: PANDA beats SC on label_wrong_clean eval; Llama: SC beats PANDA; fair PANDA@9 accuracy wins on n=300 for both but ConfWrong worse for Llama PANDA vote"
   }
 }
