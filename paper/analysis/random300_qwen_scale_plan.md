@@ -8,7 +8,7 @@
 ## Fixed cohort
 
 - 300 question ids: `paper/analysis/deepscaler_random300_meta.json` (seed=42)
-- Variants: `prs-outputs/qaac_api_bench/deepscaler_random300/variants.jsonl`
+- Variants: `panda-outputs/qaac_api_bench/deepscaler_random300/variants.jsonl`
 - SC@9 (CPU, first 9 of K=64, seed 41):  
   `experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler_random300_k9.jsonl`
 - Stats: `paper/analysis/random300_qwen25_7b_k9_stats.json`
@@ -17,7 +17,7 @@
 
 - Script: `scripts/run_random300_qwen25_7b_6gpu.sh`
 - Model: `/root/autodl-tmp/prs-models/TFB-Qwen2.5-7B-Instruct`
-- Output: `prs-outputs/maintable_qwen25_7b_deepscaler_random300/seed41`
+- Output: `panda-outputs/maintable_qwen25_7b_deepscaler_random300/seed41`
 - Fair budget: `SE_SAMPLES=0`, `N_REPHRASES=4`, weight seeds 42–45 → 9 decodes/question
 - GPUs: 6-way shard (Phase A vLLM, Phase B HF ASE), `GPU_MEMORY_UTIL=0.75` default for 7B on 5090
 

@@ -216,3 +216,6 @@ Qwen2.5-7B download+TFB: RUNNING (preserve job lineage 96436109 → current PIDs
 NEXT: when TFB config.json exists → launch PANDA/scripts/run_random300_qwen25_7b_6gpu.sh (exists post-rename)
   MODEL_PATH=/root/autodl-tmp/panda-models/TFB-Qwen2.5-7B-Instruct (symlink prs-models if needed)
   Auto-launch watcher: PID 143767 (polls TFB config → run_random300_qwen25_7b_6gpu.sh)
+
+=== Completion watcher 2026-07-02T13:30:05+08:00 ===
+Watcher PID 241511 polling every 60s for 300 finals in /root/autodl-tmp/panda-outputs/maintable_qwen25_7b_deepscaler_random300/seed41/deepscaler/raw_runs

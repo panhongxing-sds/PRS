@@ -1,7 +1,7 @@
 {
-  "source": "experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler.jsonl",
-  "output": "experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler_random300_k9.jsonl",
-  "meta": "paper/analysis/deepscaler_random300_meta.json",
+  "source": "/root/autodl-tmp/PRS/experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler.jsonl",
+  "output": "/root/autodl-tmp/PRS/experiments/spurious_consensus/data/samples/samples_qwen25_7b_seed41_deepscaler_random300_k9.jsonl",
+  "meta": "/root/autodl-tmp/PRS/paper/analysis/deepscaler_random300_meta.json",
   "n_questions": 300,
   "majority_correct_at_k9": 121,
   "majority_wrong_at_k9": 125,
