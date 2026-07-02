@@ -15,7 +15,7 @@ export TMPDIR="${TMPDIR:-/tmp/panda_tmp}"
 mkdir -p "$TMPDIR"
 export TORCH_ALLOW_TF32=1
 # Phase A (vLLM): higher batch util on 5090; Phase B (HF ASE) uses ~8–9GiB/GPU — low SM% is expected (serial decodes + CPU token_trace).
-VLLM_GPU_MEM="${GPU_MEMORY_UTIL:-0.75}"
+VLLM_GPU_MEM="${GPU_MEMORY_UTIL:-0.90}"
 VLLM_CHUNK="${VLLM_CHUNK_SIZE:-512}"
 PANDA_ATTN="${PANDA_ATTN_IMPLEMENTATION:-sdpa}"
 PANDA_DYNAMIC_CLAIM="${PANDA_DYNAMIC_CLAIM:-0}"
@@ -27,6 +27,7 @@ OUT_BASE="${OUT_BASE:-/root/autodl-tmp/panda-outputs/maintable_qwen25_7b_deepsca
 OUT="${OUT_DIR:-$OUT_BASE/seed41}"
 VARIANTS="${VARIANTS:-/root/autodl-tmp/panda-outputs/qaac_api_bench/deepscaler_random300/variants.jsonl}"
 MODEL="${MODEL_PATH:-/root/autodl-tmp/panda-models/TFB-Qwen2.5-7B-Instruct}"
+VLLM_MODEL="${VLLM_MODEL_PATH:-/root/autodl-tmp/panda-models/.vllm_ready/TFB-Qwen2.5-7B-Instruct}"
 VLLM_PY="${VLLM_PYTHON:-/root/miniconda3/bin/python}"
 TFTTCL="${TFTTCL_ROOT:-/home/phx/TF-TTCL/data/MATH}"
 MAX_SAMPLES="${MAX_SAMPLES:-300}"
@@ -70,7 +71,7 @@ launch_phase_a_shards() {
       --gpu-memory-utilization "$VLLM_GPU_MEM" \
       --chunk-size "$VLLM_CHUNK" \
       --max-model-len 8192 \
-      --model-path "$MODEL" \
+      --model-path "$VLLM_MODEL" \
       --out-dir "$OUT" \
       --variants-path "$VARIANTS" \
       --tfttcl-root "$TFTTCL" \

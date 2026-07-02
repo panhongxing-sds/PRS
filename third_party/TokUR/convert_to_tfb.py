@@ -87,7 +87,7 @@ def save_single_file_model(model_tensors, basis_vectors, output_path):
     combined = {**model_tensors, **basis_vectors}
     output_file = os.path.join(output_path, "model.safetensors")
     print(f"  Saving to {output_file}")
-    save_file(combined, output_file, metadata={"format": "safetensors", "framework": "pt"})
+    save_file(combined, output_file, metadata={"format": "pt", "framework": "pt"})
 
 
 def save_sharded_model(model_tensors, basis_vectors, output_path, source_path, source_tensor_files):
@@ -117,7 +117,7 @@ def save_sharded_model(model_tensors, basis_vectors, output_path, source_path, s
     # Save basis vectors as the new shard
     new_shard_path = os.path.join(output_path, new_shard_name)
     print(f"  Saving basis vectors to {new_shard_name}")
-    save_file(basis_vectors, new_shard_path, metadata={"format": "safetensors", "framework": "pt"})
+    save_file(basis_vectors, new_shard_path, metadata={"format": "pt", "framework": "pt"})
 
     # Update the index file
     index_path = os.path.join(source_path, "model.safetensors.index.json")
